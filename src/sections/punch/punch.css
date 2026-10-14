@@ -1,0 +1,28 @@
+/* Punch line: the spine of the page in one line; the two halves close in on a photo that changes as you scroll (MONOLOG style) */
+.pn-sec{position:relative;z-index:6;background:var(--ink);color:#F1F4EF}
+.pn-track{height:220svh}
+.pn-stage{position:sticky;top:0;height:100svh;display:grid;place-items:center;overflow:clip;padding:0 var(--pad)}
+.pn-line{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:clamp(180px,26vw,360px);margin:0}
+.pn-w{position:absolute;top:50%;z-index:2;font-size:clamp(40px,6.6vw,108px);font-weight:460;letter-spacing:-.055em;line-height:1;white-space:nowrap;will-change:transform}
+.pn-l{right:50%;transform:translate(calc(var(--g,24vw) / -2),-50%)}
+.pn-r{left:50%;transform:translate(calc(var(--g,24vw) / 2),-50%)}
+.pn-ph{position:relative;z-index:1;width:var(--pw,13vw);aspect-ratio:4/5;border-radius:10px;overflow:hidden;background:#0F2418;box-shadow:0 30px 60px -34px rgba(0,0,0,.6)}
+.pn-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(var(--ps,1.08))}
+.pn-ph img.is-on{opacity:1}
+.pn-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.pn-note{position:absolute;left:50%;bottom:clamp(40px,9vh,88px);width:min(36ch,calc(100% - 2 * var(--pad)));transform:translate(-50%,calc((1 - var(--np,0)) * 10px));opacity:var(--np,0);text-align:center;font-size:15px;line-height:1.5;color:rgba(241,244,239,.55);text-wrap:balance}
+/* phone: the halves sit above and below the photo and close in vertically */
+@media (max-width:760px){
+  .pn-track{height:200svh}
+  .pn-line{height:auto;flex-direction:column}
+  .pn-w{position:absolute;left:50%;right:auto;top:50%;font-size:clamp(34px,10.5vw,46px)}
+  .pn-l{transform:translate(-50%,calc(-100% - var(--g,30vh) / 2))}
+  .pn-r{transform:translate(-50%,calc(var(--g,30vh) / 2))}
+  .pn-ph{width:var(--pw,40vw)}
+}
+@media (prefers-reduced-motion:reduce){
+  .pn-track{height:auto}
+  .pn-stage{position:relative;height:auto;min-height:80svh;padding:96px var(--pad)}
+  .pn-note{position:static;transform:none;opacity:1;margin-top:40px}
+  .pn-stage{display:flex;flex-direction:column;justify-content:center}
+}

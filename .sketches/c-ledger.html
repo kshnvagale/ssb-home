@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sketch C: proof ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sketch.css">
+<style>
+/* C: one ruled grid, every cell is one verifiable fact. Name cells reveal their photo on hover (ref: weareinertia.com clients grid) */
+.pl{background:var(--paper);padding:96px 0 104px}
+.pl-head{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:48px;align-items:end;margin-bottom:40px}
+.pl-grid{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--hair-t);border-left:1px solid var(--hair-t)}
+.pl-c{position:relative;aspect-ratio:1/1;border-right:1px solid var(--hair-t);border-bottom:1px solid var(--hair-t);overflow:hidden;background:var(--paper);isolation:isolate}
+.pl-c.w2{grid-column:span 2;aspect-ratio:auto}
+.pl-k{position:absolute;left:16px;top:14px;font:500 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#8A938D;z-index:2;transition:color .4s}
+.pl-f{position:absolute;left:16px;right:16px;bottom:14px;font-size:13.5px;line-height:1.38;color:var(--mute);z-index:2;transition:color .4s}
+/* name cell */
+.pl-n .pl-w{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(20px,1.8vw,27px);font-weight:600;letter-spacing:-.03em;z-index:2;transition:color .4s,transform .6s var(--ease-out)}
+.pl-n img,.pl-p img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}
+.pl-n img{opacity:0;transform:scale(1.08);transition:opacity .5s var(--ease-out),transform 1.2s var(--ease-out)}
+.pl-n::after,.pl-p::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(5,14,9,.35),rgba(5,14,9,.82));opacity:0;transition:opacity .5s}
+.pl-n:hover img{opacity:1;transform:none}
+.pl-n:hover::after,.pl-p::after{opacity:1}
+.pl-n:hover .pl-w{color:#fff;transform:translateY(-10px)}
+.pl-n:hover .pl-f,.pl-n:hover .pl-k{color:rgba(255,255,255,.85)}
+/* number cell */
+.pl-s b{position:absolute;left:16px;top:40%;transform:translateY(-50%);font:300 clamp(38px,3.6vw,54px)/1 var(--font);letter-spacing:-.05em;color:var(--ink-t);font-variant-numeric:tabular-nums}
+.pl-s.g{background:var(--cta)}
+.pl-s.g b,.pl-s.g .pl-f{color:#fff}.pl-s.g .pl-k{color:var(--mint)}
+/* photo cell */
+.pl-p .pl-f{color:#fff;font-size:15px;font-weight:500;letter-spacing:-.01em;max-width:420px}
+.pl-p .pl-k{color:var(--mint)}
+.pl-p img{transition:transform 1.4s var(--ease-out)}
+.pl-p:hover img{transform:scale(1.04)}
+/* logo cell */
+.pl-l .pl-w{position:absolute;inset:0;display:grid;place-items:center;padding:0 18%}
+.pl-grid>.pl-c:nth-last-child(-n+6){aspect-ratio:auto;min-height:150px}
+.pl-grid>.pl-s:last-child b{top:46%;font-size:40px}
+.pl-l .pl-w img{max-height:30px;max-width:100%;object-fit:contain;position:static;opacity:1;transform:none}
+
+@media (max-width:1000px){
+  .pl-head{grid-template-columns:1fr;gap:20px}
+  .pl-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:640px){
+  .pl{padding:72px 0}
+  .pl-grid{grid-template-columns:repeat(2,1fr)}
+  .pl-c.w2{aspect-ratio:2/1.25}
+  .pl-f{font-size:12.5px;left:12px;right:12px;bottom:12px}.pl-k{left:12px;top:12px}
+  .pl-s b{left:12px;font-size:36px}
+  .pl-grid>.pl-c:nth-last-child(-n+6){min-height:100px}.pl-grid>.pl-s:last-child .pl-f{display:none}.pl-grid>.pl-s:last-child b{top:60%;font-size:34px}.pl-l .pl-w{padding:0 20%}
+  .pl-n img{opacity:1;transform:none}.pl-n::after{opacity:1}.pl-n .pl-w{color:#fff}.pl-n .pl-f,.pl-n .pl-k{color:rgba(255,255,255,.85)}
+}
+</style></head><body>
+
+<div class="sk-note">Above: Programme (light). C is one new light section "Proof" between Programme and Punch. AI facts sit in the ledger, mentors stay in Faculty</div>
+
+<section class="pl" id="proof"><div class="wrap">
+  <header class="pl-head">
+    <div><div class="eyebrow">On the record</div><h2 class="title">Eighteen months of real work,<br>one fact at a time.</h2></div>
+    <div><p class="lede">Live briefs, funded launches, internships and immersions. Each one names the company or the number.</p><a class="link" href="#">Download the placement report ›</a></div>
+  </header>
+
+  <div class="pl-grid">
+    <!-- row 1 -->
+    <div class="pl-c pl-n"><img src="https://ssb-school-concept.vercel.app/live-projects/mokobara.jpg" alt=""><span class="pl-k">Live brief</span><span class="pl-w">Mokobara</span><span class="pl-f">APAC plan for a ₹200Cr business, pitched to its founders</span></div>
+    <div class="pl-c pl-s g"><span class="pl-k">Internship</span><b>100%</b><span class="pl-f">placed in internships, cohorts 1 and 2</span></div>
+    <div class="pl-c pl-p w2"><img src="https://ssb-school-concept.vercel.app/immersions/creator-preneur-track.webp" alt=""><span class="pl-k">Creator track</span><span class="pl-f">6 months inside Reliance’s Jio Creative Labs, on campaigns like Jio Dhan Dhana Dhan</span></div>
+    <div class="pl-c pl-n"><img src="https://ssb-school-concept.vercel.app/live-projects/ajio.jpg" alt=""><span class="pl-k">Live brief</span><span class="pl-w">AJIO</span><span class="pl-f">Conversion friction mapped from search to checkout</span></div>
+    <div class="pl-c pl-s"><span class="pl-k">Career prep</span><b>1,100+</b><span class="pl-f">mock interviews before placements</span></div>
+    <!-- row 2 -->
+    <div class="pl-c pl-p w2"><img src="https://images.unsplash.com/photo-1769598248746-52c80a614e46?w=2000&q=70&auto=format" alt=""><span class="pl-k">D2C Startup Challenge</span><span class="pl-f">₹25K seed per team, ₹5L+ revenue target, six weeks</span></div>
+    <div class="pl-c pl-n"><img src="https://ssb-school-concept.vercel.app/live-projects/practo.jpg" alt=""><span class="pl-k">Live brief</span><span class="pl-w">Practo</span><span class="pl-f">Healthcare GMV growth across primary to tertiary care</span></div>
+    <div class="pl-c pl-s"><span class="pl-k">Internship</span><b>52%+</b><span class="pl-f">in Product and Founder’s Office roles</span></div>
+    <div class="pl-c pl-n"><img src="https://ssb-school-concept.vercel.app/live-projects/stockgro.jpg" alt=""><span class="pl-k">Stockathon</span><span class="pl-w">StockGro</span><span class="pl-f">Live mock-market trading under real conditions</span></div>
+    <div class="pl-c pl-p"><img src="../media/faculty/m-rajan-anandan.webp" alt=""><span class="pl-k">Super mentor</span><span class="pl-f">Rajan Anandan, MD Peak XV</span></div>
+    <!-- row 3 -->
+    <div class="pl-c pl-s"><span class="pl-k">Hustle Program</span><b>₹25L</b><span class="pl-f">funding path, starting at ₹50K</span></div>
+    <div class="pl-c pl-n"><img src="https://ssb-school-concept.vercel.app/live-projects/meolaa.jpg" alt=""><span class="pl-k">Live brief</span><span class="pl-w">Meolaa</span><span class="pl-f">Onboarding, brand campaigns and app-launch roadmap</span></div>
+    <div class="pl-c pl-p w2"><img src="https://ssb-school-concept.vercel.app/immersions/domestic-immersions.webp" alt=""><span class="pl-k">Immersions</span><span class="pl-f">3 site visits: a factory floor, quick-commerce ops and a fashion brand HQ</span></div>
+    <div class="pl-c pl-n"><img src="https://ssb-school-concept.vercel.app/live-projects/quenzy.jpg" alt=""><span class="pl-k">Live brief</span><span class="pl-w">Quenzy</span><span class="pl-f">Product-market fit and go-to-market strategy</span></div>
+    <div class="pl-c pl-s g"><span class="pl-k">AI</span><b>150 hrs</b><span class="pl-f">25+ tools, 5 AI products, 3 hackathons</span></div>
+    <!-- row 4: internship logos -->
+    <div class="pl-c pl-l"><span class="pl-k">Interned at</span><span class="pl-w"><img src="https://ssb-school-concept.vercel.app/internship/logos/razorpay.png" alt="Razorpay"></span></div>
+    <div class="pl-c pl-l"><span class="pl-w"><img src="https://ssb-school-concept.vercel.app/internship/logos/bharatpe.png" alt="BharatPe"></span></div>
+    <div class="pl-c pl-l"><span class="pl-w"><img src="https://ssb-school-concept.vercel.app/internship/logos/emergent.png" alt="Emergent"></span></div>
+    <div class="pl-c pl-l"><span class="pl-w"><img src="https://ssb-school-concept.vercel.app/internship/logos/the-whole-truth.png" alt="The Whole Truth"></span></div>
+    <div class="pl-c pl-l"><span class="pl-w"><img src="https://ssb-school-concept.vercel.app/internship/logos/reckitt.png" alt="Reckitt"></span></div>
+    <div class="pl-c pl-s"><span class="pl-k">Interned at</span><b>+19</b><span class="pl-f">more companies, from BCCI to ToolJet</span></div>
+  </div>
+</div></section>
+
+<div class="sk-note dark">Below: Punch, "Learn business [photo] by building it." (dark)</div>
+</body></html>

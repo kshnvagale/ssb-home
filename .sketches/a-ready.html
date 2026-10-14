@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sketch A: fold in, plus one career section</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sketch.css">
+<style>
+/* A1: what a programme term card gains (AI row + live brief) */
+.a1{padding:72px 0 88px;background:var(--paper)}
+.a1-head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin-bottom:28px}
+.a1-facts{display:flex;gap:28px;font:400 13px/1.3 var(--mono);color:var(--mute);letter-spacing:.02em}
+.a1-facts b{display:block;font:300 32px/1 var(--font);letter-spacing:-.03em;color:var(--ink-t);margin-bottom:6px}
+.a1-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:0;background:#fff;border-radius:20px;padding:12px;box-shadow:0 0 0 1px var(--hair-t),0 30px 60px -40px rgba(10,28,19,.35)}
+.a1-img{position:relative;border-radius:12px;overflow:hidden;min-height:520px}
+.a1-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.a1-img span{position:absolute;left:12px;top:12px;padding:7px 10px;border-radius:8px;background:rgba(5,14,9,.42);backdrop-filter:blur(10px);font-size:12px;color:#fff}
+.a1-body{padding:28px 32px 24px 40px;display:flex;flex-direction:column}
+.a1-term{font:500 12px/1 var(--mono);letter-spacing:.2em;color:var(--cta);margin-bottom:14px}
+.a1-body h3{font-size:30px;font-weight:500;letter-spacing:-.03em;margin-bottom:10px}
+.a1-body>p{font-size:15.5px;line-height:1.5;color:var(--mute);margin-bottom:22px}
+.a1-row{display:grid;grid-template-columns:116px 1fr;gap:16px;padding:14px 0;border-top:1px solid var(--hair-t)}
+.a1-row dt{font:500 11px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#8A938D;padding-top:2px}
+.a1-row dd{font-size:15px;line-height:1.45}
+.a1-row.new{position:relative}
+.a1-row.new::before{content:"";position:absolute;left:-40px;top:14px;bottom:14px;width:3px;border-radius:2px;background:var(--mint)}
+.a1-tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.a1-tools span{font:500 12px/1 var(--font);padding:7px 9px;border-radius:8px;background:#F1F2EE;color:var(--ink-t)}
+.a1-meta{margin-top:auto;display:flex;gap:28px;padding-top:18px;border-top:1px solid var(--hair-t);font-size:13px;color:var(--mute)}
+.a1-meta b{display:block;font:300 28px/1 var(--font);color:var(--cta);margin-bottom:4px}
+
+/* A2: new section, Career (light) */
+.cr{background:var(--paper);padding:96px 0 104px}
+.cr-head{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:48px;align-items:end;margin-bottom:48px}
+.cr-stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink-t)}
+.cr-stat{padding:22px 24px 26px 0;border-right:1px solid var(--hair-t)}
+.cr-stat+.cr-stat{padding-left:24px}
+.cr-stat:last-child{border-right:0}
+.cr-stat b{display:block;font:300 clamp(48px,5.2vw,76px)/.95 var(--font);letter-spacing:-.05em;margin-bottom:14px;font-variant-numeric:tabular-nums}
+.cr-stat span{font-size:14px;line-height:1.4;color:var(--mute);display:block;max-width:220px}
+.cr-gal{display:grid;grid-template-columns:1.55fr 1fr 1fr;gap:12px;margin-top:40px}
+.cr-ph{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:4/5;background:#ddd}
+.cr-ph.wide{aspect-ratio:auto}
+.cr-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease-out)}
+.cr-ph:hover img{transform:scale(1.04)}
+.cr-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,14,9,0) 45%,rgba(5,14,9,.78))}
+.cr-cap{position:absolute;left:20px;right:20px;bottom:18px;z-index:2;color:#fff}
+.cr-cap i{font:500 11px/1 var(--mono);font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:var(--mint);display:block;margin-bottom:10px}
+.cr-cap p{font-size:19px;line-height:1.3;letter-spacing:-.01em;font-weight:500}
+.cr-cap small{display:block;margin-top:6px;font-size:13.5px;line-height:1.4;color:rgba(255,255,255,.72)}
+.cr-rail{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.cr-step{padding:20px 22px;border-radius:14px;background:#fff;box-shadow:0 0 0 1px var(--hair-t)}
+.cr-step i{font:500 11px/1 var(--mono);font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:#8A938D}
+.cr-step h4{font-size:19px;font-weight:500;letter-spacing:-.02em;margin:10px 0 6px}
+.cr-step p{font-size:14px;line-height:1.45;color:var(--mute)}
+.cr-step b{display:inline-block;margin-top:12px;font:500 12px/1 var(--mono);color:var(--cta);letter-spacing:.02em}
+.cr-logos{display:grid;grid-template-columns:repeat(12,1fr);margin-top:40px;border-top:1px solid var(--hair-t);border-left:1px solid var(--hair-t)}
+.cr-logos div{height:72px;display:grid;place-items:center;border-right:1px solid var(--hair-t);border-bottom:1px solid var(--hair-t);padding:16px}
+.cr-logos img{max-height:26px;max-width:86%;object-fit:contain}
+.cr-logos-h{display:flex;justify-content:space-between;margin-top:40px;font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#8A938D}
+.cr-logos-h+.cr-logos{margin-top:14px}
+
+@media (max-width:1000px){
+  .a1-card{grid-template-columns:1fr}.a1-img{min-height:300px}.a1-body{padding:24px 12px 12px 16px}.a1-row.new::before{left:-16px}
+  .a1-head{flex-direction:column;align-items:flex-start}
+  .cr-head{grid-template-columns:1fr;gap:20px}
+  .cr-stats{grid-template-columns:1fr 1fr}
+  .cr-stat:nth-child(2){border-right:0}
+  .cr-stat:nth-child(n+3){border-top:1px solid var(--hair-t)}
+  .cr-stat:nth-child(3){padding-left:0}
+  .cr-gal{grid-template-columns:1fr 1fr}.cr-ph.wide{grid-column:1/-1;aspect-ratio:16/10}
+  .cr-rail{grid-template-columns:1fr}
+  .cr-logos{grid-template-columns:repeat(4,1fr)}
+}
+@media (max-width:640px){
+  .a1-facts{gap:18px}.a1-facts b{font-size:26px}
+  .cr{padding:72px 0}
+  .cr-stat b{font-size:44px}
+  .cr-gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;margin-right:calc(var(--pad) * -1);padding-right:var(--pad)}
+  .cr-ph{flex:0 0 78%;scroll-snap-align:start}.cr-ph.wide{aspect-ratio:4/5}
+  .cr-logos{grid-template-columns:repeat(3,1fr)}.cr-logos div{height:60px}
+}
+</style></head><body>
+
+<div class="sk-note">A1 · Programme, existing section. Each term card gains an AI row and its live brief. Shown: Term 04 (which brief sits in which term is a placeholder)</div>
+<section class="a1"><div class="wrap">
+  <div class="a1-head">
+    <div><div class="eyebrow">Programme</div><h2 class="title">18 months. Five terms.<br>Every term ends in a build.</h2></div>
+    <div class="a1-facts"><div><b>150 hrs</b>of AI, no code needed</div><div><b>25+</b>AI tools</div><div><b>5</b>AI products shipped</div><div><b>3</b>hackathons</div></div>
+  </div>
+  <article class="a1-card">
+    <div class="a1-img"><img src="https://ssb-school-concept.vercel.app/ai-terms/real/term4-lab-robotics.webp" alt=""><span>Oct – Dec ’27</span></div>
+    <div class="a1-body">
+      <div class="a1-term">TERM 04</div>
+      <h3>Advanced Domain Specialisation</h3>
+      <p>Choose electives across Strategy, Finance, Marketing, Product and Operations, take your startup to market and build business AI agents.</p>
+      <dl>
+        <div class="a1-row"><dt>Flagship</dt><dd>D2C Startup Challenge: ₹25K seed, ₹5L+ revenue target in six weeks</dd></div>
+        <div class="a1-row new"><dt>Live brief</dt><dd><b>AJIO</b>. Map conversion friction from search to checkout</dd></div>
+        <div class="a1-row new"><dt>AI build</dt><dd>Build AI agents in the 48-hour hackathon, e.g. a negotiation-training coach
+          <div class="a1-tools"><span>Relevance AI</span><span>CrewAI</span><span>Hugging Face</span><span>Ollama</span></div></dd></div>
+      </dl>
+      <div class="a1-meta"><div><b>9</b>courses</div><div><b>1</b>live project</div><div><b>2</b>masterclasses</div></div>
+    </div>
+  </article>
+</div></section>
+
+<div class="sk-note">A2 · New section "Career", light, sits between Programme and the Punch line. Mentors stay in Faculty</div>
+<section class="cr" id="career"><div class="wrap">
+  <header class="cr-head">
+    <div><div class="eyebrow">Career</div><h2 class="title">Every learner interns.<br>Many change lanes.</h2></div>
+    <div><p class="lede">Career prep starts in month 1 and runs until the offer letter. Internships run 3 to 6 months inside the PGP.</p><a class="link" href="#">Download the placement report ›</a></div>
+  </header>
+
+  <div class="cr-stats">
+    <div class="cr-stat"><b>100%</b><span>internship placement across cohorts 1 and 2</span></div>
+    <div class="cr-stat"><b>52%+</b><span>of interns in Product and Founder’s Office roles</span></div>
+    <div class="cr-stat"><b>1,100+</b><span>mock interviews before placements</span></div>
+    <div class="cr-stat"><b>300+</b><span>hours of 1:1 problem-solving with mentors</span></div>
+  </div>
+
+  <div class="cr-gal">
+    <figure class="cr-ph wide"><img src="https://ssb-school-concept.vercel.app/ai-terms/real/term3-students.webp" alt="">
+      <figcaption class="cr-cap"><i>Internship</i><p>3 to 6 months in Product, Founder’s Office, Marketing, Finance and Strategy</p><small>Akarsh built a GTM plan for BSLR Technologies. Ayush went from CA to private equity.</small></figcaption></figure>
+    <figure class="cr-ph"><img src="https://ssb-school-concept.vercel.app/immersions/creator-preneur-track.webp" alt="">
+      <figcaption class="cr-cap"><i>Creator track</i><p>6 months inside Reliance’s Jio Creative Labs</p><small>Tanisha Singhal, creator: 12.6M views, 13 brand deals</small></figcaption></figure>
+    <figure class="cr-ph"><img src="https://ssb-school-concept.vercel.app/immersions/domestic-immersions.webp" alt="">
+      <figcaption class="cr-cap"><i>Immersions</i><p>3 site visits: factory floor, quick-commerce ops, fashion HQ</p></figcaption></figure>
+  </div>
+
+  <div class="cr-rail">
+    <div class="cr-step"><i>Phase 01 · from month 1</i><h4>Clarity</h4><p>1:1 counselling, resume reviews, mentor allocation</p><b>150+ hrs career prep</b></div>
+    <div class="cr-step"><i>Phase 02</i><h4>Building</h4><p>Role-specific practicums, portfolio building, communication workshops</p><b>200+ hrs domain prep</b></div>
+    <div class="cr-step"><i>Phase 03</i><h4>Executing</h4><p>Employer outreach, mock interviews, salary negotiation</p><b>400+ hrs behavioural sessions</b></div>
+  </div>
+
+  <div class="cr-logos-h"><span>Interned at</span><span>24 companies</span></div>
+  <div class="cr-logos" id="crlogos"></div>
+</div></section>
+
+<div class="sk-note dark">Below: Punch, "Learn business [photo] by building it." (dark)</div>
+<script>
+var L=['razorpay','bharatpe','emergent','the-whole-truth','loestro','ninjacart','tooljet','onsurity','limechat','reckitt','mpl','apna','bcci','slikk','airtribe','neosapien','borderplus','chai-point','vaani','firstclub','clientell','spotdraft','aeos-labs','wns-vuram'];
+document.getElementById('crlogos').innerHTML=L.map(function(n){return '<div><img src="https://ssb-school-concept.vercel.app/internship/logos/'+n+'.png" alt="'+n+'" loading="eager"></div>'}).join('');
+</script>
+</body></html>

@@ -1,0 +1,35 @@
+/* Seams: the transitions between a dark and a light section. Markup sits between the slots in src/page.html.
+   .seam-grad = a curved green horizon (United Carriers style); .seam-px = small cells that fill in as you scroll (Transform9 / Bynar style). */
+.seam{position:relative;z-index:6;display:block;width:100%;pointer-events:none}
+/* gradient horizon: a dark dome that thins into green, then mint, then paper. Sized to the element exactly
+   (no oversize), so the top row is always the colour above and the bottom row the colour below. */
+.seam-grad{height:clamp(300px,52vh,560px);background:
+  linear-gradient(180deg,var(--from) 0%,rgba(0,0,0,0) 14%,rgba(0,0,0,0) 86%,var(--to) 100%),
+  radial-gradient(130% 92% at 50% 0%,var(--from) 0%,var(--from) 30%,#06150D 40%,#082C1A 49%,#0B5A33 58%,#1D925B 66%,#5CC58A 73%,#A9E2C1 80%,#DDF1E4 87%,var(--to) 94%)}
+.seam-grad::after{content:"";position:absolute;left:0;right:0;top:calc(var(--sp,0) * 6% + 46%);height:34%;background:radial-gradient(60% 50% at 50% 50%,rgba(107,238,159,.16),rgba(107,238,159,0));pointer-events:none}
+.seam-grad.up{background:
+  linear-gradient(180deg,var(--from) 0%,rgba(0,0,0,0) 14%,rgba(0,0,0,0) 86%,var(--to) 100%),
+  radial-gradient(130% 92% at 50% 100%,var(--to) 0%,var(--to) 30%,#06150D 40%,#082C1A 49%,#0B5A33 58%,#1D925B 66%,#5CC58A 73%,#A9E2C1 80%,#DDF1E4 87%,var(--from) 94%)}
+.seam-px{height:clamp(200px,30vh,340px);background:var(--from)}
+.seam-px::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--to)}
+.seam-px canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+@media (max-width:760px){
+  .seam-grad{height:34vh;min-height:220px}
+  .seam-px{height:22vh;min-height:150px}
+}
+@media (prefers-reduced-motion:reduce){
+  .seam-px{background:linear-gradient(var(--from),var(--to))}
+  .seam-px canvas{display:none}
+}
+/* sub-pixel boundaries between blocks let the page background show as a 1px line: overlap every block by 1px */
+main>*+*{margin-top:-1px}
+/* Rhythm (pass 3): seams are short, and the sections on either side drop most of their own padding,
+   so a transition reads as one gap, not three stacked gaps */
+.seam-grad{height:clamp(170px,26vh,300px)}
+.seam-px{height:clamp(120px,17vh,190px)}
+main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
+.seam+section:not(.pn-sec){padding-top:clamp(36px,4.5vw,64px)}
+@media (max-width:760px){
+  .seam-grad{height:20vh;min-height:140px}
+  .seam-px{height:14vh;min-height:110px}
+}

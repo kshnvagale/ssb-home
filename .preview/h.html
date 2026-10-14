@@ -1,0 +1,7 @@
+<!doctype html><html><body style="margin:0;background:#222;overflow:hidden">
+<iframe id="f" style="border:0;display:block;transform-origin:0 0"></iframe>
+<script>
+var q=new URLSearchParams(location.search), w=+q.get('w')||1440, h=+q.get('h')||900, f=document.getElementById('f');
+f.style.width=w+'px'; f.style.height=h+'px'; var s=Math.min(1, innerWidth/w); f.style.transform='scale('+s+')';
+f.src='/index.html?v='+Date.now();
+</script></body></html>

@@ -1,0 +1,145 @@
+/* Admissions & fees: five-step process, eligibility, intakes and fees, scholarships (sheet per scholarship, #scholarship-*), Impact Foundation backers */
+.ad-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:clamp(96px,11vw,150px) 0 clamp(96px,11vw,140px);overflow:hidden}
+.ad-sec::before{content:"";position:absolute;left:50%;top:120px;width:1400px;height:700px;margin-left:-700px;background:radial-gradient(closest-side,rgba(29,146,91,.22),rgba(29,146,91,0));pointer-events:none}
+.ad-wrap{position:relative;max-width:1440px;margin:0 auto;padding:0 var(--pad)}
+.ad-head{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:48px;align-items:end}
+.ad-eyebrow{color:var(--mint)}
+.ad-title{font-size:clamp(36px,4.6vw,66px);font-weight:500;letter-spacing:-.045em;line-height:1.02;text-wrap:balance}
+.ad-title span{color:rgba(255,255,255,.45)}
+.ad-side p{font-size:17px;line-height:1.5;color:rgba(255,255,255,.62);margin-bottom:22px;text-wrap:pretty}
+.ad-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px}
+.ad-link{display:inline-flex;gap:6px;font-size:15px;font-weight:500;color:#fff;padding-bottom:2px;border-bottom:1px solid rgba(255,255,255,.25);transition:border-color .3s,color .3s}
+.ad-link:hover{color:var(--mint);border-color:var(--mint)}
+/* steps: five columns on a hairline, each with its number on the line */
+.ad-steps{list-style:none;margin:clamp(56px,7vw,88px) 0 0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;border-top:1px solid rgba(255,255,255,.12)}
+.ad-step{position:relative;padding:28px 24px 0 0}
+.ad-step::before{content:"";position:absolute;top:-4px;left:0;width:7px;height:7px;border-radius:2px;background:var(--mint);box-shadow:0 0 0 4px var(--ink)}
+.ad-n{font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--mint)}
+.ad-step h3{margin-top:14px;font-size:19px;font-weight:500;letter-spacing:-.025em;line-height:1.2}
+.ad-step p{margin-top:8px;font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.58);text-wrap:pretty;max-width:26ch}
+/* cards */
+.ad-grid{margin-top:clamp(56px,6vw,80px);display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:12px}
+.ad-card{border-radius:20px;padding:28px 28px 24px;background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.ad-card h3{font-size:20px;font-weight:500;letter-spacing:-.025em}
+.ad-card-h{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ad-live{display:inline-flex;align-items:center;gap:8px;height:28px;padding:0 10px;border-radius:8px;background:rgba(107,238,159,.1);color:var(--mint);font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.ad-table{margin-top:18px}
+.ad-tr{display:grid;grid-template-columns:1.1fr 1fr 1fr;align-items:center;gap:12px;padding:13px 0;border-top:1px solid rgba(255,255,255,.08);font-size:15px;font-variant-numeric:tabular-nums}
+.ad-tr span:last-child{text-align:right}
+.ad-th{border-top:0;padding-top:0;font:500 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.ad-tr.is-past{color:rgba(255,255,255,.32)}
+.ad-tr.is-past span:last-child{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.25)}
+.ad-tr small{display:inline-block;margin-left:10px;padding:3px 6px;border-radius:5px;background:rgba(255,255,255,.06);font:500 9.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;vertical-align:2px}
+.ad-tr.is-now{margin:0 -14px;padding:14px;border-radius:12px;border-top-color:transparent;background:linear-gradient(90deg,rgba(29,146,91,.28),rgba(29,146,91,.1));color:#fff;font-weight:500}
+.ad-tr.is-now+.ad-tr{border-top-color:transparent}
+.ad-fine{margin-top:18px;font-size:13px;line-height:1.5;color:rgba(255,255,255,.42);max-width:62ch}
+.ad-list{list-style:none;margin-top:14px}
+.ad-list li{padding:14px 0;border-top:1px solid rgba(255,255,255,.08);font-size:15px;line-height:1.5;color:rgba(255,255,255,.7)}
+.ad-list li:first-child{border-top:0}
+.ad-list b{display:block;margin-bottom:3px;font:500 10.5px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
+/* scholarships */
+.ad-sch{margin-top:12px;border-radius:20px;padding:clamp(28px,3vw,40px);background:linear-gradient(150deg,#0A4A2A 0%,#073A21 45%,#05251A 100%);box-shadow:inset 0 0 0 1px rgba(107,238,159,.14);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:clamp(24px,3vw,48px);align-items:start}
+.ad-sch-title{font-size:clamp(28px,2.8vw,40px);font-weight:500;letter-spacing:-.04em;line-height:1.05}
+.ad-sch-head p{margin-top:12px;font-size:15.5px;line-height:1.5;color:rgba(255,255,255,.7);max-width:40ch}
+.ad-sch-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.ad-sc{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-height:104px;padding:18px 52px 18px 18px;border-radius:14px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);text-align:left;transition:background .3s var(--ease-out),transform .5s var(--ease-spring)}
+.ad-sc:hover{background:rgba(255,255,255,.11)}
+.ad-sc:active{transform:scale(.985)}
+.ad-sc:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+.ad-sc-k{font:500 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
+.ad-sc-t{font-size:18px;font-weight:500;letter-spacing:-.02em;line-height:1.2}
+.ad-sc-p{position:absolute;right:14px;bottom:14px;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:#fff;color:var(--ink);font-size:18px;line-height:1;transition:transform .5s var(--ease-spring)}
+.ad-sc:hover .ad-sc-p{transform:rotate(90deg)}
+.ad-backers{grid-column:1/-1;display:flex;align-items:center;gap:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1)}
+.ad-backers-k{flex:none;max-width:22ch;text-wrap:balance;font-size:13px;line-height:1.4;color:rgba(255,255,255,.55)}
+.ad-faces{list-style:none;display:flex;flex-wrap:wrap;gap:10px 22px}
+.ad-faces li{display:flex;align-items:center;gap:10px}
+.ad-faces img{width:40px;height:40px;border-radius:10px;object-fit:cover;object-position:50% 22%;background:#0d2a1b}
+.ad-faces span{font-size:12.5px;line-height:1.3;color:rgba(255,255,255,.55)}
+.ad-faces b{display:block;font-size:14px;font-weight:500;color:#fff;letter-spacing:-.01em}
+/* scholarship sheet: centred card on desktop, bottom sheet on a phone */
+.ad-sheet{position:fixed;inset:0;z-index:100;display:grid;place-items:center}
+.ad-sheet[hidden]{display:none}
+.ad-scrim{position:absolute;inset:0;background:rgba(2,8,5,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;transition:opacity .4s var(--ease-out)}
+.ad-panel{position:relative;width:min(620px,calc(100vw - 32px));max-height:calc(100vh - 64px);overflow:auto;border-radius:24px;padding:40px 40px 32px;background:#0B1510;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 40px 120px -20px rgba(0,0,0,.7);opacity:0;transform:translateY(16px) scale(.98);transition:opacity .4s var(--ease-out),transform .6s var(--ease-spring)}
+.ad-sheet.open .ad-scrim{opacity:1}
+.ad-sheet.open .ad-panel{opacity:1;transform:none}
+.ad-panel:focus{outline:none}
+.ad-x{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:8px;display:grid;place-items:center;background:rgba(255,255,255,.08);transition:background .3s}
+.ad-x:hover{background:rgba(255,255,255,.16)}
+.ad-x svg{width:14px;height:14px}
+.ad-pc .k{font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mint)}
+.ad-pc h3{margin-top:12px;font-size:clamp(26px,3vw,34px);font-weight:500;letter-spacing:-.035em;line-height:1.08;max-width:18ch}
+.ad-pc .lede{margin-top:12px;font-size:16px;line-height:1.5;color:rgba(255,255,255,.65)}
+.ad-pc h4{margin-top:28px;font:500 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.ad-pc ul{list-style:none;margin-top:12px}
+.ad-pc li{position:relative;padding:12px 0 12px 22px;border-top:1px solid rgba(255,255,255,.08);font-size:15px;line-height:1.45;color:rgba(255,255,255,.85)}
+.ad-pc li::before{content:"";position:absolute;left:2px;top:19px;width:6px;height:6px;border-radius:2px;background:var(--mint)}
+.ad-pc .note{margin-top:22px;font-size:13px;line-height:1.5;color:rgba(255,255,255,.45)}
+.ad-pc .row{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px}
+html.ad-lock, html.ad-lock body{overflow:hidden}
+@media (max-width:1100px){
+  .ad-head{grid-template-columns:1fr;gap:24px}
+  .ad-steps{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:36px}
+  .ad-grid{grid-template-columns:1fr}
+  .ad-sch{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .ad-sec{padding:88px 0 96px}
+  .ad-title{font-size:34px}
+  .ad-side p{font-size:15.5px}
+  .ad-ctas .cta{flex:1 1 100%;justify-content:space-between}
+  /* steps become a vertical timeline */
+  .ad-steps{grid-template-columns:1fr;border-top:0;border-left:1px solid rgba(255,255,255,.12);margin-left:3px;row-gap:0}
+  .ad-step{padding:0 0 26px 22px}
+  .ad-step::before{top:2px;left:-4px}
+  .ad-step h3{margin-top:8px;font-size:17px}
+  .ad-step p{font-size:14px;max-width:none}
+  .ad-card{padding:22px 18px 18px;border-radius:16px}
+  .ad-tr{grid-template-columns:1fr 1fr;font-size:14px}
+  .ad-tr span:nth-child(2){grid-row:2;grid-column:1;font-size:12.5px;color:rgba(255,255,255,.45);margin-top:-8px}
+  .ad-tr.is-now span:nth-child(2){color:rgba(255,255,255,.7)}
+  .ad-tr span:last-child{grid-row:1/3;grid-column:2;align-self:center}
+  .ad-th span:nth-child(2){display:none}
+  .ad-tr.is-now{margin:0 -10px;padding:12px 10px}
+  .ad-sch{border-radius:16px;padding:22px 18px}
+  .ad-sch-grid{grid-template-columns:1fr}
+  .ad-sc{min-height:0;padding:16px 52px 16px 16px}
+  .ad-backers{flex-direction:column;align-items:flex-start;gap:14px}
+  .ad-backers-k{max-width:none}
+  .ad-faces{display:grid;grid-template-columns:1fr;gap:10px}
+  .ad-sheet{place-items:end stretch}
+  .ad-panel{width:100%;max-height:calc(100% - 44px);border-radius:22px 22px 0 0;padding:32px 22px 28px;transform:translateY(100%);opacity:1;transition:transform .55s var(--ease-spring)}
+}
+@media (prefers-reduced-motion:reduce){
+  .ad-panel, .ad-scrim, .ad-sc, .ad-sc-p{transition:none!important}
+}
+/* Simple layout (pass 3): a sticky intro at the left (title, line, eligibility, CTAs), plain cards at the right
+   (process, programme fee), then the scholarship block full width */
+.ad-top{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(40px,5vw,72px);align-items:start}
+.ad-left{position:sticky;top:104px;display:flex;flex-direction:column;gap:14px}
+.ad-left .ad-title{font-size:clamp(34px,3.9vw,56px)}
+.ad-lede{font-size:17px;line-height:1.5;color:rgba(255,255,255,.62);max-width:40ch}
+.ad-left .ad-elig{margin-top:10px;padding:22px 24px}
+.ad-elig p{margin-top:10px;font-size:15px;line-height:1.55;color:rgba(255,255,255,.66)}
+.ad-left .ad-ctas{margin-top:8px}
+.ad-right{display:flex;flex-direction:column;gap:12px;min-width:0}
+.ad-proc-list{list-style:none;margin-top:16px;counter-reset:none}
+.ad-proc-list li{display:flex;align-items:baseline;gap:16px;padding:13px 0;border-top:1px solid rgba(255,255,255,.08);font-size:16px;letter-spacing:-.01em}
+.ad-proc-list li:first-child{border-top:0}
+.ad-proc-list span{flex:none;width:22px;font:500 11px/1 var(--mono);letter-spacing:.1em;color:var(--mint)}
+.ad-fast{margin-top:14px;padding:14px 16px;border-radius:12px;background:rgba(107,238,159,.07);font-size:14px;line-height:1.5;color:rgba(255,255,255,.7)}
+.ad-fast b{display:block;margin-bottom:4px;font:500 10.5px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
+.ad-sch{margin-top:clamp(40px,5vw,64px)}
+@media (max-width:1000px){
+  .ad-top{grid-template-columns:1fr}
+  .ad-left{position:static}
+}
+@media (max-width:640px){
+  .ad-left .ad-title{font-size:34px}
+  .ad-lede{font-size:15.5px}
+  .ad-left .ad-elig{padding:18px}
+  .ad-proc-list li{font-size:15px}
+}
+.ad-left .sec-eyebrow{margin-bottom:2px}
+@media (max-width:640px){ .ad-th span:last-child{grid-row:1;grid-column:2;align-self:end} .ad-th{font-size:10px} }

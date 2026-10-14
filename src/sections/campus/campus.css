@@ -1,0 +1,70 @@
+/* Campus life: the cohort arrives full-bleed and pulls back into the middle of a mosaic of the campus (the live site's lab moment) */
+.cl-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:clamp(88px,11vw,150px) 0 clamp(88px,11vw,150px)}
+.cl-frame{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
+.cl-head{max-width:46rem;margin-bottom:clamp(32px,4vw,48px)}
+.cl-eyebrow{color:var(--mint);font-family:var(--mono);font-size:12px;letter-spacing:.14em}
+.cl-title{font-size:clamp(34px,4.4vw,64px);font-weight:500;letter-spacing:-.042em;line-height:1.02;text-wrap:balance}
+.cl-sub{margin-top:18px;font-size:17px;line-height:1.5;color:rgba(255,255,255,.62);max-width:40ch;text-wrap:pretty}
+/* phone: cohort across the top, then the four in two rows */
+.cl-mosaic{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:'hero hero' 'a d' 'b e';gap:8px}
+.cl-slot{grid-area:hero;display:grid}
+.cl-slot>*{grid-area:1/1}
+.cl-tile{margin:0;overflow:hidden;aspect-ratio:1;border-radius:14px;background:#0F2418}
+.cl-hero{aspect-ratio:4/3}
+.cl-tile img{display:block;width:100%;height:100%;max-width:none;object-fit:cover}
+.cl-tile[data-area="a"]{grid-area:a}.cl-tile[data-area="b"]{grid-area:b}.cl-tile[data-area="d"]{grid-area:d}.cl-tile[data-area="e"]{grid-area:e}
+.cl-tile[data-area] img{transition:transform .6s cubic-bezier(.22,1,.36,1)}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){ .cl-tile[data-area]:hover img{transform:scale(1.05)} }
+/* follow buttons: glass on the cohort photo, lower left */
+.cl-social{position:relative;z-index:2;align-self:end;justify-self:start;margin:16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;max-width:calc(100% - 32px)}
+.cl-social-lbl{flex-basis:100%;margin:0 0 2px;font-size:12px;font-weight:600;letter-spacing:.04em;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+.cl-glass{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px 0 12px;border:1px solid rgba(255,255,255,.35);border-radius:8px;background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);color:#fff;font-size:15px;font-weight:500;white-space:nowrap;transition:background-color .2s linear}
+.cl-glass:hover{background:rgba(255,255,255,.28)}
+.cl-glass:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+.cl-glass svg{width:18px;height:18px;flex:none}
+.cl-glass small{font:400 11px/1 var(--mono);letter-spacing:.06em;color:rgba(255,255,255,.7)}
+@media (min-width:672px){
+  .cl-mosaic{gap:12px}
+  .cl-tile{aspect-ratio:3/2}
+  .cl-hero{aspect-ratio:16/9}
+}
+/* desktop: three columns, the cohort in the middle twice as wide, a tall and a short tile either side */
+@media (min-width:1056px){
+  .cl-mosaic{grid-template-columns:minmax(0,1fr) minmax(0,2fr) minmax(0,1fr);grid-template-rows:repeat(3,minmax(0,1fr));grid-template-areas:'a hero d' 'a hero e' 'b hero e';height:clamp(30rem,46vw,42rem)}
+  .cl-tile, .cl-hero{aspect-ratio:auto}
+}
+@media (max-width:640px){
+  .cl-social{margin:10px;gap:6px}
+  .cl-glass{height:36px;font-size:13px;padding:0 12px 0 10px}
+  .cl-glass small{display:none}
+  .cl-sub{font-size:15.5px}
+}
+/* The moment (desktop, tall enough, motion allowed): the track is a screen plus .75 of one; the stage sticks;
+   the cohort, lifted out over the whole stage (cl-live), is trimmed back to its tile by clip-path. */
+@media (min-width:1056px) and (min-height:640px) and (prefers-reduced-motion:no-preference){
+  .cl-sec{padding:0}
+  .cl-track{height:calc(175svh)}
+  .cl-stage{position:sticky;top:0;height:100svh;overflow:clip}
+  .cl-frame{display:flex;flex-direction:column;height:100%;padding-top:clamp(76px,9vh,96px);padding-bottom:28px}
+  .cl-head{flex:none;margin-bottom:28px}
+  .cl-frame .cl-mosaic{flex:1;min-height:0;height:auto}
+  .cl-sec.cl-live .cl-hero{position:absolute;inset:0;z-index:1;border-radius:0}
+  .cl-sec.cl-live .cl-hero img, .cl-sec.cl-live .cl-tile[data-area]{will-change:transform}
+}
+/* everywhere else: the tiles wipe open as they are reached */
+.cl-js:not(.cl-live) .cl-tile{clip-path:inset(100% 0 0 0 round 14px)}
+.cl-js:not(.cl-live) .cl-tile img{transform:scale(1.18)}
+.cl-js:not(.cl-live) .cl-tile.is-in{clip-path:inset(0 0 0 0 round 14px);transition:clip-path .78s cubic-bezier(.4,.14,.3,1) var(--dl,0s)}
+.cl-js:not(.cl-live) .cl-tile.is-in img{transform:none;transition:transform 1s cubic-bezier(0,0,.3,1) var(--dl,0s)}
+.cl-js:not(.cl-live) .cl-head{opacity:0;transform:translateY(12px)}
+.cl-js:not(.cl-live) .cl-head.is-in{opacity:1;transform:none;transition:opacity .8s cubic-bezier(0,0,.3,1),transform .8s cubic-bezier(0,0,.3,1)}
+@media (prefers-reduced-motion:reduce){
+  .cl-js .cl-tile, .cl-js .cl-tile img, .cl-js .cl-head{clip-path:none!important;transform:none!important;opacity:1!important}
+}
+/* Light mode (refinement pass 2): paper background like faculty; the full-bleed cohort photo is the divider between the two */
+.cl-sec{background:#FBFAF7;color:var(--ink-t)}
+.cl-eyebrow{color:#075C32}
+.cl-title{color:var(--ink-t)}
+.cl-sub{color:rgba(10,28,19,.62)}
+.cl-tile{background:#E7E8E2}
+.cl-title em{font-style:normal;color:#075C32}
