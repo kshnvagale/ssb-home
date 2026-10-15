@@ -32,6 +32,24 @@ Silent failures to know about:
 - A section in `SECTIONS` but with **no `{{name}}` slot in `page.html`**: its HTML is skipped, with no warning. Its CSS still goes in.
 - All CSS shares one stylesheet. A loose selector in one section can restyle another. Scope every rule to your section prefix.
 
+## Type scale and section rhythm (global.css tokens)
+
+Every section title, eyebrow, lead line and section padding comes from these. Do not set font sizes or section padding by hand in a section file.
+
+| Token | Desktop | Phone (<=760) | Used for |
+|---|---|---|---|
+| `--t-h2` / `-lh` / `-ls` | clamp(32px,3.4vw,50px) / 1.04 / -.038em | 32px | every section title, breaker headlines |
+| `--t-h3` | clamp(24px,2.3vw,34px) | 24px | sub-blocks (scholarships, clubs intro) |
+| `--t-lead` | 17px | 15.5px | the line under a title |
+| `.sec-eyebrow` | 500 12px mono, .14em, gap `--t-eb-gap` (16 / 14) | same | every eyebrow, no lines |
+| `--sec-y` | clamp(80px,9vw,128px) | 72px | top and bottom section padding |
+| `--sec-y-tight` | clamp(40px,4.5vw,64px) | 40px | next to a seam, or two sections that share a background |
+| `--head-gap` | clamp(28px,3.4vw,44px) | same | section header to its content |
+
+Sticky columns: never put `overflow:hidden` on a section that has a sticky child (it makes the section the scroll box and the sticky column drops down). Use `overflow:clip`.
+
+Overlays: the root hides with `visibility` after a delay equal to its exit animation (`transition:visibility 0s linear .5s`, reset to `0s` when open), so every modal, sheet and panel animates out the way it came in. Keep enter and exit on `--ease-out`, .4s to .6s.
+
 ## Section conventions
 
 Follow these in every section:
@@ -106,7 +124,9 @@ The `.cta` base rule in `global.css` still says `border-radius:999px`. A later r
 - Pillar figures come from the v3 lab (ssb-school-concept.vercel.app/v3): 150 hrs AI, 25+ tools, 5 AI products, 3 hackathons, ₹25K / ₹5L+ / ₹50K / ₹25L business funding, 6 briefs, 3 immersions, 6 months at Jio Creative Labs, 4 super mentor sessions. Confirm before launch.
 - Breaker stats (60% of MBA students, Forbes 2026; 62% AI wage premium, PwC 2026) come from v3 and are not yet traced to the source reports.
 - Press: the Inshorts piece says the founding cohort's average CTC is ₹18 LPA; outcomes elsewhere use ₹19L (Cohort 1). The Tribune piece is a syndicated press release (VMPL / ANI advertorial).
-- Student clubs: Marketing and Consulting are real (v3); the other eight are placeholders.
+- Student clubs: Marketing and Consulting are real (v3); the other eight are placeholders, and the "10" on the intro tile counts them.
+- Faculty and mentor one-liners (`note` in `tools/faculty_data.py`) are dummy copy written for layout, not quotes or researched facts.
+- Founding team: Amar Srivastava's chip reads "Scaler" (his current company); every other chip is a past company.
 - Founding team names and roles come from v3; Vidit Jain's title matches the July 2026 press release.
 - Reels are placeholders: real posters, but every reel plays the same campus film (`REEL_SRC` in `tools/pillars_data.py`).
 

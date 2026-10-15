@@ -1,5 +1,5 @@
 /* Campus life: the cohort arrives full-bleed and pulls back into the middle of a mosaic of the campus (the live site's lab moment) */
-.cl-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:clamp(88px,11vw,150px) 0 clamp(88px,11vw,150px)}
+.cl-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:var(--sec-y) 0 0}
 .cl-frame{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
 .cl-head{max-width:46rem;margin-bottom:clamp(32px,4vw,48px)}
 .cl-eyebrow{color:var(--mint)}
@@ -44,7 +44,8 @@
   .cl-sec{padding:0}
   .cl-track{height:calc(175svh)}
   .cl-stage{position:sticky;top:0;height:100svh;overflow:clip}
-  .cl-frame{display:flex;flex-direction:column;height:100%;padding-top:clamp(76px,9vh,96px);padding-bottom:28px}
+  .cl-stage .cl-frame{display:flex;flex-direction:column;height:100%;padding-top:clamp(76px,9vh,96px);padding-bottom:28px}
+  .cl-sec .cl-clubs{margin-top:-16px}
   .cl-head{flex:none;margin-bottom:28px}
   .cl-frame .cl-mosaic{flex:1;min-height:0;height:auto}
   .cl-sec.cl-live .cl-hero{position:absolute;inset:0;z-index:1;border-radius:0}
@@ -96,7 +97,7 @@
 @media (max-width:760px){
   .cl-clubs{margin-top:8px}
   .cl-clubs .cl-frame{padding:0}
-  .cl-bento{grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(2,minmax(150px,auto));grid-auto-columns:minmax(0,58vw);gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 var(--pad);scroll-padding:0 var(--pad);scrollbar-width:none}
+  .cl-bento{grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(2,minmax(150px,auto));grid-auto-columns:min(62vw,250px);gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 var(--pad);scroll-padding:0 var(--pad);scrollbar-width:none}
   .cl-bento::-webkit-scrollbar{display:none}
   .cl-bt{scroll-snap-align:start;padding:16px;gap:14px}
   .cl-bt--intro{grid-column:span 1;grid-row:span 2;padding:20px}

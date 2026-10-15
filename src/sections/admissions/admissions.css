@@ -1,5 +1,5 @@
 /* Admissions & fees: five-step process, eligibility, intakes and fees, scholarships (sheet per scholarship, #scholarship-*), Impact Foundation backers */
-.ad-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:var(--sec-y) 0;overflow:hidden}
+.ad-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:var(--sec-y) 0;overflow:clip}
 .ad-sec::before{content:"";position:absolute;left:50%;top:120px;width:1400px;height:700px;margin-left:-700px;background:radial-gradient(closest-side,rgba(29,146,91,.22),rgba(29,146,91,0));pointer-events:none}
 .ad-wrap{position:relative;max-width:1440px;margin:0 auto;padding:0 var(--pad)}
 .ad-head{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:48px;align-items:end}
@@ -61,7 +61,7 @@
 .ad-sheet{position:fixed;inset:0;z-index:100;display:grid;place-items:center}
 .ad-sheet[hidden]{display:none}
 .ad-scrim{position:absolute;inset:0;background:rgba(2,8,5,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;transition:opacity .4s var(--ease-out)}
-.ad-panel{position:relative;width:min(620px,calc(100vw - 32px));max-height:calc(100vh - 64px);overflow:auto;border-radius:24px;padding:40px 40px 32px;background:#0B1510;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 40px 120px -20px rgba(0,0,0,.7);opacity:0;transform:translateY(16px) scale(.98);transition:opacity .4s var(--ease-out),transform .6s var(--ease-spring)}
+.ad-panel{position:relative;width:min(620px,calc(100vw - 32px));max-height:calc(100vh - 64px);overflow:auto;border-radius:24px;padding:40px 40px 32px;background:#0B1510;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 40px 120px -20px rgba(0,0,0,.7);opacity:0;transform:translateY(16px) scale(.98);transition:opacity .4s var(--ease-out),transform .6s var(--ease-out)}
 .ad-sheet.open .ad-scrim{opacity:1}
 .ad-sheet.open .ad-panel{opacity:1;transform:none}
 .ad-panel:focus{outline:none}
@@ -107,7 +107,7 @@ html.ad-lock, html.ad-lock body{overflow:hidden}
   .ad-backers-k{max-width:none}
   .ad-faces{display:grid;grid-template-columns:1fr;gap:10px}
   .ad-sheet{place-items:end stretch}
-  .ad-panel{width:100%;max-height:calc(100% - 44px);border-radius:22px 22px 0 0;padding:32px 22px 28px;transform:translateY(100%);opacity:1;transition:transform .55s var(--ease-spring)}
+  .ad-panel{width:100%;max-height:calc(100% - 44px);border-radius:22px 22px 0 0;padding:32px 22px 28px;transform:translateY(100%);opacity:1;transition:transform .55s var(--ease-out)}
 }
 @media (prefers-reduced-motion:reduce){
   .ad-panel, .ad-scrim, .ad-sc, .ad-sc-p{transition:none!important}

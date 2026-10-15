@@ -50,7 +50,7 @@ Sections in page order:
 | 10 | `breakers` (`voices`) | Full-width video breaker, two slides: Anupam Mittal, Ankur Warikoo; controls at the bottom | dark |
 | | seam | Pixel fill, dark to light | |
 | 11 | `faculty` | Name list with stacked brand tiles that fan out, sticky portrait, topic filter | light |
-| 12 | `campus` | Campus life: the cohort arrives full-bleed and pulls back into a photo mosaic; student clubs strip | light |
+| 12 | `campus` | Campus life: the cohort arrives full-bleed and pulls back into a photo mosaic; student clubs bento (icons) right under it | light |
 | 13 | `team` | Founding team: portrait grid (rail on phones) with past companies | light |
 | | seam | Pixel fill, light to dark | |
 | 14 | `press` | Four real articles about SSB (rail on phones) | dark |
