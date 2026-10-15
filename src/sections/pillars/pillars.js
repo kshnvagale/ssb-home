@@ -21,17 +21,22 @@
     // panels stick just under the pinned headline: its height drives --pl-top
     if(innerWidth>760) sec.style.setProperty('--pl-bar',bar.offsetHeight+'px'); else sec.style.removeProperty('--pl-bar');
     var cs=getComputedStyle(panels[0]);
-    stickTop=parseFloat(cs.top)||0;
+    stickTop=parseFloat(getComputedStyle(sec.querySelector('.pl-scene')).top)||0;
     step=panels[0].offsetHeight+(parseFloat(cs.marginBottom)||0);
     top0=stack.getBoundingClientRect().top+scrollY;
     mob=innerWidth<=1180; sceneH=deck.offsetHeight||600;
   }
-  function ease(t){ return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2; }
-  function frame(){
-    raf=0;
+  function ease(t){ return t*t*(3-2*t); }
+  var cur=-1, tLast=0;
+  function frame(now){
+    raf=0; now=now||performance.now();
     var raw=Math.max(0,Math.min(P.length-1,(scrollY+stickTop-top0)/step)), f=Math.floor(raw), fr=raw-f;
-    // hold for the first half of each step, then move over the second half
-    var p=Math.min(P.length-1,f+ease(Math.max(0,Math.min(1,(fr-.5)/.5)))), n=Math.round(p);
+    // a brief rest at the start of each step, then the move; the deck then follows that target with a soft lag
+    var tp=Math.min(P.length-1,f+ease(Math.max(0,Math.min(1,(fr-.12)/.88))));
+    var dt=tLast?Math.min(64,now-tLast):16.7; tLast=now;
+    if(cur<0||rm.matches||Math.abs(tp-cur)>2.5) cur=tp; else cur+=(tp-cur)*(1-Math.pow(.84,dt/16.7));
+    if(Math.abs(tp-cur)<.0005) cur=tp;
+    var p=cur, n=Math.round(p);
     P.forEach(function(o,i){
       var d=i-p, s=o.card.style, front=Math.abs(d)<.5;
       o.card.classList.toggle('is-front',rm.matches?i===n:front); o.card.inert=rm.matches?i!==n:!front;
@@ -48,6 +53,7 @@
       s.visibility=(d>3||d<=-1)?'hidden':'visible';
       s.zIndex=String(100-i);
     });
+    if(cur!==tp) raf=requestAnimationFrame(frame); else tLast=0;
     n=Math.max(0,n);
     // the index docks at the bottom while the panels fill the screen
     var sr=stack.getBoundingClientRect(), on=sr.top<innerHeight*0.55&&sr.bottom>innerHeight*0.6;
