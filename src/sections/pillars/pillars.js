@@ -62,6 +62,26 @@
     scrollTo({top:top0+i*step-stickTop+2,behavior:rm.matches?'auto':'smooth'}); }); });
   if(window.ResizeObserver) new ResizeObserver(function(){ measure(); kick(); }).observe(bar);
 
+  // ---------- orbit (desktop): logos evenly spaced on one ring, travelling slowly; only the panels on screen move ----------
+  var OB=panels.map(function(p,k){ return {st:p.querySelector('.pl-stage'), card:p.querySelector('.pl-card'), it:[].slice.call(p.querySelectorAll('.pl-ob')), a0:-Math.PI/2+k*.7, on:false, w:0, h:0, half:0}; });
+  var obPhase=0, obLast=0, obRaf=0, REV=150000;
+  function obMeasure(){ OB.forEach(function(o){ o.w=o.st.clientWidth; o.h=o.st.clientHeight; o.half=o.card.offsetWidth/2; }); }
+  function obPlace(o){ var n=o.it.length; if(!n) return; var rx=o.w*.45, ry=o.h*.40;
+    o.it.forEach(function(el,i){ var t=o.a0+obPhase+i*2*Math.PI/n, s=Math.sin(t), d=(s+1)/2;
+      el.style.setProperty('--ox',(o.w/2+rx*Math.cos(t)).toFixed(1)+'px'); el.style.setProperty('--oy',(o.h/2+ry*s).toFixed(1)+'px');
+      // fade out while passing behind the card column (never half-covered by the card or the index), slightly smaller at the back
+      var dx=Math.abs(rx*Math.cos(t)), vis=Math.max(0,Math.min(1,(dx-o.half-24)/70));
+      el.style.setProperty('--os',(.84+.16*d).toFixed(3)); el.style.setProperty('--oo',vis.toFixed(3)); }); }
+  function obTick(now){ obRaf=0; if(innerWidth<1181) return;
+    if(obLast&&!rm.matches) obPhase+=(now-obLast)/REV*2*Math.PI; obLast=now;
+    var any=false; OB.forEach(function(o){ if(o.on){ any=true; obPlace(o); } });
+    if(any&&!rm.matches) obRaf=requestAnimationFrame(obTick); else obLast=0; }
+  function obKick(){ if(!obRaf) obRaf=requestAnimationFrame(obTick); }
+  if('IntersectionObserver' in window){ var obIO=new IntersectionObserver(function(es){ es.forEach(function(en){ OB.forEach(function(o){ if(o.st===en.target) o.on=en.isIntersecting; }); }); obKick(); });
+    OB.forEach(function(o){ obIO.observe(o.st); }); } else OB.forEach(function(o){ o.on=true; });
+  obMeasure(); OB.forEach(obPlace);
+  addEventListener('resize',function(){ obMeasure(); OB.forEach(obPlace); obKick(); });
+
   // ---------- rails: arrows (desktop), mouse drag, arrow state ----------
   [].slice.call(sec.querySelectorAll('.pl-card')).forEach(function(card){
     var rail=card.querySelector('.pl-rail'), pv=card.querySelector('.pl-pv'), nx=card.querySelector('.pl-nx');

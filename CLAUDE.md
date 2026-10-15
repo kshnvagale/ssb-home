@@ -50,6 +50,11 @@ Sticky columns: never put `overflow:hidden` on a section that has a sticky child
 
 Overlays: the root hides with `visibility` after a delay equal to its exit animation (`transition:visibility 0s linear .5s`, reset to `0s` when open), so every modal, sheet and panel animates out the way it came in. Keep enter and exit on `--ease-out`, .4s to .6s.
 
+## How you learn panels: background and logos
+
+No photos behind the cards. Each panel has an abstract background (`aura()` in `tools/pillars_data.py`, colours in `AURA`): a deep green base, two slow glows, a light behind the card, grain. The only lines are the orbit rings.
+Desktop (1181px and up): the pillar's logos (icon floaters, deduped) sit evenly on one ring and travel along it (`pillars.js`, one turn per 150s, only panels on screen move). They fade out while behind the card column. Below 1181px they are one centred row at the top of the panel (8 max on tablets, 6 on phones). Text chips in `floaters` are kept in the data but no longer shown. The photos in `bg` are still the headers of the detail sheets.
+
 ## Pinned headline in How you learn
 
 The headline (`.pl-bar`) is sticky to the section, the panels to `.pl-stack`. On desktop the stack has a negative bottom margin of one panel and the section gets it back as padding, so the section's content box ends where the last panel starts to move and the headline leaves with it. Do not remove one half without the other.

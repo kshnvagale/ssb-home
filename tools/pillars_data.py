@@ -226,6 +226,31 @@ def floater(f, k=0):
     sub = f'<small>{e(label)}</small>' if label else ''
     return f'<span class="{cls} pl-chip" style="{style}" data-d="{d}">{sub}{e(val)}</span>'
 
+
+# Panel backgrounds: abstract, not photos, so the card stays the focus: a deep green base, two soft glows that drift,
+# a light behind the card, grain on top. The lines are the orbit rings the logos travel on (see orbit()).
+# Colours per pillar: (glow a, glow b). The photo in `bg` is still used as the header of the detail sheet.
+AURA = {
+    'ai':         ('#0E8A63', '#1C9CA8'),
+    'build':      ('#0B7A3E', '#C9A04A'),
+    'projects':   ('#0A6E58', '#3FA9C4'),
+    'immersions': ('#0C6B3F', '#D98E52'),
+    'mentors':    ('#0D6A47', '#7F72E0'),
+}
+def aura(key):
+    a, b = AURA[key]
+    return f'<div class="pl-bg pl-aura" style="--ga:{a};--gb:{b}" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div>'
+
+# Desktop (1181px and up): the logos sit evenly on one orbit ring around the card and travel along it slowly
+# (pillars.js). Two fainter rings echo it. Text chips are not shown in the background any more.
+def orbit(p):
+    seen, ics = set(), []
+    for f in p['floaters']:
+        if f[0] == 'ic' and f[1] not in seen:
+            seen.add(f[1]); ics.append(f)
+    logos = ''.join(f'<span class="pl-ob"><img src="{f[1]}" alt="{e(f[2])}" width="68" height="68" decoding="async" loading="lazy"></span>' for f in ics)
+    return f'<div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span>{logos}</div>'
+
 def rail_item(p, i, it):
     kind, src, pos, title, sub = it
     img = f'<img src="{src}" alt="" loading="lazy" decoding="async" style="object-position:{pos}">'
@@ -240,7 +265,7 @@ def panel(p, n, total):
     rail = ''.join(rail_item(p, i, it) for i, it in enumerate(p['rail']))
     cnt = {'t': 0, 'b': 0}
     fls = []
-    for f in p['floaters']:
+    for f in [f for f in p['floaters'] if f[0] == 'ic']:
         band = f[6]
         fls.append(floater(f, cnt.get(band, 0)))
         if band:
@@ -249,7 +274,8 @@ def panel(p, n, total):
     return f'''
     <article class="pl-panel" id="learn-{p['key']}" data-key="{p['key']}" data-sub="{e(p['name'])}" aria-labelledby="pl-t-{p['key']}">
       <div class="pl-stage">
-        <img class="pl-bg" src="{p['bg']}" alt="" loading="lazy" decoding="async" style="object-position:{p['fx']}">
+        {aura(p['key'])}
+        {orbit(p)}
         <div class="pl-fl" aria-hidden="false">{fl}</div>
         <div class="pl-card">
           <div class="pl-in">
