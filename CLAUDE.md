@@ -55,6 +55,11 @@ Overlays: the root hides with `visibility` after a delay equal to its exit anima
 No photos behind the cards. Each panel has an abstract background (`aura()` in `tools/pillars_data.py`, colours in `AURA`): a deep green base, two slow glows, a light behind the card, grain. The only lines are the orbit rings.
 Desktop (1181px and up): the pillar's logos (icon floaters, deduped) sit evenly on one ring and travel along it (`pillars.js`, one turn per 150s, only panels on screen move). They fade out while behind the card column. Below 1181px they are one centred row at the top of the panel (8 max on tablets, 6 on phones). Text chips in `floaters` are kept in the data but no longer shown. The photos in `bg` are still the headers of the detail sheets.
 
+## How you learn: the deck
+
+One pinned scene (`.pl-scene`) holds the background, the logos and all five cards. On load `pillars.js` moves each card out of its panel into `.pl-deck`; the panels stay as empty scroll spacers (they keep the `#learn-*` ids, the stack height and the pillar index jumps).
+Scroll runs p from 0 to 4. Each card rests for the first half of its step, then the front card slides up and tilts back (top tips away, rotateX) and leaves, solid until the last fifth; the next card steps forward from the deck. Waiting cards sit behind, 5% smaller per step and 14px lower (10px on phones), bottom-anchored so only their bottom edges show, with their content faded. Only the front card takes clicks and focus (others are `inert`). The background layer and the logo ring crossfade to the active card. Reduced motion: no transforms, the active card simply swaps.
+
 ## Pinned headline in How you learn
 
 The headline (`.pl-bar`) is sticky to the section, the panels to `.pl-stack`. On desktop the stack has a negative bottom margin of one panel and the section gets it back as padding, so the section's content box ends where the last panel starts to move and the headline leaves with it. Do not remove one half without the other.

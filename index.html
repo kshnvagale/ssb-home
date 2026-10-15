@@ -953,9 +953,20 @@ main>.bk-sec{padding:0!important}
   .pl-sec{padding-bottom:calc(var(--pl-h) + 24px)}
 }
 .pl-panel:last-child{margin-bottom:0}
-.pl-stage{position:relative;height:100%;border-radius:24px;overflow:hidden;background:#0b1510;isolation:isolate;transform-origin:50% 0;transform:scale(calc(1 - var(--cov,0) * .06));will-change:transform}
-.pl-stage::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27160%27 height=%27160%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")}
-.pl-stage::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:#050E09;opacity:calc(var(--cov,0) * .55)}
+.pl-stage{position:relative;height:100%;isolation:isolate}
+/* one pinned scene behind all the cards: it sticks with the stack and takes no height (negative margin) */
+.pl-scene{position:sticky;top:var(--pl-top);z-index:0;height:var(--pl-h);margin-bottom:calc(-1 * var(--pl-h));border-radius:24px;overflow:hidden;background:#040C08;isolation:isolate}
+.pl-layer{position:absolute;inset:0;opacity:0;transition:opacity .7s var(--ease-out)}
+.pl-layer.on{opacity:1}
+.pl-layer .pl-bg{top:0;height:100%;transform:none}
+.pl-grain{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27160%27 height=%27160%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")}
+.pl-panel{z-index:1;pointer-events:none}
+/* the deck sits in the scene; cards are transformed by pillars.js (bottom-anchored so the deck shows bottom edges) */
+.pl-deck{position:absolute;inset:0;z-index:4;perspective:1600px;perspective-origin:50% 0}
+.pl-deck .pl-card{transform-origin:50% 100%;pointer-events:none;will-change:transform,opacity;backface-visibility:hidden}
+.pl-deck .pl-card.is-front{pointer-events:auto}
+
+
 .pl-bg{position:absolute;left:0;top:-8%;width:100%;height:116%;object-fit:cover;transform:translate3d(0,var(--bgy,0px),0) scale(1.02);will-change:transform}
 /* abstract panel background (replaces the photos): base, three drifting glows, grid, twinkling cells, light behind the card */
 .pl-aura{overflow:hidden;background:radial-gradient(120% 90% at 50% 110%,#0A2417 0%,#06130C 55%,#040C08 100%)}
@@ -997,8 +1008,11 @@ main>.bk-sec{padding:0!important}
 .pl-ic img{width:100%;height:100%;object-fit:cover}
 .pl-chip{display:flex;flex-direction:column;gap:3px;padding:10px 13px;border-radius:10px;background:rgba(251,250,247,.94);color:var(--ink-t);font-size:13.5px;font-weight:500;letter-spacing:-.01em;line-height:1.2;white-space:nowrap;box-shadow:0 22px 44px -20px rgba(0,0,0,.7);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .pl-chip small{font:500 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--cta)}
-.pl-card{position:absolute;z-index:3;left:50%;top:50%;width:min(460px,calc(100% - 28px));transform:translate3d(-50%,calc(-50% + var(--cy,0px)),0);background:#FBFAF7;color:var(--ink-t);border-radius:20px;padding:24px 0 22px;box-shadow:0 50px 90px -34px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.4)}
+.pl-card{position:absolute;z-index:3;left:50%;top:50%;width:min(460px,calc(100% - 28px));transform-origin:50% 0;transform:translate3d(-50%,calc(-50% + var(--cy,0px) - var(--cov,0) * 16px),0) scale(calc(1 - var(--cov,0) * .05));background:#FBFAF7;color:var(--ink-t);border-radius:20px;padding:24px 0 22px;box-shadow:0 50px 90px -34px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.4)}
 .pl-in{padding:0 24px}
+.pl-card::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#050E09;opacity:calc(var(--cov,0) * .55);pointer-events:none}
+/* a covered card shows only its edge behind the next one: its content fades out as it is covered */
+.pl-card>*{opacity:calc(1 - var(--cov,0) * 1.4)}
 .pl-k{font:500 11px/1 var(--mono);letter-spacing:.12em;color:var(--faint-t)}
 .pl-k b{font-weight:500;color:var(--cta)}
 .pl-t{margin:12px 0 6px;font-size:30px;font-weight:500;letter-spacing:-.032em;line-height:1.05}
@@ -1071,7 +1085,7 @@ main>.bk-sec{padding:0!important}
   .pl-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500}
   .pl-stack{padding:0 8px}
   .pl-panel{margin-bottom:8px}
-  .pl-stage{border-radius:18px}
+  .pl-scene{border-radius:18px}
   .pl-ic{width:44px;height:44px;border-radius:12px}
   .pl-chip{padding:8px 10px;font-size:12px;border-radius:9px;white-space:normal;max-width:calc(96% - var(--mx,0%))}
   .pl-chip small{font-size:9px}
@@ -1206,8 +1220,7 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 }
 
 @media (prefers-reduced-motion:reduce){
-  .pl-stage{transform:none}
-  .pl-stage::after{opacity:0}
+  .pl-card{--cov:0!important}
   .pl-bg, .pl-f, .pl-card{will-change:auto}
   .pl-it img, .pl-dlg-box, .pl-dlg-scrim, .pl-rv-frame, .pl-rv-scrim{transition-duration:.01s!important}
 }
@@ -2616,7 +2629,7 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
     </div>
   </div>
 </section>
-<!-- How you learn: five pillars as stacked photo panels; a card per pillar with a sideways rail; logos float around it; 85% detail sheet; reel viewer. GENERATED by tools/pillars_data.py -->
+<!-- How you learn: one pinned scene (background + logos follow the active card) with five cards stacking over it; a card per pillar with a sideways rail; logos float around it; 85% detail sheet; reel viewer. GENERATED by tools/pillars_data.py -->
 <section class="pl-sec" id="learn" data-nav="dark" aria-labelledby="pl-title">
   <div class="pl-bar">
     <div class="pl-head">
@@ -2625,10 +2638,9 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
     </div>
   </div>
   <div class="pl-stack">
+    <div class="pl-scene"><div class="pl-layer on" data-i="0"><div class="pl-bg pl-aura" style="--ga:#0E8A63;--gb:#1C9CA8" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div><div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/openai/icon-dark.jpg" alt="OpenAI" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/anthropic/icon-dark.jpg" alt="Claude" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/gemini/icon-dark.png" alt="Gemini" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/lovable/icon-dark.jpg" alt="Lovable" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/elevenlabs/icon-dark.jpg" alt="ElevenLabs" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/n8n/icon-dark.jpg" alt="n8n" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/zapier/icon-dark.jpg" alt="Zapier" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/cursor/icon-dark.jpg" alt="Cursor" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/crewai/icon-dark.jpg" alt="CrewAI" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/perplexity/icon-dark.jpg" alt="Perplexity" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/heygen/icon-dark.jpg" alt="HeyGen" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/notion/icon-dark.jpg" alt="Notion" width="68" height="68" decoding="async" loading="lazy"></span></div></div><div class="pl-layer" data-i="1"><div class="pl-bg pl-aura" style="--ga:#0B7A3E;--gb:#C9A04A" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div><div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/peakxv/icon-dark.jpg" alt="Peak XV" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/lightrock/icon-dark.jpg" alt="Lightrock" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/zomato/icon-dark.png" alt="Zomato" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/swiggy/icon-dark.jpg" alt="Swiggy" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/thewholetruth/icon-dark.jpg" alt="The Whole Truth" width="68" height="68" decoding="async" loading="lazy"></span></div></div><div class="pl-layer" data-i="2"><div class="pl-bg pl-aura" style="--ga:#0A6E58;--gb:#3FA9C4" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div><div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/ajio/icon-dark.jpg" alt="AJIO" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/practo/icon-dark.jpg" alt="Practo" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/meolaa/icon-dark.jpg" alt="Meolaa" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/stockgro/icon-dark.jpg" alt="StockGro" width="68" height="68" decoding="async" loading="lazy"></span></div></div><div class="pl-layer" data-i="3"><div class="pl-bg pl-aura" style="--ga:#0C6B3F;--gb:#D98E52" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div><div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/jio/icon-dark.png" alt="Jio" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/reliance/icon-dark.jpg" alt="Reliance" width="68" height="68" decoding="async" loading="lazy"></span></div></div><div class="pl-layer" data-i="4"><div class="pl-bg pl-aura" style="--ga:#0D6A47;--gb:#7F72E0" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div><div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/google/icon-dark.jpg" alt="Google" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/blinkit/icon-dark.jpg" alt="Blinkit" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/phonepe/icon-dark.jpg" alt="PhonePe" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/openai/icon-dark.jpg" alt="OpenAI" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/peakxv/icon-dark.jpg" alt="Peak XV" width="68" height="68" decoding="async" loading="lazy"></span></div></div><span class="pl-grain" aria-hidden="true"></span></div>
     <article class="pl-panel" id="learn-ai" data-key="ai" data-sub="AI fluency" aria-labelledby="pl-t-ai">
       <div class="pl-stage">
-        <div class="pl-bg pl-aura" style="--ga:#0E8A63;--gb:#1C9CA8" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div>
-        <div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/openai/icon-dark.jpg" alt="OpenAI" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/anthropic/icon-dark.jpg" alt="Claude" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/gemini/icon-dark.png" alt="Gemini" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/lovable/icon-dark.jpg" alt="Lovable" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/elevenlabs/icon-dark.jpg" alt="ElevenLabs" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/n8n/icon-dark.jpg" alt="n8n" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/zapier/icon-dark.jpg" alt="Zapier" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/cursor/icon-dark.jpg" alt="Cursor" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/crewai/icon-dark.jpg" alt="CrewAI" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/perplexity/icon-dark.jpg" alt="Perplexity" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/heygen/icon-dark.jpg" alt="HeyGen" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/notion/icon-dark.jpg" alt="Notion" width="68" height="68" decoding="async" loading="lazy"></span></div>
         <div class="pl-fl" aria-hidden="false"><span class="pl-f pl-ft pl-ic" style="--x:9%;--y:16%;--mx:6%;--row:0" data-d="0.8"><img src="media/brands/openai/icon-dark.jpg" alt="OpenAI" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:22%;--y:30%;--mx:30%;--row:1" data-d="0.45"><img src="media/brands/anthropic/icon-dark.jpg" alt="Claude" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:12%;--y:52%;--mx:56%;--row:0" data-d="0.7"><img src="media/brands/gemini/icon-dark.png" alt="Gemini" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:25%;--y:70%;--mx:80%;--row:1" data-d="0.35"><img src="media/brands/lovable/icon-dark.jpg" alt="Lovable" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:8%;--y:84%;--mx:8%;--row:0" data-d="0.9"><img src="media/brands/elevenlabs/icon-dark.jpg" alt="ElevenLabs" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:76%;--y:14%;--mx:33%;--row:1" data-d="0.6"><img src="media/brands/n8n/icon-dark.jpg" alt="n8n" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:90%;--y:30%;--mx:58%;--row:0" data-d="0.4"><img src="media/brands/zapier/icon-dark.jpg" alt="Zapier" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:78%;--y:50%;--mx:82%;--row:1" data-d="0.85"><img src="media/brands/cursor/icon-dark.jpg" alt="Cursor" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:91%;--y:70%" data-d="0.5"><img src="media/brands/crewai/icon-dark.jpg" alt="CrewAI" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:74%;--y:86%" data-d="0.75"><img src="media/brands/perplexity/icon-dark.jpg" alt="Perplexity" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:31%;--y:10%" data-d="0.3"><img src="media/brands/heygen/icon-dark.jpg" alt="HeyGen" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:71%;--y:32%" data-d="0.3"><img src="media/brands/notion/icon-dark.jpg" alt="Notion" width="64" height="64" decoding="async"></span></div>
         <div class="pl-card">
           <div class="pl-in">
@@ -2645,8 +2657,6 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
     </article>
     <article class="pl-panel" id="learn-build" data-key="build" data-sub="Build businesses" aria-labelledby="pl-t-build">
       <div class="pl-stage">
-        <div class="pl-bg pl-aura" style="--ga:#0B7A3E;--gb:#C9A04A" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div>
-        <div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/peakxv/icon-dark.jpg" alt="Peak XV" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/lightrock/icon-dark.jpg" alt="Lightrock" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/zomato/icon-dark.png" alt="Zomato" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/swiggy/icon-dark.jpg" alt="Swiggy" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/thewholetruth/icon-dark.jpg" alt="The Whole Truth" width="68" height="68" decoding="async" loading="lazy"></span></div>
         <div class="pl-fl" aria-hidden="false"><span class="pl-f pl-ft pl-ic" style="--x:10%;--y:20%;--mx:8%;--row:0" data-d="0.8"><img src="media/brands/peakxv/icon-dark.jpg" alt="Peak XV" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:22%;--y:42%;--mx:30%;--row:1" data-d="0.45"><img src="media/brands/lightrock/icon-dark.jpg" alt="Lightrock" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:24%;--y:84%;--mx:8%;--row:0" data-d="0.9"><img src="media/brands/zomato/icon-dark.png" alt="Zomato" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:77%;--y:16%;--mx:30%;--row:1" data-d="0.55"><img src="media/brands/swiggy/icon-dark.jpg" alt="Swiggy" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:89%;--y:82%" data-d="0.5"><img src="media/brands/thewholetruth/icon-dark.jpg" alt="The Whole Truth" width="64" height="64" decoding="async"></span></div>
         <div class="pl-card">
           <div class="pl-in">
@@ -2663,8 +2673,6 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
     </article>
     <article class="pl-panel" id="learn-projects" data-key="projects" data-sub="Live projects" aria-labelledby="pl-t-projects">
       <div class="pl-stage">
-        <div class="pl-bg pl-aura" style="--ga:#0A6E58;--gb:#3FA9C4" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div>
-        <div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/ajio/icon-dark.jpg" alt="AJIO" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/practo/icon-dark.jpg" alt="Practo" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/meolaa/icon-dark.jpg" alt="Meolaa" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/stockgro/icon-dark.jpg" alt="StockGro" width="68" height="68" decoding="async" loading="lazy"></span></div>
         <div class="pl-fl" aria-hidden="false"><span class="pl-f pl-ft pl-ic" style="--x:10%;--y:18%;--mx:8%;--row:0" data-d="0.8"><img src="media/brands/ajio/icon-dark.jpg" alt="AJIO" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:9%;--y:62%;--mx:64%;--row:1" data-d="0.7"><img src="media/brands/practo/icon-dark.jpg" alt="Practo" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:24%;--y:82%;--mx:8%;--row:0" data-d="0.9"><img src="media/brands/meolaa/icon-dark.jpg" alt="Meolaa" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:78%;--y:18%;--mx:30%;--row:1" data-d="0.55"><img src="media/brands/stockgro/icon-dark.jpg" alt="StockGro" width="64" height="64" decoding="async"></span></div>
         <div class="pl-card">
           <div class="pl-in">
@@ -2681,8 +2689,6 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
     </article>
     <article class="pl-panel" id="learn-immersions" data-key="immersions" data-sub="Immersions" aria-labelledby="pl-t-immersions">
       <div class="pl-stage">
-        <div class="pl-bg pl-aura" style="--ga:#0C6B3F;--gb:#D98E52" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div>
-        <div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/jio/icon-dark.png" alt="Jio" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/reliance/icon-dark.jpg" alt="Reliance" width="68" height="68" decoding="async" loading="lazy"></span></div>
         <div class="pl-fl" aria-hidden="false"><span class="pl-f pl-ft pl-ic" style="--x:10%;--y:20%;--mx:8%;--row:0" data-d="0.8"><img src="media/brands/jio/icon-dark.png" alt="Jio" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:22%;--y:44%;--mx:30%;--row:1" data-d="0.45"><img src="media/brands/reliance/icon-dark.jpg" alt="Reliance" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:90%;--y:64%" data-d="0.75"><img src="media/brands/jio/icon-dark.png" alt="Jio" width="64" height="64" decoding="async"></span></div>
         <div class="pl-card">
           <div class="pl-in">
@@ -2699,8 +2705,6 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
     </article>
     <article class="pl-panel" id="learn-mentors" data-key="mentors" data-sub="Mentor sessions" aria-labelledby="pl-t-mentors">
       <div class="pl-stage">
-        <div class="pl-bg pl-aura" style="--ga:#0D6A47;--gb:#7F72E0" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div>
-        <div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/google/icon-dark.jpg" alt="Google" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/blinkit/icon-dark.jpg" alt="Blinkit" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/phonepe/icon-dark.jpg" alt="PhonePe" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/openai/icon-dark.jpg" alt="OpenAI" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/peakxv/icon-dark.jpg" alt="Peak XV" width="68" height="68" decoding="async" loading="lazy"></span></div>
         <div class="pl-fl" aria-hidden="false"><span class="pl-f pl-ft pl-ic" style="--x:10%;--y:20%;--mx:8%;--row:0" data-d="0.8"><img src="media/brands/google/icon-dark.jpg" alt="Google" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:23%;--y:44%;--mx:30%;--row:1" data-d="0.45"><img src="media/brands/blinkit/icon-dark.jpg" alt="Blinkit" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:24%;--y:86%;--mx:8%;--row:0" data-d="0.9"><img src="media/brands/phonepe/icon-dark.jpg" alt="PhonePe" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:77%;--y:16%;--mx:30%;--row:1" data-d="0.55"><img src="media/brands/openai/icon-dark.jpg" alt="OpenAI" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:90%;--y:64%" data-d="0.75"><img src="media/brands/peakxv/icon-dark.jpg" alt="Peak XV" width="64" height="64" decoding="async"></span></div>
         <div class="pl-card">
           <div class="pl-in">
@@ -3945,12 +3949,13 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
   // overlays sit above every section and the nav
   document.body.appendChild(dlg); document.body.appendChild(rv);
 
-  // ---------- stacked panels: parallax, cover, active pillar ----------
-  var P=panels.map(function(p){
-    return {el:p, stage:p.querySelector('.pl-stage'), bg:p.querySelector('.pl-bg'), card:p.querySelector('.pl-card'),
-      fl:[].slice.call(p.querySelectorAll('.pl-f')).map(function(f){ return {el:f, d:parseFloat(f.dataset.d)||.5}; })};
-  });
-  var step=1, top0=0, stickTop=60, mob=false, active=-1;
+  // ---------- deck: all cards live in the pinned scene; the panels are only scroll spacers (and deep-link targets) ----------
+  // Scroll position p runs 0..4. Each card rests for half its step, then the front card slides up and tilts back
+  // (top tips away) while the next card steps forward from the deck, where the upcoming cards show only their bottom edges.
+  var layers=[].slice.call(sec.querySelectorAll('.pl-layer'));
+  var deck=document.createElement('div'); deck.className='pl-deck'; sec.querySelector('.pl-scene').appendChild(deck);
+  var P=panels.map(function(p){ var c=p.querySelector('.pl-card'); deck.appendChild(c); return {el:p, card:c}; });
+  var step=1, top0=0, stickTop=60, mob=false, active=-1, sceneH=600;
   var bar=sec.querySelector('.pl-bar'), dockNav=sec.querySelector('.pl-dock .pl-idx'), tabs=[].slice.call(sec.querySelectorAll('.pl-idx a')), dockOn=false;
   function measure(){
     // panels stick just under the pinned headline: its height drives --pl-top
@@ -3959,28 +3964,35 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
     stickTop=parseFloat(cs.top)||0;
     step=panels[0].offsetHeight+(parseFloat(cs.marginBottom)||0);
     top0=stack.getBoundingClientRect().top+scrollY;
-    mob=innerWidth<=1180;
+    mob=innerWidth<=1180; sceneH=deck.offsetHeight||600;
   }
+  function ease(t){ return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2; }
   function frame(){
     raf=0;
-    var y=scrollY, range=mob?70:150, n=-1;
-    P.forEach(function(p,i){
-      // t: -1 entering from below, 0 just stuck, 1 fully covered by the next panel
-      var t=(y+stickTop-(top0+i*step))/step;
-      if(t>-0.5) n=i;
-      if(rm.matches) return;
-      if(t<-1.2||t>1.2) return;
-      var tc=Math.max(-1,Math.min(1,t));
-      p.fl.forEach(function(f){ f.el.style.setProperty('--fy',(-tc*f.d*range).toFixed(1)+'px'); });
-      p.card.style.setProperty('--cy',(-tc*(mob?10:22)).toFixed(1)+'px');
-      p.bg.style.setProperty('--bgy',(tc*(mob?24:48)).toFixed(1)+'px');
-      p.stage.style.setProperty('--cov',i<P.length-1?Math.max(0,Math.min(1,t)).toFixed(3):0);
+    var raw=Math.max(0,Math.min(P.length-1,(scrollY+stickTop-top0)/step)), f=Math.floor(raw), fr=raw-f;
+    // hold for the first half of each step, then move over the second half
+    var p=Math.min(P.length-1,f+ease(Math.max(0,Math.min(1,(fr-.5)/.5)))), n=Math.round(p);
+    P.forEach(function(o,i){
+      var d=i-p, s=o.card.style, front=Math.abs(d)<.5;
+      o.card.classList.toggle('is-front',rm.matches?i===n:front); o.card.inert=rm.matches?i!==n:!front;
+      if(rm.matches){ s.opacity=i===n?1:0; s.visibility=i===n?'visible':'hidden'; s.transform=''; s.zIndex=i===n?2:1; return; }
+      if(d>=0){ // in the deck: smaller, lower, only the bottom edge shows; content fades
+        var k=Math.min(d,3);
+        s.transform='translate3d(-50%,calc(-50% + '+(k*(mob?10:14)).toFixed(1)+'px),0) scale('+(1-k*.05).toFixed(4)+')';
+        s.opacity=Math.max(0,Math.min(1,3-d)).toFixed(3); s.setProperty('--cov',Math.max(0,Math.min(1,(d-.55)/.45)).toFixed(3));
+      } else { // leaving: slides up and tilts back, fading as it goes
+        var e=Math.min(1,-d);
+        s.transform='translate3d(-50%,calc(-50% - '+(e*sceneH*1.05).toFixed(1)+'px),0) rotateX('+(e*38).toFixed(2)+'deg)';
+        s.opacity=Math.max(0,1-Math.max(0,e-.82)/.18).toFixed(3); s.setProperty('--cov','0');
+      }
+      s.visibility=(d>3||d<=-1)?'hidden':'visible';
+      s.zIndex=String(100-i);
     });
     n=Math.max(0,n);
     // the index docks at the bottom while the panels fill the screen
     var sr=stack.getBoundingClientRect(), on=sr.top<innerHeight*0.55&&sr.bottom>innerHeight*0.6;
     if(on!==dockOn){ dockOn=on; sec.classList.toggle('dock-on',on); }
-    if(n!==active){ active=n; sec.dataset.sub=panels[n].dataset.sub; sec.dataset.subI=n; dispatchEvent(new CustomEvent('ssb:sub'));
+    if(n!==active){ active=n; layers.forEach(function(l,k){ l.classList.toggle('on',k===n); }); obKick(); sec.dataset.sub=panels[n].dataset.sub; sec.dataset.subI=n; dispatchEvent(new CustomEvent('ssb:sub'));
       tabs.forEach(function(a){ var on=+a.dataset.i===n; a.classList.toggle('on',on); if(on) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current'); });
       // phones: keep the active pillar in view in the pinned strip
       var am=dockNav.querySelector('a.on'); if(am&&dockNav.scrollWidth>dockNav.clientWidth) dockNav.scrollTo({left:Math.max(0,am.offsetLeft-4),behavior:rm.matches?'auto':'smooth'}); }
@@ -3999,7 +4011,9 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
   if(window.ResizeObserver) new ResizeObserver(function(){ measure(); kick(); }).observe(bar);
 
   // ---------- orbit (desktop): logos evenly spaced on one ring, travelling slowly; only the panels on screen move ----------
-  var OB=panels.map(function(p,k){ return {st:p.querySelector('.pl-stage'), card:p.querySelector('.pl-card'), it:[].slice.call(p.querySelectorAll('.pl-ob')), a0:-Math.PI/2+k*.7, on:false, w:0, h:0, half:0}; });
+  // the scene's layers follow the active card; only the active layer's logos move (the outgoing one keeps its place while it fades)
+  var scene=sec.querySelector('.pl-scene');
+  var OB=layers.map(function(l,k){ return {st:scene, card:P[k].card, it:[].slice.call(l.querySelectorAll('.pl-ob')), a0:-Math.PI/2+k*.7, k:k, w:0, h:0, half:0}; });
   var obPhase=0, obLast=0, obRaf=0, REV=150000;
   function obMeasure(){ OB.forEach(function(o){ o.w=o.st.clientWidth; o.h=o.st.clientHeight; o.half=o.card.offsetWidth/2; }); }
   function obPlace(o){ var n=o.it.length; if(!n) return; var rx=o.w*.45, ry=o.h*.40;
@@ -4010,11 +4024,11 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
       el.style.setProperty('--os',(.84+.16*d).toFixed(3)); el.style.setProperty('--oo',vis.toFixed(3)); }); }
   function obTick(now){ obRaf=0; if(innerWidth<1181) return;
     if(obLast&&!rm.matches) obPhase+=(now-obLast)/REV*2*Math.PI; obLast=now;
-    var any=false; OB.forEach(function(o){ if(o.on){ any=true; obPlace(o); } });
-    if(any&&!rm.matches) obRaf=requestAnimationFrame(obTick); else obLast=0; }
+    var o=OB[Math.max(0,active)], vis=scene.getBoundingClientRect(); if(o) obPlace(o);
+    if(vis.bottom>0&&vis.top<innerHeight&&!rm.matches) obRaf=requestAnimationFrame(obTick); else obLast=0; }
   function obKick(){ if(!obRaf) obRaf=requestAnimationFrame(obTick); }
-  if('IntersectionObserver' in window){ var obIO=new IntersectionObserver(function(es){ es.forEach(function(en){ OB.forEach(function(o){ if(o.st===en.target) o.on=en.isIntersecting; }); }); obKick(); });
-    OB.forEach(function(o){ obIO.observe(o.st); }); } else OB.forEach(function(o){ o.on=true; });
+  if('IntersectionObserver' in window) new IntersectionObserver(function(){ obKick(); }).observe(scene);
+  addEventListener('scroll',obKick,{passive:true});
   obMeasure(); OB.forEach(obPlace);
   addEventListener('resize',function(){ obMeasure(); OB.forEach(obPlace); obKick(); });
 

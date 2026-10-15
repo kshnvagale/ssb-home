@@ -9,12 +9,13 @@
   // overlays sit above every section and the nav
   document.body.appendChild(dlg); document.body.appendChild(rv);
 
-  // ---------- stacked panels: parallax, cover, active pillar ----------
-  var P=panels.map(function(p){
-    return {el:p, stage:p.querySelector('.pl-stage'), bg:p.querySelector('.pl-bg'), card:p.querySelector('.pl-card'),
-      fl:[].slice.call(p.querySelectorAll('.pl-f')).map(function(f){ return {el:f, d:parseFloat(f.dataset.d)||.5}; })};
-  });
-  var step=1, top0=0, stickTop=60, mob=false, active=-1;
+  // ---------- deck: all cards live in the pinned scene; the panels are only scroll spacers (and deep-link targets) ----------
+  // Scroll position p runs 0..4. Each card rests for half its step, then the front card slides up and tilts back
+  // (top tips away) while the next card steps forward from the deck, where the upcoming cards show only their bottom edges.
+  var layers=[].slice.call(sec.querySelectorAll('.pl-layer'));
+  var deck=document.createElement('div'); deck.className='pl-deck'; sec.querySelector('.pl-scene').appendChild(deck);
+  var P=panels.map(function(p){ var c=p.querySelector('.pl-card'); deck.appendChild(c); return {el:p, card:c}; });
+  var step=1, top0=0, stickTop=60, mob=false, active=-1, sceneH=600;
   var bar=sec.querySelector('.pl-bar'), dockNav=sec.querySelector('.pl-dock .pl-idx'), tabs=[].slice.call(sec.querySelectorAll('.pl-idx a')), dockOn=false;
   function measure(){
     // panels stick just under the pinned headline: its height drives --pl-top
@@ -23,28 +24,35 @@
     stickTop=parseFloat(cs.top)||0;
     step=panels[0].offsetHeight+(parseFloat(cs.marginBottom)||0);
     top0=stack.getBoundingClientRect().top+scrollY;
-    mob=innerWidth<=1180;
+    mob=innerWidth<=1180; sceneH=deck.offsetHeight||600;
   }
+  function ease(t){ return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2; }
   function frame(){
     raf=0;
-    var y=scrollY, range=mob?70:150, n=-1;
-    P.forEach(function(p,i){
-      // t: -1 entering from below, 0 just stuck, 1 fully covered by the next panel
-      var t=(y+stickTop-(top0+i*step))/step;
-      if(t>-0.5) n=i;
-      if(rm.matches) return;
-      if(t<-1.2||t>1.2) return;
-      var tc=Math.max(-1,Math.min(1,t));
-      p.fl.forEach(function(f){ f.el.style.setProperty('--fy',(-tc*f.d*range).toFixed(1)+'px'); });
-      p.card.style.setProperty('--cy',(-tc*(mob?10:22)).toFixed(1)+'px');
-      p.bg.style.setProperty('--bgy',(tc*(mob?24:48)).toFixed(1)+'px');
-      p.stage.style.setProperty('--cov',i<P.length-1?Math.max(0,Math.min(1,t)).toFixed(3):0);
+    var raw=Math.max(0,Math.min(P.length-1,(scrollY+stickTop-top0)/step)), f=Math.floor(raw), fr=raw-f;
+    // hold for the first half of each step, then move over the second half
+    var p=Math.min(P.length-1,f+ease(Math.max(0,Math.min(1,(fr-.5)/.5)))), n=Math.round(p);
+    P.forEach(function(o,i){
+      var d=i-p, s=o.card.style, front=Math.abs(d)<.5;
+      o.card.classList.toggle('is-front',rm.matches?i===n:front); o.card.inert=rm.matches?i!==n:!front;
+      if(rm.matches){ s.opacity=i===n?1:0; s.visibility=i===n?'visible':'hidden'; s.transform=''; s.zIndex=i===n?2:1; return; }
+      if(d>=0){ // in the deck: smaller, lower, only the bottom edge shows; content fades
+        var k=Math.min(d,3);
+        s.transform='translate3d(-50%,calc(-50% + '+(k*(mob?10:14)).toFixed(1)+'px),0) scale('+(1-k*.05).toFixed(4)+')';
+        s.opacity=Math.max(0,Math.min(1,3-d)).toFixed(3); s.setProperty('--cov',Math.max(0,Math.min(1,(d-.55)/.45)).toFixed(3));
+      } else { // leaving: slides up and tilts back, fading as it goes
+        var e=Math.min(1,-d);
+        s.transform='translate3d(-50%,calc(-50% - '+(e*sceneH*1.05).toFixed(1)+'px),0) rotateX('+(e*38).toFixed(2)+'deg)';
+        s.opacity=Math.max(0,1-Math.max(0,e-.82)/.18).toFixed(3); s.setProperty('--cov','0');
+      }
+      s.visibility=(d>3||d<=-1)?'hidden':'visible';
+      s.zIndex=String(100-i);
     });
     n=Math.max(0,n);
     // the index docks at the bottom while the panels fill the screen
     var sr=stack.getBoundingClientRect(), on=sr.top<innerHeight*0.55&&sr.bottom>innerHeight*0.6;
     if(on!==dockOn){ dockOn=on; sec.classList.toggle('dock-on',on); }
-    if(n!==active){ active=n; sec.dataset.sub=panels[n].dataset.sub; sec.dataset.subI=n; dispatchEvent(new CustomEvent('ssb:sub'));
+    if(n!==active){ active=n; layers.forEach(function(l,k){ l.classList.toggle('on',k===n); }); obKick(); sec.dataset.sub=panels[n].dataset.sub; sec.dataset.subI=n; dispatchEvent(new CustomEvent('ssb:sub'));
       tabs.forEach(function(a){ var on=+a.dataset.i===n; a.classList.toggle('on',on); if(on) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current'); });
       // phones: keep the active pillar in view in the pinned strip
       var am=dockNav.querySelector('a.on'); if(am&&dockNav.scrollWidth>dockNav.clientWidth) dockNav.scrollTo({left:Math.max(0,am.offsetLeft-4),behavior:rm.matches?'auto':'smooth'}); }
@@ -63,7 +71,9 @@
   if(window.ResizeObserver) new ResizeObserver(function(){ measure(); kick(); }).observe(bar);
 
   // ---------- orbit (desktop): logos evenly spaced on one ring, travelling slowly; only the panels on screen move ----------
-  var OB=panels.map(function(p,k){ return {st:p.querySelector('.pl-stage'), card:p.querySelector('.pl-card'), it:[].slice.call(p.querySelectorAll('.pl-ob')), a0:-Math.PI/2+k*.7, on:false, w:0, h:0, half:0}; });
+  // the scene's layers follow the active card; only the active layer's logos move (the outgoing one keeps its place while it fades)
+  var scene=sec.querySelector('.pl-scene');
+  var OB=layers.map(function(l,k){ return {st:scene, card:P[k].card, it:[].slice.call(l.querySelectorAll('.pl-ob')), a0:-Math.PI/2+k*.7, k:k, w:0, h:0, half:0}; });
   var obPhase=0, obLast=0, obRaf=0, REV=150000;
   function obMeasure(){ OB.forEach(function(o){ o.w=o.st.clientWidth; o.h=o.st.clientHeight; o.half=o.card.offsetWidth/2; }); }
   function obPlace(o){ var n=o.it.length; if(!n) return; var rx=o.w*.45, ry=o.h*.40;
@@ -74,11 +84,11 @@
       el.style.setProperty('--os',(.84+.16*d).toFixed(3)); el.style.setProperty('--oo',vis.toFixed(3)); }); }
   function obTick(now){ obRaf=0; if(innerWidth<1181) return;
     if(obLast&&!rm.matches) obPhase+=(now-obLast)/REV*2*Math.PI; obLast=now;
-    var any=false; OB.forEach(function(o){ if(o.on){ any=true; obPlace(o); } });
-    if(any&&!rm.matches) obRaf=requestAnimationFrame(obTick); else obLast=0; }
+    var o=OB[Math.max(0,active)], vis=scene.getBoundingClientRect(); if(o) obPlace(o);
+    if(vis.bottom>0&&vis.top<innerHeight&&!rm.matches) obRaf=requestAnimationFrame(obTick); else obLast=0; }
   function obKick(){ if(!obRaf) obRaf=requestAnimationFrame(obTick); }
-  if('IntersectionObserver' in window){ var obIO=new IntersectionObserver(function(es){ es.forEach(function(en){ OB.forEach(function(o){ if(o.st===en.target) o.on=en.isIntersecting; }); }); obKick(); });
-    OB.forEach(function(o){ obIO.observe(o.st); }); } else OB.forEach(function(o){ o.on=true; });
+  if('IntersectionObserver' in window) new IntersectionObserver(function(){ obKick(); }).observe(scene);
+  addEventListener('scroll',obKick,{passive:true});
   obMeasure(); OB.forEach(obPlace);
   addEventListener('resize',function(){ obMeasure(); OB.forEach(obPlace); obKick(); });
 
