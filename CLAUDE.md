@@ -42,8 +42,8 @@ Every section title, eyebrow, lead line and section padding comes from these. Do
 | `--t-h3` | clamp(24px,2.3vw,34px) | 24px | sub-blocks (scholarships, clubs intro) |
 | `--t-lead` | 17px | 15.5px | the line under a title |
 | `.sec-eyebrow` | 500 12px mono, .14em, gap `--t-eb-gap` (16 / 14) | same | every eyebrow, no lines |
-| `--sec-y` | clamp(80px,9vw,128px) | 72px | top and bottom section padding |
-| `--sec-y-tight` | clamp(40px,4.5vw,64px) | 40px | next to a seam, or two sections that share a background |
+| `--sec-y` | clamp(200px,22.5vw,320px) | 144px | top and bottom section padding (2.5x the first pass on desktop, 2x on phones, at Kishan's request) |
+| `--sec-y-tight` | clamp(100px,11.25vw,160px) | 80px | next to a seam (seams.css), or two sections that share a background |
 | `--head-gap` | clamp(28px,3.4vw,44px) | same | section header to its content |
 
 Sticky columns: never put `overflow:hidden` on a section that has a sticky child (it makes the section the scroll box and the sticky column drops down). Use `overflow:clip`.

@@ -51,10 +51,10 @@ body{color:var(--ink-t);background:radial-gradient(50% 40% at 95% 0%,rgba(29,146
 html.pg-lock, html.pg-lock body{overflow:hidden}
 :root{--lh:clamp(40px,3.3vw,48px);--gn-h:clamp(76px,9.4vh,88px)}
 /* type scale and section rhythm: every section title, eyebrow, lead line and section padding uses these */
-:root{--t-h2:clamp(32px,3.4vw,50px);--t-h2-lh:1.04;--t-h2-ls:-.038em;--t-h3:clamp(24px,2.3vw,34px);--t-lead:17px;--t-eb-gap:16px;--sec-y:clamp(80px,9vw,128px);--sec-y-tight:clamp(40px,4.5vw,64px);--head-gap:clamp(28px,3.4vw,44px)}
+:root{--t-h2:clamp(32px,3.4vw,50px);--t-h2-lh:1.04;--t-h2-ls:-.038em;--t-h3:clamp(24px,2.3vw,34px);--t-lead:17px;--t-eb-gap:16px;--sec-y:clamp(200px,22.5vw,320px);--sec-y-tight:clamp(100px,11.25vw,160px);--head-gap:clamp(28px,3.4vw,44px)}
 html.sheet-open{overflow:hidden}
 @media (max-width:760px){
-  :root{--lh:32px;--gn-h:68px;--t-h2:32px;--t-h3:24px;--t-lead:15.5px;--t-eb-gap:14px;--sec-y:72px;--sec-y-tight:40px}
+  :root{--lh:32px;--gn-h:68px;--t-h2:32px;--t-h3:24px;--t-lead:15.5px;--t-eb-gap:14px;--sec-y:144px;--sec-y-tight:80px}
 }
 @keyframes fadeUp{to{opacity:1;transform:none}}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(107,238,159,.55)}70%{box-shadow:0 0 0 10px rgba(107,238,159,0)}100%{box-shadow:0 0 0 0 rgba(107,238,159,0)}}

@@ -27,8 +27,8 @@ main>*+*{margin-top:-1px}
    so a transition reads as one gap, not three stacked gaps */
 .seam-grad{height:clamp(170px,26vh,300px)}
 .seam-px{height:clamp(120px,17vh,190px)}
-main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
-.seam+section:not(.pn-sec){padding-top:clamp(36px,4.5vw,64px)}
+main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
+.seam+section:not(.pn-sec){padding-top:var(--sec-y-tight)}
 @media (max-width:760px){
   .seam-grad{height:20vh;min-height:140px}
   .seam-px{height:14vh;min-height:110px}

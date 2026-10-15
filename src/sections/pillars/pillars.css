@@ -1,5 +1,5 @@
 /* How you learn: five pillars as stacked photo panels; a card per pillar with a sideways rail; logos float around it; 85% detail sheet; reel viewer */
-.pl-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:clamp(28px,4vh,48px) 0 12px;--pl-bar:120px;--pl-top:calc(52px + var(--pl-bar));--pl-h:calc(100svh - var(--pl-top) - 12px)}
+.pl-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:var(--sec-y-tight) 0 12px;--pl-bar:120px;--pl-top:calc(52px + var(--pl-bar));--pl-h:calc(100svh - var(--pl-top) - 12px)}
 /* the headline stays pinned under the section bar while the panels stack, with the pillar index beside it */
 .pl-bar{position:sticky;top:52px;z-index:7;background:var(--ink)}
 .pl-bar::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px;background:linear-gradient(var(--ink),rgba(5,14,9,0));pointer-events:none}
@@ -137,7 +137,7 @@
   .pl-fb{top:auto;bottom:calc(14px + var(--row) * 54px)}
 }
 @media (max-width:760px){
-  .pl-sec{padding-top:clamp(36px,5vh,56px);--pl-top:calc(60px + env(safe-area-inset-top,0px));--pl-h:calc(100svh - var(--pl-top) - 62px - env(safe-area-inset-bottom,0px))}
+  .pl-sec{padding-top:var(--sec-y-tight);--pl-top:calc(60px + env(safe-area-inset-top,0px));--pl-h:calc(100svh - var(--pl-top) - 62px - env(safe-area-inset-bottom,0px))}
   .pl-bar{position:relative;top:auto}
   .pl-bar::after{display:none}
   .pl-head{padding-bottom:16px}

@@ -60,10 +60,10 @@ body{color:var(--ink-t);background:radial-gradient(50% 40% at 95% 0%,rgba(29,146
 html.pg-lock, html.pg-lock body{overflow:hidden}
 :root{--lh:clamp(40px,3.3vw,48px);--gn-h:clamp(76px,9.4vh,88px)}
 /* type scale and section rhythm: every section title, eyebrow, lead line and section padding uses these */
-:root{--t-h2:clamp(32px,3.4vw,50px);--t-h2-lh:1.04;--t-h2-ls:-.038em;--t-h3:clamp(24px,2.3vw,34px);--t-lead:17px;--t-eb-gap:16px;--sec-y:clamp(80px,9vw,128px);--sec-y-tight:clamp(40px,4.5vw,64px);--head-gap:clamp(28px,3.4vw,44px)}
+:root{--t-h2:clamp(32px,3.4vw,50px);--t-h2-lh:1.04;--t-h2-ls:-.038em;--t-h3:clamp(24px,2.3vw,34px);--t-lead:17px;--t-eb-gap:16px;--sec-y:clamp(200px,22.5vw,320px);--sec-y-tight:clamp(100px,11.25vw,160px);--head-gap:clamp(28px,3.4vw,44px)}
 html.sheet-open{overflow:hidden}
 @media (max-width:760px){
-  :root{--lh:32px;--gn-h:68px;--t-h2:32px;--t-h3:24px;--t-lead:15.5px;--t-eb-gap:14px;--sec-y:72px;--sec-y-tight:40px}
+  :root{--lh:32px;--gn-h:68px;--t-h2:32px;--t-h3:24px;--t-lead:15.5px;--t-eb-gap:14px;--sec-y:144px;--sec-y-tight:80px}
 }
 @keyframes fadeUp{to{opacity:1;transform:none}}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(107,238,159,.55)}70%{box-shadow:0 0 0 10px rgba(107,238,159,0)}100%{box-shadow:0 0 0 0 rgba(107,238,159,0)}}
@@ -924,7 +924,7 @@ main>.bk-sec{padding:0!important}
 
 /* ===== pillars ===== */
 /* How you learn: five pillars as stacked photo panels; a card per pillar with a sideways rail; logos float around it; 85% detail sheet; reel viewer */
-.pl-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:clamp(28px,4vh,48px) 0 12px;--pl-bar:120px;--pl-top:calc(52px + var(--pl-bar));--pl-h:calc(100svh - var(--pl-top) - 12px)}
+.pl-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:var(--sec-y-tight) 0 12px;--pl-bar:120px;--pl-top:calc(52px + var(--pl-bar));--pl-h:calc(100svh - var(--pl-top) - 12px)}
 /* the headline stays pinned under the section bar while the panels stack, with the pillar index beside it */
 .pl-bar{position:sticky;top:52px;z-index:7;background:var(--ink)}
 .pl-bar::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px;background:linear-gradient(var(--ink),rgba(5,14,9,0));pointer-events:none}
@@ -1062,7 +1062,7 @@ main>.bk-sec{padding:0!important}
   .pl-fb{top:auto;bottom:calc(14px + var(--row) * 54px)}
 }
 @media (max-width:760px){
-  .pl-sec{padding-top:clamp(36px,5vh,56px);--pl-top:calc(60px + env(safe-area-inset-top,0px));--pl-h:calc(100svh - var(--pl-top) - 62px - env(safe-area-inset-bottom,0px))}
+  .pl-sec{padding-top:var(--sec-y-tight);--pl-top:calc(60px + env(safe-area-inset-top,0px));--pl-h:calc(100svh - var(--pl-top) - 62px - env(safe-area-inset-bottom,0px))}
   .pl-bar{position:relative;top:auto}
   .pl-bar::after{display:none}
   .pl-head{padding-bottom:16px}
@@ -2019,8 +2019,8 @@ main>*+*{margin-top:-1px}
    so a transition reads as one gap, not three stacked gaps */
 .seam-grad{height:clamp(170px,26vh,300px)}
 .seam-px{height:clamp(120px,17vh,190px)}
-main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
-.seam+section:not(.pn-sec){padding-top:clamp(36px,4.5vw,64px)}
+main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
+.seam+section:not(.pn-sec){padding-top:var(--sec-y-tight)}
 @media (max-width:760px){
   .seam-grad{height:20vh;min-height:140px}
   .seam-px{height:14vh;min-height:110px}
