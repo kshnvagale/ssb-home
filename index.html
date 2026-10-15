@@ -48,9 +48,9 @@ body{color:var(--ink-t);background:radial-gradient(50% 40% at 95% 0%,rgba(29,146
 .cta-glass:hover{background:#fff}
 .cta-glass .orb{background:rgba(10,28,19,.07)}
 .sec-head{max-width:1440px;margin:0 auto;padding:0 var(--pad);display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:48px;align-items:end}
-.sec-eyebrow{display:flex;align-items:center;gap:12px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:20px}
-.sec-title{font-size:clamp(36px,4.6vw,68px);font-weight:500;letter-spacing:-.045em;line-height:1}
-.sec-side p{font-size:17px;line-height:1.5;margin-bottom:22px}
+.sec-eyebrow{display:flex;align-items:center;gap:12px;font:500 12px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:var(--t-eb-gap)}
+.sec-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500}
+.sec-side p{font-size:var(--t-lead);line-height:1.5;margin-bottom:22px}
 .cta-dark{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#fff}
 .cta-dark:hover{background:rgba(255,255,255,.14)}
 .cta-dark .orb{background:rgba(255,255,255,.1)}
@@ -59,9 +59,11 @@ body{color:var(--ink-t);background:radial-gradient(50% 40% at 95% 0%,rgba(29,146
 }
 html.pg-lock, html.pg-lock body{overflow:hidden}
 :root{--lh:clamp(40px,3.3vw,48px);--gn-h:clamp(76px,9.4vh,88px)}
+/* type scale and section rhythm: every section title, eyebrow, lead line and section padding uses these */
+:root{--t-h2:clamp(32px,3.4vw,50px);--t-h2-lh:1.04;--t-h2-ls:-.038em;--t-h3:clamp(24px,2.3vw,34px);--t-lead:17px;--t-eb-gap:16px;--sec-y:clamp(80px,9vw,128px);--sec-y-tight:clamp(40px,4.5vw,64px);--head-gap:clamp(28px,3.4vw,44px)}
 html.sheet-open{overflow:hidden}
 @media (max-width:760px){
-  :root{--lh:32px;--gn-h:68px}
+  :root{--lh:32px;--gn-h:68px;--t-h2:32px;--t-h3:24px;--t-lead:15.5px;--t-eb-gap:14px;--sec-y:72px;--sec-y-tight:40px}
 }
 @keyframes fadeUp{to{opacity:1;transform:none}}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(107,238,159,.55)}70%{box-shadow:0 0 0 10px rgba(107,238,159,0)}100%{box-shadow:0 0 0 0 rgba(107,238,159,0)}}
@@ -136,10 +138,10 @@ html.nav-dark .ln-hooks a:hover, html.nav-dark .ln-hooks a.on{color:#fff}
 html.nav-dark .ln-ind{background:rgba(255,255,255,.12)}
 html.nav-dark .ln-sep{background:rgba(255,255,255,.14)}
 .mh, .mx{display:none}
-.sheet{position:fixed;inset:0;z-index:45;visibility:hidden;pointer-events:none}
+.sheet{position:fixed;inset:0;z-index:45;visibility:hidden;pointer-events:none;transition:visibility 0s linear .5s}
 .sheet-scrim{position:absolute;inset:0;background:rgba(5,14,9,.32);opacity:0;transition:opacity .5s var(--ease-out)}
 .sheet-panel{position:absolute;top:10px;right:10px;width:min(392px,calc(100vw - 20px));max-height:calc(100dvh - 20px);overflow:auto;overscroll-behavior:contain;padding:8px 8px 14px;border-radius:16px;color:var(--ink-t);background:rgba(250,250,246,.95);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:0 30px 70px -30px rgba(10,28,19,.5),0 1px 1px rgba(10,28,19,.04);opacity:0;transform:translateY(-10px) scale(.98);transform-origin:100% 0;transition:opacity .4s var(--ease-out),transform .6s var(--ease-out)}
-html.sheet-open .sheet{visibility:visible;pointer-events:auto}
+html.sheet-open .sheet{visibility:visible;pointer-events:auto;transition-delay:0s}
 html.sheet-open .sheet-scrim{opacity:1}
 html.sheet-open .sheet-panel{opacity:1;transform:none}
 .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:4px 4px 10px 10px}
@@ -209,8 +211,8 @@ html.sheet-open .sh-i{opacity:1;transform:none;transition-delay:calc(.06s + var(
   html.nav-dark .mh-where:active{background:rgba(255,255,255,.08)}
   html.nav-dark .mh-pg b{background:var(--mint)}
   /* section list: bottom sheet */
-  .mx{display:block;position:fixed;inset:0;z-index:45;visibility:hidden;pointer-events:none}
-  html.mx-open .mx{visibility:visible;pointer-events:auto}
+  .mx{display:block;position:fixed;inset:0;z-index:45;visibility:hidden;pointer-events:none;transition:visibility 0s linear .5s}
+  html.mx-open .mx{visibility:visible;pointer-events:auto;transition-delay:0s}
   .mx-scrim{position:absolute;inset:0;background:rgba(5,14,9,.42);opacity:0;transition:opacity .45s var(--ease-out)}
   html.mx-open .mx-scrim{opacity:1}
   .mx-panel{position:absolute;left:0;right:0;bottom:0;max-height:85svh;overflow:auto;overscroll-behavior:contain;padding:0 8px calc(10px + env(safe-area-inset-bottom,0px));border-radius:20px 20px 0 0;background:#FBFAF7;color:var(--ink-t);transform:translateY(102%);transition:transform .55s var(--ease-out)}
@@ -544,7 +546,7 @@ h1 .h1-sub{margin-top:.5em}
 
 /* ===== outcomes ===== */
 /* Outcomes: alumni before/after cards in two marquee rows */
-.alumni-sec{position:relative;z-index:6;background:#050E09;color:#fff;padding:clamp(80px,12vh,140px) 0 clamp(80px,12vh,130px);overflow:hidden}
+.alumni-sec{position:relative;z-index:6;background:#050E09;color:#fff;padding:var(--sec-y) 0;overflow:hidden}
 .alumni-sec .sec-eyebrow{color:var(--mint)}
 .alumni-sec .sec-title span{color:rgba(255,255,255,.45)}
 .alumni-sec .sec-side p{color:rgba(255,255,255,.6)}
@@ -552,12 +554,9 @@ h1 .h1-sub{margin-top:.5em}
 .al-row{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .al-track{display:flex;width:max-content;animation:alScroll 70s linear infinite}
 .r2 .al-track{animation-direction:reverse;animation-duration:62s}
-.al-row:hover .al-track{animation-play-state:paused}
 .al-card{position:relative;flex:none;overflow:hidden;isolation:isolate;background:radial-gradient(90% 120% at 0% 50%,#12241A 0%,#0A140F 60%,#08110C 100%);border:1px solid rgba(255,255,255,.07);transition:transform .6s var(--ease-spring),border-color .4s var(--ease-out)}
-.al-card:hover{transform:translateY(-4px);border-color:rgba(107,238,159,.3)}
 .al-ph{position:absolute;z-index:-1;left:0;top:0;bottom:0;-webkit-mask-image:linear-gradient(90deg,#000 55%,transparent 100%);mask-image:linear-gradient(90deg,#000 55%,transparent 100%)}
 .al-ph img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;filter:saturate(.9) contrast(1.03);transition:transform 1.1s var(--ease-out)}
-.al-card:hover .al-ph img{transform:scale(1.04)}
 .al-card.no-photo .al-ph{display:flex;align-items:center;background:radial-gradient(80% 90% at 10% 50%,rgba(10,110,61,.55) 0%,rgba(4,63,34,.25) 45%,transparent 75%)}
 .al-ph .mono{font-weight:300;letter-spacing:-.04em;color:#fff}
 .al-body{position:absolute;right:0;top:0;bottom:0;display:flex;flex-direction:column}
@@ -618,7 +617,7 @@ h1 .h1-sub{margin-top:.5em}
 @keyframes amScroll{to{transform:translateX(calc(-50% - clamp(24px,3vw,44px)))}}
 /* Refinement pass 2: the card rows fade out at the screen edges; less dead space before the gradient */
 .al-rows{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%)}
-.alumni-sec{padding-bottom:clamp(40px,6vh,64px)}
+.alumni-sec{padding-bottom:var(--sec-y-tight)}
 @media (max-width:640px){
   .al-rows{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%)}
 }
@@ -638,8 +637,8 @@ h1 .h1-sub{margin-top:.5em}
   linear-gradient(180deg,#050E09 0%,rgba(5,14,9,0) 16%,rgba(5,14,9,0) 82%,#050E09 100%)}
 .bk-in{position:relative;z-index:1;width:100%;max-width:1440px;margin:0 auto;padding:clamp(72px,11vh,128px) var(--pad);display:flex;justify-content:flex-end}
 .bk-copy{width:min(560px,46%)}
-.bk-copy .sec-eyebrow{color:var(--mint);margin-bottom:16px}
-.bk-h{font-size:clamp(30px,3.2vw,48px);font-weight:500;letter-spacing:-.035em;line-height:1.05}
+.bk-copy .sec-eyebrow{color:var(--mint)}
+.bk-h{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500}
 .bk-q{margin:22px 0 0}
 .bk-q p{font-size:clamp(19px,1.7vw,24px);line-height:1.35;letter-spacing:-.015em;color:rgba(255,255,255,.8)}
 .bk-q footer{margin-top:12px;font-size:14px;color:rgba(255,255,255,.56)}
@@ -654,11 +653,9 @@ h1 .h1-sub{margin-top:.5em}
 .bk-who b{display:block;font-size:16px;font-weight:500;letter-spacing:-.01em}
 .bk-who small{display:block;margin-top:3px;font-size:13px;color:rgba(255,255,255,.6)}
 .bk-who img{flex:none;padding-left:18px;border-left:1px solid rgba(255,255,255,.16);box-sizing:content-box}
-/* controls sit at the bottom, under the copy column */
-.bk-ctlwrap{position:absolute;z-index:2;left:0;right:0;bottom:clamp(28px,5vh,56px)}
-.bk-ctl{max-width:1440px;margin:0 auto;padding:0 var(--pad);display:flex;justify-content:flex-end}
-.bk-ctl-in{width:min(560px,46%);display:flex;align-items:center;gap:8px}
-.bk-bars{display:flex;gap:6px;width:min(220px,30vw)}
+/* controls sit right under the copy, one set per slide (kept in sync) */
+.bk-ctl{display:flex;align-items:center;gap:8px;margin-top:24px;max-width:340px}
+.bk-bars{flex:1;display:flex;gap:6px}
 .bk-bars button{flex:1;height:24px;display:flex;align-items:center}
 .bk-bars i{display:block;width:100%;height:2px;border-radius:2px;background:rgba(255,255,255,.24);overflow:hidden}
 .bk-bars i::before{content:"";display:block;height:100%;background:#fff;transform-origin:0 50%;transform:scaleX(var(--f,0))}
@@ -668,7 +665,7 @@ h1 .h1-sub{margin-top:.5em}
 .bk-btn svg{width:13px;height:13px}
 .bk-sec button:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
 @media (max-width:1000px){
-  .bk-copy, .bk-ctl-in{width:min(520px,56%)}
+  .bk-copy{width:min(520px,56%)}
 }
 @media (max-width:760px){
   .bk-slide{display:block;min-height:0}
@@ -676,7 +673,6 @@ h1 .h1-sub{margin-top:.5em}
   .bk-media::after{background:linear-gradient(180deg,#050E09 0%,rgba(5,14,9,0) 18%,rgba(5,14,9,0) 52%,rgba(5,14,9,.85) 82%,#050E09 100%)}
   .bk-in{margin-top:-96px;padding:0 20px 32px}
   .bk-copy{width:100%}
-  .bk-h{font-size:30px}
   .bk-q p{font-size:18px}
   .bk-stats{gap:16px}
   .bk-stats b{font-size:30px}
@@ -684,11 +680,7 @@ h1 .h1-sub{margin-top:.5em}
   .bk-big{font-size:24px}
   .bk-who{padding:14px;gap:14px}
   .bk-who img{padding-left:14px;max-width:84px;height:auto}
-  .bk-voices .bk-in{padding-bottom:88px}
-  .bk-ctlwrap{bottom:28px}
-  .bk-ctl{padding:0 20px}
-  .bk-ctl-in{width:100%}
-  .bk-bars{flex:1;width:auto}
+  .bk-ctl{max-width:none;margin-top:20px}
 }
 @media (prefers-reduced-motion:reduce){
   .bk-voices .bk-slide{transition:none}
@@ -768,12 +760,12 @@ main>.bk-sec{padding:0!important}
   .pg-close{position:sticky;top:12px;display:grid;margin:12px 22px -46px auto;width:34px;height:34px;background:rgba(5,14,9,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   .pg-pager{position:static;background:none;padding:8px 0 28px;margin-top:28px}
 }
-.pg-sec2{position:relative;z-index:6;padding:clamp(90px,12vh,140px) 0 clamp(70px,10vh,110px);overflow:hidden}
+.pg-sec2{position:relative;z-index:6;padding:var(--sec-y) 0;overflow:hidden}
 .pg-sec2::before{content:"";position:absolute;left:50%;top:-10%;width:1100px;height:700px;margin-left:-550px;pointer-events:none}
 .tm-head{position:relative;text-align:center;max-width:820px;margin:0 auto;padding:0 var(--pad)}
 .tm-head .sec-eyebrow{justify-content:center;color:var(--mint)}
-.tm-h{font-weight:500;letter-spacing:-.045em;line-height:1.02}
-.tm-sub{margin:18px auto 0;font-size:17px;line-height:1.5;max-width:46ch}
+.tm-h{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500}
+.tm-sub{margin:18px auto 0;font-size:var(--t-lead);line-height:1.5;max-width:46ch}
 .tm-link{display:inline-flex;gap:6px;font-size:15px;font-weight:500;border-bottom:1px solid rgba(255,255,255,.25);padding-bottom:2px;transition:border-color .3s,color .3s}
 .tm-stage{position:relative;height:520px;outline:none}
 .tm-card{position:absolute;left:50%;top:50%;border-radius:22px;overflow:hidden;transition:width .75s cubic-bezier(.65,0,.25,1),height .75s cubic-bezier(.65,0,.25,1),transform .75s cubic-bezier(.65,0,.25,1),border-radius .75s}
@@ -811,7 +803,6 @@ main>.bk-sec{padding:0!important}
   .tm-sum{display:none}
 }
 @media (max-width:700px){
-  .tm-sub{font-size:15.5px}
   .tm-full{grid-template-columns:1fr;grid-template-rows:38% 1fr}
   .tm-info{padding:16px 18px 18px}
   .tm-title{font-size:24px;margin-top:8px}
@@ -826,8 +817,6 @@ main>.bk-sec{padding:0!important}
 @media (prefers-reduced-motion:reduce){
   .tm-card, .tm-face, .tm-full{transition:none!important}
 }
-.pg-sec2{padding-top:clamp(80px,10vh,120px)}
-.tm-h{font-size:clamp(34px,3.9vw,58px)}
 .tm-sub{margin-top:14px}
 .tm-link{margin-top:14px}
 .tm-stage{margin-top:clamp(30px,4.5vh,48px)}
@@ -1022,7 +1011,7 @@ main>.bk-sec{padding:0!important}
   .pl-head{padding-bottom:16px}
   .pl-dock{bottom:calc(10px + env(safe-area-inset-bottom,0px))}
   .pl-idx a{height:34px;padding:0 11px;font-size:13px}
-  .pl-title{font-size:28px;line-height:1.08}
+  .pl-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500}
   .pl-stack{padding:0 8px}
   .pl-panel{margin-bottom:8px}
   .pl-stage{border-radius:18px}
@@ -1054,8 +1043,8 @@ main>.bk-sec{padding:0!important}
 
 /* ---------- detail: 85% sheet (phone) or modal (desktop) ---------- */
 html.pl-lock, html.pl-lock body{overflow:hidden}
-.pl-dlg{position:fixed;inset:0;z-index:50;visibility:hidden;pointer-events:none;color:var(--ink-t)}
-.pl-dlg.is-open{visibility:visible;pointer-events:auto}
+.pl-dlg{position:fixed;inset:0;z-index:50;visibility:hidden;pointer-events:none;color:var(--ink-t);transition:visibility 0s linear .5s}
+.pl-dlg.is-open{visibility:visible;pointer-events:auto;transition-delay:0s}
 .pl-dlg-scrim{position:absolute;inset:0;background:rgba(5,14,9,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .45s var(--ease-out)}
 .pl-dlg.is-open .pl-dlg-scrim{opacity:1}
 .pl-dlg-box{position:absolute;left:50%;top:50%;width:min(1120px,calc(100vw - 48px));height:85vh;height:85dvh;display:grid;grid-template-columns:40% minmax(0,1fr);border-radius:20px;overflow:hidden;background:#FBFAF7;box-shadow:0 60px 120px -40px rgba(0,0,0,.7);opacity:0;transform:translate3d(-50%,calc(-50% + 24px),0) scale(.98);transition:opacity .45s var(--ease-out),transform .7s var(--ease-out)}
@@ -1129,8 +1118,8 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 }
 
 /* ---------- reel viewer ---------- */
-.pl-rv{position:fixed;inset:0;z-index:55;visibility:hidden;pointer-events:none}
-.pl-rv.is-open{visibility:visible;pointer-events:auto}
+.pl-rv{position:fixed;inset:0;z-index:55;visibility:hidden;pointer-events:none;transition:visibility 0s linear .45s}
+.pl-rv.is-open{visibility:visible;pointer-events:auto;transition-delay:0s}
 .pl-rv-scrim{position:absolute;inset:0;background:rgba(3,8,5,.9);opacity:0;transition:opacity .4s var(--ease-out)}
 .pl-rv.is-open .pl-rv-scrim{opacity:1}
 .pl-rv-frame{position:absolute;left:50%;top:50%;height:min(88vh,880px);aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#000;color:#fff;opacity:0;transform:translate3d(-50%,-48%,0) scale(.96);transition:opacity .4s var(--ease-out),transform .6s var(--ease-out)}
@@ -1169,11 +1158,11 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 /* ===== built ===== */
 /* Built at SSB: full-bleed company showcase, tabs inside the image, hotspots */
 #built, #faculty{position:relative;z-index:6}
-.bs-sec{position:relative;background:var(--ink);color:#fff;padding:clamp(60px,7.5vh,84px) 0 clamp(40px,6vh,64px)}
+.bs-sec{position:relative;background:var(--ink);color:#fff;padding:var(--sec-y) 0 var(--sec-y-tight)}
 .bs-wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
 .bs-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:clamp(20px,3vh,32px)}
-.bs-head .sec-eyebrow{color:var(--mint);margin-bottom:14px}
-.bs-title{font-size:clamp(28px,3vw,44px);line-height:1.06;letter-spacing:-.032em;font-weight:500;max-width:22ch}
+.bs-head .sec-eyebrow{color:var(--mint)}
+.bs-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500;max-width:22ch}
 .bs-title span{color:rgba(255,255,255,.46)}
 .bs-grid{display:grid;gap:12px}
 .bs-stage{position:relative;height:100%;border-radius:24px;overflow:hidden;background:#0b1510;isolation:isolate;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
@@ -1228,9 +1217,8 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
   .bs-tab{height:38px;padding:0 14px;font-size:13px}
 }
 @media (max-width:640px){
-  .bs-sec{padding:56px 0 40px}
   .bs-head{margin-bottom:18px}
-  .bs-title{font-size:30px;max-width:15ch}
+  .bs-title{max-width:15ch}
   .bs-title span{display:block}
   .bs-top{flex-direction:column;gap:14px}
   .bs-met{text-align:left}
@@ -1268,13 +1256,13 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 /* ===== faculty ===== */
 /* Faculty and mentors: name list with brand monograms, sticky portrait, topic filter */
 #faculty{background:#FBFAF7;color:#0A1C13}
-.fx-sec{--fx-paper:#FBFAF7;--fx-ink:#0A1C13;--fx-mute:#5C6862;--fx-off:#C3C7BF;--fx-tile:#E7E8E2;--fx-tile-ink:#A7ACA4;position:relative;background:var(--fx-paper);color:var(--fx-ink);font-family:var(--font);padding:clamp(96px,11vw,168px) 0 clamp(104px,12vw,176px)}
+.fx-sec{--fx-paper:#FBFAF7;--fx-ink:#0A1C13;--fx-mute:#5C6862;--fx-off:#C3C7BF;--fx-tile:#E7E8E2;--fx-tile-ink:#A7ACA4;position:relative;background:var(--fx-paper);color:var(--fx-ink);font-family:var(--font);padding:var(--sec-y) 0}
 .fx-sec *{box-sizing:border-box}
 .fx-wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
 .fx-head{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;align-items:end;margin-bottom:clamp(56px,7vw,104px)}
 .fx-head-l{grid-column:1/9}
-.fx-eyebrow{color:var(--cta);font-family:var(--mono);font-size:12px;letter-spacing:.14em}
-.fx-title{font-weight:500;font-size:clamp(34px,4.5vw,66px);line-height:1.02;letter-spacing:-.042em;max-width:15ch;text-wrap:balance}
+.fx-eyebrow{color:var(--cta)}
+.fx-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500;max-width:18ch;text-wrap:balance}
 .fx-lede{grid-column:9/13;font-size:17px;line-height:1.5;color:var(--fx-mute);letter-spacing:-.005em;max-width:36ch;padding-bottom:8px;text-wrap:pretty}
 .fx-body{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;align-items:stretch}
 .fx-side{grid-column:1/3}
@@ -1314,6 +1302,7 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 .fx-cap{grid-area:1/1;opacity:0;transform:translateY(4px);transition:opacity .35s var(--ease-out),transform .5s var(--ease-out);pointer-events:none}
 .fx-cap.is-on{opacity:1;transform:none}
 .fx-logo{display:block;width:auto;height:var(--lh,20px);max-width:100%;object-fit:contain}
+.fx-note{margin:8px auto 0;max-width:36ch;text-align:center;font-size:13.5px;line-height:1.45;color:var(--fx-ink);opacity:.72;text-wrap:balance}
 .fx-role{margin:6px 0 0;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.5;color:var(--fx-mute);text-wrap:balance}
 .fx-js .fx-li, .fx-js .fx-group{opacity:0;transform:translateY(14px)}
 .fx-js.is-in .fx-li, .fx-js.is-in .fx-group{opacity:1;transform:none;transition:opacity .7s var(--ease-out),transform .9s var(--ease-out);transition-delay:calc(var(--k,0) * 28ms)}
@@ -1330,10 +1319,8 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
   .fx-lede{grid-column:1/10;margin-top:22px}
 }
 @media (max-width:760px){
-  .fx-sec{padding:88px 0 96px}
   .fx-head{display:block;margin-bottom:36px}
-  .fx-eyebrow{font-size:11px;margin-bottom:16px}
-  .fx-title{font-size:34px;letter-spacing:-.04em;max-width:none}
+  .fx-title{max-width:none}
   .fx-lede{font-size:15.5px;margin-top:16px}
   .fx-body{grid-template-columns:minmax(0,1fr) 40%;column-gap:14px}
   .fx-side{grid-column:1/-1;margin:0 calc(var(--pad) * -1)}
@@ -1358,6 +1345,7 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
   .fx-big{font-size:12.5px;letter-spacing:-.01em;line-height:1.2}
   .fx-caps{margin-top:10px}
   .fx-role{font-size:9.5px;margin-top:4px;letter-spacing:.02em}
+  .fx-note{font-size:12px;margin-top:6px;max-width:none}
 }
 @media (prefers-reduced-motion:reduce){
   .fx-sec *, .fx-sec *::before{transition:none!important;animation:none!important}
@@ -1428,9 +1416,9 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 .cl-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:clamp(88px,11vw,150px) 0 clamp(88px,11vw,150px)}
 .cl-frame{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
 .cl-head{max-width:46rem;margin-bottom:clamp(32px,4vw,48px)}
-.cl-eyebrow{color:var(--mint);font-family:var(--mono);font-size:12px;letter-spacing:.14em}
-.cl-title{font-size:clamp(34px,4.4vw,64px);font-weight:500;letter-spacing:-.042em;line-height:1.02;text-wrap:balance}
-.cl-sub{margin-top:18px;font-size:17px;line-height:1.5;color:rgba(255,255,255,.62);max-width:40ch;text-wrap:pretty}
+.cl-eyebrow{color:var(--mint)}
+.cl-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500;text-wrap:balance}
+.cl-sub{margin-top:18px;font-size:var(--t-lead);line-height:1.5;color:rgba(255,255,255,.62);max-width:40ch;text-wrap:pretty}
 /* phone: cohort across the top, then the four in two rows */
 .cl-mosaic{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:'hero hero' 'a d' 'b e';gap:8px}
 .cl-slot{grid-area:hero;display:grid}
@@ -1463,7 +1451,6 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
   .cl-social{margin:10px;gap:6px}
   .cl-glass{height:36px;font-size:13px;padding:0 12px 0 10px}
   .cl-glass small{display:none}
-  .cl-sub{font-size:15.5px}
 }
 /* The moment (desktop, tall enough, motion allowed): the track is a screen plus .75 of one; the stage sticks;
    the cohort, lifted out over the whole stage (cl-live), is trimmed back to its tile by clip-path. */
@@ -1495,31 +1482,54 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 .cl-tile{background:#E7E8E2}
 .cl-title em{font-style:normal;color:#075C32}
 
-/* student clubs: a small sideways strip under the mosaic (first two are real, the rest are placeholders) */
-.cl-clubs{margin-top:clamp(24px,3vw,36px);padding-bottom:clamp(64px,8vw,104px)}
-.cl-clubs-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:14px}
-.cl-clubs-head h3{font-size:clamp(20px,1.8vw,26px);font-weight:500;letter-spacing:-.025em}
-.cl-clubs-head span{font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint-t)}
-.cl-clubs-row{list-style:none;display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding:0 max(var(--pad),calc((100vw - 1440px) / 2 + var(--pad)));scroll-padding:0 max(var(--pad),calc((100vw - 1440px) / 2 + var(--pad)));scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 48px),transparent);mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 48px),transparent)}
-.cl-clubs-row::-webkit-scrollbar{display:none}
-.cl-club{flex:none;width:236px;padding:16px 16px 18px;border-radius:12px;background:#F1F0EB;box-shadow:inset 0 0 0 1px rgba(10,28,19,.06);scroll-snap-align:start}
-.cl-ck{font:500 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--cta)}
-.cl-club b{display:block;margin-top:10px;font-size:16px;font-weight:500;letter-spacing:-.015em}
-.cl-club p{margin-top:6px;font-size:13px;line-height:1.45;color:var(--dim-t)}
+/* student clubs: a bento under the mosaic, same gap and corners so the two read as one block.
+   Marketing and Consulting are real; the other eight are placeholders until the club list is confirmed. */
+.cl-clubs{margin-top:12px;padding-bottom:var(--sec-y)}
+.cl-bento{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-rows:minmax(176px,auto);gap:12px}
+.cl-bt{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:20px;padding:20px;border-radius:14px;background:#F1F0EB;box-shadow:inset 0 0 0 1px rgba(10,28,19,.05)}
+.cl-bt--wide{grid-column:span 2}
+.cl-bt--intro{grid-column:span 2;grid-row:span 2;padding:28px;background:#075C32;color:#fff;box-shadow:none;overflow:hidden;isolation:isolate}
+.cl-bt--intro::after{content:"";position:absolute;inset:auto -20% -40% auto;width:80%;aspect-ratio:1;border-radius:50%;background:radial-gradient(closest-side,rgba(107,238,159,.35),transparent);z-index:-1}
+.cl-bt-n{font-size:clamp(88px,9vw,140px);font-weight:500;letter-spacing:-.06em;line-height:.85;color:var(--mint)}
+.cl-bt--intro h3{margin-top:10px;font-size:var(--t-h3);font-weight:500;letter-spacing:-.03em;line-height:1.1;max-width:16ch}
+.cl-bt-k{font:500 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ci,var(--cta))}
+.cl-bt--intro .cl-bt-k{color:rgba(255,255,255,.7)}
+.cl-bt-ic{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--ct);color:var(--ci)}
+.cl-bt-ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.cl-bt b{display:block;margin-top:8px;font-size:16px;font-weight:500;letter-spacing:-.015em;line-height:1.25}
+.cl-bt div>p:last-child:not(.cl-bt-k){margin-top:4px;font-size:13px;line-height:1.45;color:var(--dim-t)}
+.cl-bt--wide{background:var(--ct)}
+.cl-bt--wide .cl-bt-ic{background:#fff}
+.cl-bt--wide b{font-size:20px}
+.cl-bt--wide div>p:last-child{max-width:34ch;font-size:14px}
+@media (max-width:1180px){
+  .cl-bento{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .cl-bt--intro{grid-row:span 1}
+}
+/* phone and small tablet: a two-row sideways rail, intro first */
 @media (max-width:760px){
-  .cl-club{width:72vw;max-width:260px}
-  .cl-clubs{padding-bottom:44px}
+  .cl-clubs{margin-top:8px}
+  .cl-clubs .cl-frame{padding:0}
+  .cl-bento{grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(2,minmax(150px,auto));grid-auto-columns:minmax(0,58vw);gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 var(--pad);scroll-padding:0 var(--pad);scrollbar-width:none}
+  .cl-bento::-webkit-scrollbar{display:none}
+  .cl-bt{scroll-snap-align:start;padding:16px;gap:14px}
+  .cl-bt--intro{grid-column:span 1;grid-row:span 2;padding:20px}
+  .cl-bt--wide{grid-column:span 1;grid-row:span 1}
+  .cl-bt--wide b{font-size:16px}
+  .cl-bt--wide div>p:last-child{font-size:13px}
+  .cl-bt-ic{width:38px;height:38px;border-radius:10px}
+  .cl-bt-ic svg{width:19px;height:19px}
 }
 
 /* ===== team ===== */
 /* Founding team: the people who built SSB, portrait grid (rail on phones) with each person's past company */
-.lt-sec{position:relative;z-index:6;background:#FBFAF7;color:var(--ink-t);padding:clamp(64px,8vw,112px) 0}
+.lt-sec{position:relative;z-index:6;background:#FBFAF7;color:var(--ink-t);padding:var(--sec-y) 0}
 .lt-wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
-.lt-head{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:clamp(24px,3vw,40px)}
-.lt-head .sec-eyebrow{color:var(--cta);margin-bottom:14px}
-.lt-title{font-size:clamp(28px,3vw,44px);line-height:1.06;letter-spacing:-.032em;font-weight:500;max-width:30ch}
+.lt-head{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:var(--head-gap)}
+.lt-head .sec-eyebrow{color:var(--cta)}
+.lt-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500;max-width:26ch}
 .lt-title span{color:rgba(10,28,19,.42)}
-.lt-side{max-width:34ch;font-size:15.5px;line-height:1.5;color:var(--dim-t)}
+.lt-side{max-width:34ch;font-size:var(--t-lead);line-height:1.5;color:var(--dim-t)}
 .lt-grid{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
 .lt-card figure{position:relative;margin:0;aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:#E7EAE4}
 .lt-ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;transition:transform .9s var(--ease-out)}
@@ -1527,10 +1537,11 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 .lt-card figure::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,14,9,0) 48%,rgba(5,14,9,.82));pointer-events:none}
 .lt-card figcaption{position:absolute;z-index:1;left:14px;right:14px;bottom:13px;color:#fff}
 .lt-card b{display:block;font-size:16px;font-weight:500;letter-spacing:-.015em;line-height:1.2}
-.lt-card span{display:block;margin-top:3px;font-size:12.5px;line-height:1.3;color:rgba(255,255,255,.78)}
+.lt-card figcaption span{display:block;margin-top:3px;font-size:12.5px;line-height:1.3;color:rgba(255,255,255,.78)}
 .lt-card small{display:block;margin-top:5px;font:500 10px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mint)}
-.lt-lg{position:absolute;z-index:1;left:12px;top:12px;display:grid;place-items:center;height:28px;padding:0 9px;border-radius:8px;background:rgba(255,255,255,.92);box-shadow:0 8px 20px -10px rgba(0,0,0,.5)}
-.lt-lg img{height:13px;width:auto;max-width:64px}
+.lt-lg{position:absolute;z-index:1;left:12px;top:12px;display:flex;align-items:center;justify-content:center;height:30px;min-width:64px;padding:0 10px;border-radius:8px;background:rgba(255,255,255,.94);box-shadow:0 8px 20px -10px rgba(0,0,0,.5)}
+.lt-lg img{display:block;height:var(--h,14px);width:auto;max-width:92px}
+.lt-lg--t{font-size:13.5px;font-weight:600;letter-spacing:-.02em;line-height:1;color:var(--ink-t)}
 @media (max-width:1000px){
   .lt-head{flex-direction:column;align-items:flex-start;gap:14px}
   .lt-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -1539,7 +1550,6 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
   .lt-grid{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 var(--pad);margin:0 calc(var(--pad) * -1);padding:0 var(--pad);scrollbar-width:none}
   .lt-grid::-webkit-scrollbar{display:none}
   .lt-card{flex:none;width:58vw;max-width:240px;scroll-snap-align:start}
-  .lt-side{font-size:14.5px}
 }
 @media (prefers-reduced-motion:reduce){
   .lt-ph{transition:none}
@@ -1550,11 +1560,11 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 
 /* ===== press ===== */
 /* Press: what the press has written about SSB, four article cards (rail on phones) */
-.pr-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:clamp(56px,7vw,96px) 0}
+.pr-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:var(--sec-y) 0}
 .pr-wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
-.pr-head{margin-bottom:clamp(22px,3vw,36px)}
-.pr-head .sec-eyebrow{color:var(--mint);margin-bottom:14px}
-.pr-title{font-size:clamp(28px,3vw,44px);line-height:1.06;letter-spacing:-.032em;font-weight:500}
+.pr-head{margin-bottom:var(--head-gap)}
+.pr-head .sec-eyebrow{color:var(--mint)}
+.pr-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500}
 .pr-grid{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .pr-card{display:flex;flex-direction:column;height:100%;padding:20px 20px 18px;border-radius:14px;background:#FBFAF7;color:var(--ink-t);transition:transform .6s var(--ease-spring),box-shadow .5s var(--ease-out)}
 .pr-card:hover{transform:translateY(-3px);box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
@@ -1581,17 +1591,17 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 }
 
 /* press runs straight into admissions: one gap, not two */
-.pr-sec{padding-bottom:clamp(40px,5vw,64px)}
-.pr-sec+.ad-sec{padding-top:clamp(48px,6vw,88px)}
+.pr-sec{padding-bottom:var(--sec-y-tight)}
+.pr-sec+.ad-sec{padding-top:var(--sec-y-tight)}
 
 /* ===== admissions ===== */
 /* Admissions & fees: five-step process, eligibility, intakes and fees, scholarships (sheet per scholarship, #scholarship-*), Impact Foundation backers */
-.ad-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:clamp(96px,11vw,150px) 0 clamp(96px,11vw,140px);overflow:hidden}
+.ad-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:var(--sec-y) 0;overflow:hidden}
 .ad-sec::before{content:"";position:absolute;left:50%;top:120px;width:1400px;height:700px;margin-left:-700px;background:radial-gradient(closest-side,rgba(29,146,91,.22),rgba(29,146,91,0));pointer-events:none}
 .ad-wrap{position:relative;max-width:1440px;margin:0 auto;padding:0 var(--pad)}
 .ad-head{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:48px;align-items:end}
 .ad-eyebrow{color:var(--mint)}
-.ad-title{font-size:clamp(36px,4.6vw,66px);font-weight:500;letter-spacing:-.045em;line-height:1.02;text-wrap:balance}
+.ad-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500;text-wrap:balance}
 .ad-title span{color:rgba(255,255,255,.45)}
 .ad-side p{font-size:17px;line-height:1.5;color:rgba(255,255,255,.62);margin-bottom:22px;text-wrap:pretty}
 .ad-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px}
@@ -1626,7 +1636,7 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 .ad-list b{display:block;margin-bottom:3px;font:500 10.5px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
 /* scholarships */
 .ad-sch{margin-top:12px;border-radius:20px;padding:clamp(28px,3vw,40px);background:linear-gradient(150deg,#0A4A2A 0%,#073A21 45%,#05251A 100%);box-shadow:inset 0 0 0 1px rgba(107,238,159,.14);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:clamp(24px,3vw,48px);align-items:start}
-.ad-sch-title{font-size:clamp(28px,2.8vw,40px);font-weight:500;letter-spacing:-.04em;line-height:1.05}
+.ad-sch-title{font-size:var(--t-h3);font-weight:500;letter-spacing:-.035em;line-height:1.08}
 .ad-sch-head p{margin-top:12px;font-size:15.5px;line-height:1.5;color:rgba(255,255,255,.7);max-width:40ch}
 .ad-sch-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .ad-sc{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-height:104px;padding:18px 52px 18px 18px;border-radius:14px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);text-align:left;transition:background .3s var(--ease-out),transform .5s var(--ease-spring)}
@@ -1672,8 +1682,6 @@ html.ad-lock, html.ad-lock body{overflow:hidden}
   .ad-sch{grid-template-columns:1fr}
 }
 @media (max-width:640px){
-  .ad-sec{padding:88px 0 96px}
-  .ad-title{font-size:34px}
   .ad-side p{font-size:15.5px}
   .ad-ctas .cta{flex:1 1 100%;justify-content:space-between}
   /* steps become a vertical timeline */
@@ -1705,7 +1713,6 @@ html.ad-lock, html.ad-lock body{overflow:hidden}
    (process, programme fee), then the scholarship block full width */
 .ad-top{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(40px,5vw,72px);align-items:start}
 .ad-left{position:sticky;top:104px;display:flex;flex-direction:column;gap:14px}
-.ad-left .ad-title{font-size:clamp(34px,3.9vw,56px)}
 .ad-lede{font-size:17px;line-height:1.5;color:rgba(255,255,255,.62);max-width:40ch}
 .ad-left .ad-elig{margin-top:10px;padding:22px 24px}
 .ad-elig p{margin-top:10px;font-size:15px;line-height:1.55;color:rgba(255,255,255,.66)}
@@ -1723,7 +1730,6 @@ html.ad-lock, html.ad-lock body{overflow:hidden}
   .ad-left{position:static}
 }
 @media (max-width:640px){
-  .ad-left .ad-title{font-size:34px}
   .ad-lede{font-size:15.5px}
   .ad-left .ad-elig{padding:18px}
   .ad-proc-list li{font-size:15px}
@@ -1733,13 +1739,13 @@ html.ad-lock, html.ad-lock body{overflow:hidden}
 
 /* ===== faq ===== */
 /* FAQ: questions parents and candidates ask first; each answer has a shareable link (#faq-*) */
-.fq-sec{position:relative;z-index:6;background:#FBFAF7;color:var(--ink-t);padding:clamp(88px,10vw,140px) 0 clamp(96px,11vw,150px)}
+.fq-sec{position:relative;z-index:6;background:#FBFAF7;color:var(--ink-t);padding:var(--sec-y) 0}
 .fq-wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;align-items:start}
 .fq-head{grid-column:1/5;position:sticky;top:112px}
-.fq-eyebrow{color:#075C32;font-family:var(--mono);font-size:12px;letter-spacing:.14em}
-.fq-title{font-size:clamp(34px,4vw,58px);font-weight:500;letter-spacing:-.045em;line-height:1.02}
+.fq-eyebrow{color:#075C32}
+.fq-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500}
 .fq-title span{color:#075C32}
-.fq-sub{margin:16px 0 26px;font-size:16.5px;line-height:1.5;color:rgba(10,28,19,.6);max-width:30ch}
+.fq-sub{margin:16px 0 26px;font-size:var(--t-lead);line-height:1.5;color:rgba(10,28,19,.6);max-width:30ch}
 .fq-list{grid-column:6/13;border-top:1px solid rgba(10,28,19,.1)}
 .fq-item{border-bottom:1px solid rgba(10,28,19,.1);scroll-margin-top:100px}
 .fq-q{margin:0;font:inherit}
@@ -1763,16 +1769,12 @@ html.ad-lock, html.ad-lock body{overflow:hidden}
   .fq-list{grid-column:1/-1}
 }
 @media (max-width:640px){
-  .fq-sec{padding:80px 0 88px}
-  .fq-title{font-size:34px}
-  .fq-sub{font-size:15.5px}
   .fq-b{padding:20px 0;font-size:17px;gap:16px}
   .fq-i{width:28px;height:28px}
   .fq-a p{padding-right:0;font-size:15px}
 }
 @media (prefers-reduced-motion:reduce){ .fq-a, .fq-a p, .fq-i, .fq-i::after{transition:none!important} }
-.seam+.fq-sec{padding-top:clamp(32px,4vw,64px)}
-.fq-sec{padding-bottom:clamp(64px,7vw,104px)}
+.seam+.fq-sec{padding-top:var(--sec-y-tight)}
 
 /* ===== footer ===== */
 /* Footer: replica of the live V3 footer + draft footnotes */
@@ -1847,8 +1849,8 @@ html.ad-lock, html.ad-lock body{overflow:hidden}
 /* ===== lead ===== */
 /* Lead modal: apply / brochure / callback / exit intent. Photo carousel with proof on the left, form on the right (85% sheet on phones) */
 html.ld-lock, html.ld-lock body{overflow:hidden}
-.ld{position:fixed;inset:0;z-index:60;visibility:hidden;pointer-events:none;color:var(--ink-t)}
-.ld.is-open{visibility:visible;pointer-events:auto}
+.ld{position:fixed;inset:0;z-index:60;visibility:hidden;pointer-events:none;color:var(--ink-t);transition:visibility 0s linear .5s}
+.ld.is-open{visibility:visible;pointer-events:auto;transition-delay:0s}
 .ld-scrim{position:absolute;inset:0;background:rgba(5,14,9,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .45s var(--ease-out)}
 .ld.is-open .ld-scrim{opacity:1}
 .ld-box{position:absolute;left:50%;top:50%;width:min(980px,calc(100vw - 48px));height:min(640px,85vh);display:grid;grid-template-columns:42% minmax(0,1fr);border-radius:20px;overflow:hidden;background:#FBFAF7;box-shadow:0 60px 120px -40px rgba(0,0,0,.7);opacity:0;transform:translate3d(-50%,calc(-50% + 24px),0) scale(.98);transition:opacity .45s var(--ease-out),transform .7s var(--ease-out)}
@@ -2836,6 +2838,9 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
           <p class="sec-eyebrow">Founders and investors have noticed</p>
           <p class="bk-big">In July 2026, Anupam Mittal heard four startups our students built, and offered ₹50 lakh to back one of them, Hummusapiens.</p>
           <div class="bk-who"><span><b>Anupam Mittal</b><small>Founder and CEO, Shaadi.com · Shark Tank India judge</small></span><img src="media/breakers/shaadi.svg" alt="Shaadi.com" height="26" loading="lazy"></div>
+          <div class="bk-ctl"><button class="bk-btn" type="button" data-step="-1" aria-label="Previous"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="bk-bars"><button type="button" aria-label="Anupam Mittal"><i></i></button><button type="button" aria-label="Ankur Warikoo"><i></i></button></div>
+      <button class="bk-btn" type="button" data-step="1" aria-label="Next"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4.5 2.5 8 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
         </div>
       </div>
     </div>
@@ -2848,16 +2853,12 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
           <p class="sec-eyebrow">Founders and investors have noticed</p>
           <p class="bk-big">Ankur Warikoo handed our graduates their degrees, and one line: “Don’t get intellectually comfortable.”</p>
           <div class="bk-who"><span><b>Ankur Warikoo</b><small>Founder, WebVeda · Author, Do Epic Shit</small></span><img src="media/breakers/webveda.svg" alt="WebVeda" height="20" loading="lazy"></div>
+          <div class="bk-ctl"><button class="bk-btn" type="button" data-step="-1" aria-label="Previous"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="bk-bars"><button type="button" aria-label="Anupam Mittal"><i></i></button><button type="button" aria-label="Ankur Warikoo"><i></i></button></div>
+      <button class="bk-btn" type="button" data-step="1" aria-label="Next"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4.5 2.5 8 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="bk-ctlwrap">
-    <div class="bk-ctl"><div class="bk-ctl-in">
-      <button class="bk-btn" type="button" data-step="-1" aria-label="Previous"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div class="bk-bars"><button type="button" aria-label="Anupam Mittal"><i></i></button><button type="button" aria-label="Ankur Warikoo"><i></i></button></div>
-      <button class="bk-btn" type="button" data-step="1" aria-label="Next"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4.5 2.5 8 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    </div></div>
   </div>
 </section>
 <div class="seam seam-px" data-from="#050E09" data-to="#FBFAF7" aria-hidden="true"></div>
@@ -2883,7 +2884,7 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
       <aside class="fx-stage" aria-label="Selected person">
         <div class="fx-pin">
           <div class="fx-photo"><figure class="fx-fig" data-i="0"><img src="media/faculty/siddharth-menon.webp" alt="Siddharth Menon" width="640" height="800" decoding="async"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Operation Management</span></figcaption></figure><figure class="fx-fig" data-i="1"><img src="media/faculty/akash-sinha.webp" alt="Akash Sinha" width="640" height="800" decoding="async"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Growth Marketing</span></figcaption></figure><figure class="fx-fig" data-i="2"><img src="media/faculty/dhron-kanish.webp" alt="Dhron Kanish" width="640" height="800" decoding="async"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Product Management</span></figcaption></figure><figure class="fx-fig" data-i="3"><img src="media/faculty/jacob-singh.webp" alt="Jacob Singh" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Business Analytics</span></figcaption></figure><figure class="fx-fig" data-i="4"><img src="media/faculty/kanishk-mehta.webp" alt="Kanishk Mehta" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Operation Management</span></figcaption></figure><figure class="fx-fig" data-i="5"><img src="media/faculty/gaurav-dadhich.webp" alt="Gaurav Dadhich" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Growth Marketing</span></figcaption></figure><figure class="fx-fig" data-i="6"><img src="media/faculty/sandeep-das.webp" alt="Sandeep Das" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Product Management</span></figcaption></figure><figure class="fx-fig" data-i="7"><img src="media/faculty/vatsal-sanghvi.webp" alt="Vatsal Sanghvi" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Business Analytics</span></figcaption></figure><figure class="fx-fig" data-i="8"><img src="media/faculty/saurabh-jain.webp" alt="Saurabh Jain" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Brand Strategy</span></figcaption></figure><figure class="fx-fig" data-i="9"><img src="media/faculty/puneet.webp" alt="Puneet" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Corporate Finance</span></figcaption></figure><figure class="fx-fig" data-i="10"><img src="media/faculty/sidhant-goyal.webp" alt="Sidhant Goyal" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Sales Leadership</span></figcaption></figure><figure class="fx-fig" data-i="11"><img src="media/faculty/malthi-ss.webp" alt="Malthi SS" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Strategy and Consulting</span></figcaption></figure><figure class="fx-fig" data-i="12"><img src="media/faculty/saurabh-sengupta.webp" alt="Saurabh Sengupta" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Brand Strategy</span></figcaption></figure><figure class="fx-fig" data-i="13"><img src="media/faculty/amit-puniyani.webp" alt="Amit Puniyani" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Corporate Finance</span></figcaption></figure><figure class="fx-fig" data-i="14"><img src="media/faculty/narahari-hansoge.webp" alt="Narahari Hansoge" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Teaches</span><span class="fx-big">Sales Leadership</span></figcaption></figure><figure class="fx-fig" data-i="15"><img src="media/faculty/m-rajan-anandan.webp" alt="Rajan Anandan" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Mentor</span><span class="fx-big">MD, Peak XV</span></figcaption></figure><figure class="fx-fig" data-i="16"><img src="media/faculty/m-deepinder-goyal.webp" alt="Deepinder Goyal" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Mentor</span><span class="fx-big">Founder, Zomato</span></figcaption></figure><figure class="fx-fig" data-i="17"><img src="media/faculty/m-binny-bansal.webp" alt="Binny Bansal" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Mentor</span><span class="fx-big">Co-founder, Flipkart</span></figcaption></figure><figure class="fx-fig" data-i="18"><img src="media/faculty/m-vijay-shekhar-sharma.webp" alt="Vijay Shekhar Sharma" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Mentor</span><span class="fx-big">Founder and CEO, Paytm</span></figcaption></figure><figure class="fx-fig" data-i="19"><img src="media/faculty/m-kunal-shah.webp" alt="Kunal Shah" width="640" height="800" decoding="async" loading="lazy"><figcaption class="fx-scrim"><span class="fx-k">Mentor</span><span class="fx-big">Head of WhatsApp</span></figcaption></figure></div>
-          <div class="fx-caps"><div class="fx-cap" data-i="0"><div class="fx-logos fx-logos--3"><img class="fx-logo" src="media/faculty/logos/colgate.svg" alt="Colgate" style="--lh:17px" loading="lazy"><img class="fx-logo" src="media/brands/cocacola/logo.svg" alt="Coca-Cola" style="--lh:21px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/epigamia.png" alt="Epigamia" style="--lh:18px" loading="lazy"></div><p class="fx-role">Ex-CMO, Epigamia · Ex-Colgate, Coca-Cola</p></div><div class="fx-cap" data-i="1"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/cashfree.svg" alt="Cashfree" style="--lh:17px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/amazon.svg" alt="Amazon" style="--lh:20px" loading="lazy"></div><p class="fx-role">CEO and Co-founder, Cashfree · Ex-Amazon</p></div><div class="fx-cap" data-i="2"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/mckinsey.svg" alt="McKinsey &amp; Company" style="--lh:14px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/ey.svg" alt="EY" style="--lh:28px" loading="lazy"></div><p class="fx-role">Associate Partner, McKinsey · Ex-EY</p></div><div class="fx-cap" data-i="3"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/blinkit.svg" alt="Blinkit" style="--lh:20px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/sequoia.svg" alt="Sequoia Capital" style="--lh:15px" loading="lazy"></div><p class="fx-role">Ex-CTO, Blinkit · Ex-Sequoia Capital</p></div><div class="fx-cap" data-i="4"><div class="fx-logos fx-logos--1"><img class="fx-logo" src="media/faculty/logos/razorpay.svg" alt="Razorpay" style="--lh:20px" loading="lazy"></div><p class="fx-role">Sr. Product Director, Razorpay</p></div><div class="fx-cap" data-i="5"><div class="fx-logos fx-logos--3"><img class="fx-logo" src="media/faculty/logos/flipkart.svg" alt="Flipkart" style="--lh:28px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/razorpay.svg" alt="Razorpay" style="--lh:17px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/amazon.svg" alt="Amazon" style="--lh:18px" loading="lazy"></div><p class="fx-role">Founder, Maximem AI · Ex-Flipkart, Razorpay</p></div><div class="fx-cap" data-i="6"><div class="fx-logos fx-logos--3"><img class="fx-logo" src="media/faculty/logos/mars.svg" alt="Mars" style="--lh:17px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/pwc.svg" alt="PwC" style="--lh:24px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/accenture.svg" alt="Accenture" style="--lh:19px" loading="lazy"></div><p class="fx-role">Ex-Global Lead, Mars · Ex-PwC, Accenture</p></div><div class="fx-cap" data-i="7"><div class="fx-logos fx-logos--1"><img class="fx-logo" src="media/faculty/logos/flipkart.svg" alt="Flipkart" style="--lh:30px" loading="lazy"></div><p class="fx-role">Founder, 1811 Labs · Ex-Flipkart</p></div><div class="fx-cap" data-i="8"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/stable-money.svg" alt="Stable Money" style="--lh:19px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/swiggy.svg" alt="Swiggy" style="--lh:22px" loading="lazy"></div><p class="fx-role">Co-founder, Stable Money · Ex-Swiggy, Navi</p></div><div class="fx-cap" data-i="9"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/bcg.svg" alt="BCG" style="--lh:20px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/deloitte.svg" alt="Deloitte" style="--lh:17px" loading="lazy"></div><p class="fx-role">Partner, BCG · Ex-Deloitte</p></div><div class="fx-cap" data-i="10"><div class="fx-logos fx-logos--3"><img class="fx-logo" src="media/faculty/logos/sequoia.svg" alt="Sequoia Capital" style="--lh:14px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/mckinsey.svg" alt="McKinsey &amp; Company" style="--lh:13px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/toddle.svg" alt="Toddle" style="--lh:19px" loading="lazy"></div><p class="fx-role">Principal, Crane VC · Ex-Sequoia, McKinsey</p></div><div class="fx-cap" data-i="11"><div class="fx-logos fx-logos--3"><img class="fx-logo" src="media/faculty/logos/paypal.svg" alt="PayPal" style="--lh:19px" loading="lazy"><img class="fx-logo" src="media/brands/sap/logo.svg" alt="SAP" style="--lh:20px" loading="lazy"><img class="fx-logo" src="media/brands/intuit/logo.svg" alt="Intuit" style="--lh:15px" loading="lazy"></div><p class="fx-role">Ex-Product Director, PayPal · Ex-SAP, Intuit</p></div><div class="fx-cap" data-i="12"><div class="fx-logos fx-logos--1"><img class="fx-logo" src="media/faculty/logos/zomato.svg" alt="Zomato" style="--lh:18px" loading="lazy"></div><p class="fx-role">Ex-SVP Sales, Zomato · Ex-Aon Hewitt</p></div><div class="fx-cap" data-i="13"><div class="fx-logos fx-logos--1"><img class="fx-logo" src="media/faculty/logos/deutschebank.svg" alt="Deutsche Bank" style="--lh:20px" loading="lazy"></div><p class="fx-role">Ex-VP, Deutsche Bank</p></div><div class="fx-cap" data-i="14"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/iimb.webp" alt="IIM Bangalore" style="--lh:24px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/pwc.svg" alt="PwC" style="--lh:22px" loading="lazy"></div><p class="fx-role">Adjunct Faculty, IIM-B · Ex-Merrill Lynch, PwC</p></div><div class="fx-cap" data-i="15"><div class="fx-logos fx-logos--3"><img class="fx-logo" src="media/faculty/logos/peakxv.svg" alt="Peak XV" style="--lh:17px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/google.svg" alt="Google" style="--lh:22px" loading="lazy"><span class="fx-lk" style="--h:18px"><img src="media/brands/microsoft/symbol.svg" alt="" loading="lazy"><span>Microsoft</span></span></div><p class="fx-role">MD, Peak XV · Ex-Google, Microsoft</p></div><div class="fx-cap" data-i="16"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/zomato.svg" alt="Zomato" style="--lh:18px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/bain.svg" alt="Bain &amp; Company" style="--lh:13px" loading="lazy"></div><p class="fx-role">Founder, Zomato · Ex-Bain &amp; Company</p></div><div class="fx-cap" data-i="17"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/flipkart.svg" alt="Flipkart" style="--lh:30px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/amazon.svg" alt="Amazon" style="--lh:18px" loading="lazy"></div><p class="fx-role">Co-founder, Flipkart · Founder, Opptra</p></div><div class="fx-cap" data-i="18"><div class="fx-logos fx-logos--1"><img class="fx-logo" src="media/faculty/logos/paytm.svg" alt="Paytm" style="--lh:18px" loading="lazy"></div><p class="fx-role">Founder, MD and CEO, Paytm</p></div><div class="fx-cap" data-i="19"><div class="fx-logos fx-logos--3"><span class="fx-lk" style="--h:20px"><img src="media/brands/whatsapp/symbol.svg" alt="" loading="lazy"><span>WhatsApp</span></span><img class="fx-logo fx-logo--ink" src="media/faculty/logos/cred.svg" alt="CRED" style="--lh:24px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/freecharge.png" alt="Freecharge" style="--lh:17px" loading="lazy"></div><p class="fx-role">Head of WhatsApp · Founder, CRED, Freecharge</p></div></div>
+          <div class="fx-caps"><div class="fx-cap" data-i="0"><div class="fx-logos fx-logos--3"><img class="fx-logo" src="media/faculty/logos/colgate.svg" alt="Colgate" style="--lh:17px" loading="lazy"><img class="fx-logo" src="media/brands/cocacola/logo.svg" alt="Coca-Cola" style="--lh:21px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/epigamia.png" alt="Epigamia" style="--lh:18px" loading="lazy"></div><p class="fx-role">Ex-CMO, Epigamia · Ex-Colgate, Coca-Cola</p><p class="fx-note">Teaches operations as the hidden half of every brand: if the shelf is empty, the ad was wasted.</p></div><div class="fx-cap" data-i="1"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/cashfree.svg" alt="Cashfree" style="--lh:17px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/amazon.svg" alt="Amazon" style="--lh:20px" loading="lazy"></div><p class="fx-role">CEO and Co-founder, Cashfree · Ex-Amazon</p><p class="fx-note">Runs growth as a weekly experiment log. You leave with a channel you tested, not a framework you memorised.</p></div><div class="fx-cap" data-i="2"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/mckinsey.svg" alt="McKinsey &amp; Company" style="--lh:14px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/ey.svg" alt="EY" style="--lh:28px" loading="lazy"></div><p class="fx-role">Associate Partner, McKinsey · Ex-EY</p><p class="fx-note">Starts every product class with a client brief and ends it with a one-page recommendation you defend.</p></div><div class="fx-cap" data-i="3"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/blinkit.svg" alt="Blinkit" style="--lh:20px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/sequoia.svg" alt="Sequoia Capital" style="--lh:15px" loading="lazy"></div><p class="fx-role">Ex-CTO, Blinkit · Ex-Sequoia Capital</p><p class="fx-note">Believes a good analyst asks the boring question first. Class is SQL, dashboards and a decision by Friday.</p></div><div class="fx-cap" data-i="4"><div class="fx-logos fx-logos--1"><img class="fx-logo" src="media/faculty/logos/razorpay.svg" alt="Razorpay" style="--lh:20px" loading="lazy"></div><p class="fx-role">Sr. Product Director, Razorpay</p><p class="fx-note">Teaches ops through failure post-mortems from real launches, then has you redesign the process.</p></div><div class="fx-cap" data-i="5"><div class="fx-logos fx-logos--3"><img class="fx-logo" src="media/faculty/logos/flipkart.svg" alt="Flipkart" style="--lh:28px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/razorpay.svg" alt="Razorpay" style="--lh:17px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/amazon.svg" alt="Amazon" style="--lh:18px" loading="lazy"></div><p class="fx-role">Founder, Maximem AI · Ex-Flipkart, Razorpay</p><p class="fx-note">Hands you a budget and a target on day one. The rest of the course is about where the money went.</p></div><div class="fx-cap" data-i="6"><div class="fx-logos fx-logos--3"><img class="fx-logo" src="media/faculty/logos/mars.svg" alt="Mars" style="--lh:17px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/pwc.svg" alt="PwC" style="--lh:24px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/accenture.svg" alt="Accenture" style="--lh:19px" loading="lazy"></div><p class="fx-role">Ex-Global Lead, Mars · Ex-PwC, Accenture</p><p class="fx-note">Uses global product cases to show how the same playbook breaks in Indian markets, and how to fix it.</p></div><div class="fx-cap" data-i="7"><div class="fx-logos fx-logos--1"><img class="fx-logo" src="media/faculty/logos/flipkart.svg" alt="Flipkart" style="--lh:30px" loading="lazy"></div><p class="fx-role">Founder, 1811 Labs · Ex-Flipkart</p><p class="fx-note">Treats data as a story with a villain. You find it, size it and pitch the fix to a founder.</p></div><div class="fx-cap" data-i="8"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/stable-money.svg" alt="Stable Money" style="--lh:19px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/swiggy.svg" alt="Swiggy" style="--lh:22px" loading="lazy"></div><p class="fx-role">Co-founder, Stable Money · Ex-Swiggy, Navi</p><p class="fx-note">Brand is a promise you can keep at scale. Every session ends with a positioning line you have to defend.</p></div><div class="fx-cap" data-i="9"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/bcg.svg" alt="BCG" style="--lh:20px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/deloitte.svg" alt="Deloitte" style="--lh:17px" loading="lazy"></div><p class="fx-role">Partner, BCG · Ex-Deloitte</p><p class="fx-note">Teaches finance from the CFO chair: read the P&amp;L, find the leak, make the call with incomplete data.</p></div><div class="fx-cap" data-i="10"><div class="fx-logos fx-logos--3"><img class="fx-logo" src="media/faculty/logos/sequoia.svg" alt="Sequoia Capital" style="--lh:14px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/mckinsey.svg" alt="McKinsey &amp; Company" style="--lh:13px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/toddle.svg" alt="Toddle" style="--lh:19px" loading="lazy"></div><p class="fx-role">Principal, Crane VC · Ex-Sequoia, McKinsey</p><p class="fx-note">Sales is a craft you rehearse. Expect live role-plays, recorded calls and a pipeline you build yourself.</p></div><div class="fx-cap" data-i="11"><div class="fx-logos fx-logos--3"><img class="fx-logo" src="media/faculty/logos/paypal.svg" alt="PayPal" style="--lh:19px" loading="lazy"><img class="fx-logo" src="media/brands/sap/logo.svg" alt="SAP" style="--lh:20px" loading="lazy"><img class="fx-logo" src="media/brands/intuit/logo.svg" alt="Intuit" style="--lh:15px" loading="lazy"></div><p class="fx-role">Ex-Product Director, PayPal · Ex-SAP, Intuit</p><p class="fx-note">Breaks strategy into decisions a team can act on Monday morning, not slides that sit in a drive.</p></div><div class="fx-cap" data-i="12"><div class="fx-logos fx-logos--1"><img class="fx-logo" src="media/faculty/logos/zomato.svg" alt="Zomato" style="--lh:18px" loading="lazy"></div><p class="fx-role">Ex-SVP Sales, Zomato · Ex-Aon Hewitt</p><p class="fx-note">Brings the field into class: city launches, restaurant partners and the numbers that decide both.</p></div><div class="fx-cap" data-i="13"><div class="fx-logos fx-logos--1"><img class="fx-logo" src="media/faculty/logos/deutschebank.svg" alt="Deutsche Bank" style="--lh:20px" loading="lazy"></div><p class="fx-role">Ex-VP, Deutsche Bank</p><p class="fx-note">Makes valuation intuitive first and precise second. You model a real company before the term ends.</p></div><div class="fx-cap" data-i="14"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/iimb.webp" alt="IIM Bangalore" style="--lh:24px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/pwc.svg" alt="PwC" style="--lh:22px" loading="lazy"></div><p class="fx-role">Adjunct Faculty, IIM-B · Ex-Merrill Lynch, PwC</p><p class="fx-note">Teaches selling as listening. Frameworks from the boardroom, practised on real customer calls.</p></div><div class="fx-cap" data-i="15"><div class="fx-logos fx-logos--3"><img class="fx-logo" src="media/faculty/logos/peakxv.svg" alt="Peak XV" style="--lh:17px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/google.svg" alt="Google" style="--lh:22px" loading="lazy"><span class="fx-lk" style="--h:18px"><img src="media/brands/microsoft/symbol.svg" alt="" loading="lazy"><span>Microsoft</span></span></div><p class="fx-role">MD, Peak XV · Ex-Google, Microsoft</p><p class="fx-note">Talks about picking markets early, building teams that outlast you and what investors really look for.</p></div><div class="fx-cap" data-i="16"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/zomato.svg" alt="Zomato" style="--lh:18px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/bain.svg" alt="Bain &amp; Company" style="--lh:13px" loading="lazy"></div><p class="fx-role">Founder, Zomato · Ex-Bain &amp; Company</p><p class="fx-note">Speaks on building through near-death moments and why the customer is the only roadmap that matters.</p></div><div class="fx-cap" data-i="17"><div class="fx-logos fx-logos--2"><img class="fx-logo" src="media/faculty/logos/flipkart.svg" alt="Flipkart" style="--lh:30px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/amazon.svg" alt="Amazon" style="--lh:18px" loading="lazy"></div><p class="fx-role">Co-founder, Flipkart · Founder, Opptra</p><p class="fx-note">Shares how Flipkart scaled operations from a single warehouse and what he would do differently now.</p></div><div class="fx-cap" data-i="18"><div class="fx-logos fx-logos--1"><img class="fx-logo" src="media/faculty/logos/paytm.svg" alt="Paytm" style="--lh:18px" loading="lazy"></div><p class="fx-role">Founder, MD and CEO, Paytm</p><p class="fx-note">On betting the company on a new behaviour, and the patience it takes before India catches up.</p></div><div class="fx-cap" data-i="19"><div class="fx-logos fx-logos--3"><span class="fx-lk" style="--h:20px"><img src="media/brands/whatsapp/symbol.svg" alt="" loading="lazy"><span>WhatsApp</span></span><img class="fx-logo fx-logo--ink" src="media/faculty/logos/cred.svg" alt="CRED" style="--lh:24px" loading="lazy"><img class="fx-logo" src="media/faculty/logos/freecharge.png" alt="Freecharge" style="--lh:17px" loading="lazy"></div><p class="fx-role">Head of WhatsApp · Founder, CRED, Freecharge</p><p class="fx-note">On first-principles thinking, consumer psychology and finding the delta nobody else is looking at.</p></div></div>
         </div>
       </aside>
     </div>
@@ -2918,8 +2919,7 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
     </div>
   </div>
   <div class="cl-clubs" role="region" aria-labelledby="cl-clubs-h">
-    <div class="cl-frame cl-clubs-head"><h3 id="cl-clubs-h">Student clubs, run by students.</h3></div>
-    <ul class="cl-clubs-row"><li class="cl-club"><span class="cl-ck">Marketing</span><b>Marketing Club</b><p>Branding sessions and case competitions with founders like Meolaa’s Ishita Sawant.</p></li><li class="cl-club"><span class="cl-ck">Consulting</span><b>Consulting Club</b><p>SSB’s own case book, and sessions with ex-McKinsey and BCG consultants.</p></li><li class="cl-club"><span class="cl-ck">Finance</span><b>Finance and Investing Club</b><p>Stock pitches, valuation sprints and a paper portfolio the club runs together.</p></li><li class="cl-club"><span class="cl-ck">Product</span><b>Product Club</b><p>Teardowns of apps you use every day, and product sense mock interviews.</p></li><li class="cl-club"><span class="cl-ck">Startups</span><b>Entrepreneurship Cell</b><p>Founder fireside chats, idea nights and office hours for student startups.</p></li><li class="cl-club"><span class="cl-ck">Speaking</span><b>Debate and Public Speaking</b><p>Weekly debates and pitch practice before Demo Day.</p></li><li class="cl-club"><span class="cl-ck">Creators</span><b>Content and Creators</b><p>Reels, newsletters and podcasts made by students, for students.</p></li><li class="cl-club"><span class="cl-ck">Sports</span><b>Sports Club</b><p>Turf football, cricket and badminton leagues on campus.</p></li><li class="cl-club"><span class="cl-ck">Culture</span><b>Music and Arts</b><p>Open mics, jam nights and the annual cultural fest.</p></li><li class="cl-club"><span class="cl-ck">Impact</span><b>Social Impact</b><p>Weekend projects with NGOs and community partners in Bengaluru.</p></li></ul>
+    <div class="cl-frame"><ul class="cl-bento"><li class="cl-bt cl-bt--intro"><span class="cl-bt-n">10</span><div><p class="cl-bt-k">Student clubs</p><h3 id="cl-clubs-h">Run by students, for everything outside class.</h3></div></li><li class="cl-bt cl-bt--wide" style="--ct:#FFE4DA;--ci:#C2410C"><span class="cl-bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4a1 1 0 0 0 1 1h2l5 4V5L7 9H5a1 1 0 0 0-1 1Z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/></svg></span><div><p class="cl-bt-k">Marketing</p><b>Marketing Club</b><p>Branding sessions and case competitions with founders like Meolaa’s Ishita Sawant.</p></div></li><li class="cl-bt" style="--ct:#DCE7FB;--ci:#1D4ED8"><span class="cl-bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18"/></svg></span><div><p class="cl-bt-k">Consulting</p><b>Consulting Club</b><p>SSB’s own case book, and sessions with ex-McKinsey and BCG consultants.</p></div></li><li class="cl-bt" style="--ct:#DDF3E5;--ci:#075C32"><span class="cl-bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 4 8-8"/><path d="M15 8h5v5"/></svg></span><div><p class="cl-bt-k">Finance</p><b>Finance and Investing</b><p>Stock pitches, valuation sprints and a paper portfolio.</p></div></li><li class="cl-bt" style="--ct:#ECE3FB;--ci:#6D28D9"><span class="cl-bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg></span><div><p class="cl-bt-k">Product</p><b>Product Club</b><p>Teardowns of apps you use daily, and product sense mocks.</p></div></li><li class="cl-bt" style="--ct:#FDF0C9;--ci:#A16207"><span class="cl-bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1Z"/><path d="m12 15-3-3a22 22 0 0 1 2-4A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2Z"/><path d="M9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5"/></svg></span><div><p class="cl-bt-k">Startups</p><b>Entrepreneurship Cell</b><p>Fireside chats, idea nights and office hours for student startups.</p></div></li><li class="cl-bt" style="--ct:#D8F1EF;--ci:#0F766E"><span class="cl-bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span><div><p class="cl-bt-k">Speaking</p><b>Debate and Speaking</b><p>Weekly debates and pitch practice before Demo Day.</p></div></li><li class="cl-bt" style="--ct:#FCE1EC;--ci:#BE185D"><span class="cl-bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3V9Z"/></svg></span><div><p class="cl-bt-k">Creators</p><b>Content and Creators</b><p>Reels, newsletters and podcasts by students.</p></div></li><li class="cl-bt" style="--ct:#DDEFFB;--ci:#0369A1"><span class="cl-bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m12 7 4 3-1.5 4.5h-5L8 10l4-3ZM12 3v4M21 10l-5 0M3 10h5M7 20l2.5-5.5M17 20l-2.5-5.5"/></svg></span><div><p class="cl-bt-k">Sports</p><b>Sports Club</b><p>Turf football, cricket and badminton leagues.</p></div></li><li class="cl-bt" style="--ct:#EEE3FB;--ci:#7E22CE"><span class="cl-bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span><div><p class="cl-bt-k">Culture</p><b>Music and Arts</b><p>Open mics, jam nights and the cultural fest.</p></div></li><li class="cl-bt" style="--ct:#E7F0D6;--ci:#4D7C0F"><span class="cl-bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg></span><div><p class="cl-bt-k">Impact</p><b>Social Impact</b><p>Weekend projects with NGOs in Bengaluru.</p></div></li></ul></div>
   </div>
 </section>
 <!-- Founding team: the people who built SSB, portrait grid (rail on phones) with each person's past company -->
@@ -2933,16 +2933,16 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
       <p class="lt-side">Founded in 2024 by Anshuman Singh and Abhimanyu Saxena, the founders of Scaler.</p>
     </div>
     <ul class="lt-grid">
-      <li class="lt-card"><figure><img class="lt-ph" src="media/team/anshuman-singh.webp" alt="Anshuman Singh" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-meta.svg" alt="" loading="lazy"></span><figcaption><b>Anshuman Singh</b><span>Co-founder</span><small>Ex-Meta</small></figcaption></figure></li>
-      <li class="lt-card"><figure><img class="lt-ph" src="media/team/abhimanyu-saxena.webp" alt="Abhimanyu Saxena" width="640" height="800" loading="lazy" decoding="async"><figcaption><b>Abhimanyu Saxena</b><span>Co-founder</span><small>Ex-Fab.com</small></figcaption></figure></li>
-      <li class="lt-card"><figure><img class="lt-ph" src="media/team/vidit-jain.webp" alt="Vidit Jain" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-mckinsey.svg" alt="" loading="lazy"></span><figcaption><b>Vidit Jain</b><span>SVP and Head, Scaler Schools</span><small>Ex-McKinsey, ISB</small></figcaption></figure></li>
-      <li class="lt-card"><figure><img class="lt-ph" src="media/team/bhavik-rathod.webp" alt="Bhavik Rathod" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-uber.svg" alt="" loading="lazy"></span><figcaption><b>Bhavik Rathod</b><span>Founding leader, Uber India</span><small>Ex-Uber</small></figcaption></figure></li>
-      <li class="lt-card"><figure><img class="lt-ph" src="media/team/sucheta-mahapatra.webp" alt="Sucheta Mahapatra" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-bain.svg" alt="" loading="lazy"></span><figcaption><b>Sucheta Mahapatra</b><span>VP Business, SSB</span><small>Ex-Bain, Airtel</small></figcaption></figure></li>
-      <li class="lt-card"><figure><img class="lt-ph" src="media/team/adhiraj-arora.webp" alt="Adhiraj Arora" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-bcg.svg" alt="" loading="lazy"></span><figcaption><b>Adhiraj Arora</b><span>Programme Director</span><small>Ex-BCG, ISB</small></figcaption></figure></li>
-      <li class="lt-card"><figure><img class="lt-ph" src="media/team/manish-pansari.webp" alt="Manish Pansari" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-kearney.svg" alt="" loading="lazy"></span><figcaption><b>Manish Pansari</b><span>Director, Business Ops, SSB</span><small>Ex-Myntra, Kearney</small></figcaption></figure></li>
-      <li class="lt-card"><figure><img class="lt-ph" src="media/team/ratnakar-reddy.webp" alt="Ratnakar Reddy" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-google.svg" alt="" loading="lazy"></span><figcaption><b>Ratnakar Reddy</b><span>Enterprise Head</span><small>Ex-Google, Microsoft</small></figcaption></figure></li>
-      <li class="lt-card"><figure><img class="lt-ph" src="media/team/rahul-karthikeyan.webp" alt="Rahul Karthikeyan" width="640" height="800" loading="lazy" decoding="async"><figcaption><b>Rahul Karthikeyan</b><span>CMO, Scaler</span><small>Ex-upGrad</small></figcaption></figure></li>
-      <li class="lt-card"><figure><img class="lt-ph" src="media/team/amar-srivastava.webp" alt="Amar Srivastava" width="640" height="800" loading="lazy" decoding="async"><figcaption><b>Amar Srivastava</b><span>CEO, Scaler Online Business</span></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/anshuman-singh.webp" alt="Anshuman Singh" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg" style="--h:13px"><img src="media/team/logo-meta.svg" alt="" loading="lazy"></span><figcaption><b>Anshuman Singh</b><span>Co-founder</span><small>Ex-Meta</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/abhimanyu-saxena.webp" alt="Abhimanyu Saxena" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg lt-lg--t" aria-hidden="true">fab.com</span><figcaption><b>Abhimanyu Saxena</b><span>Co-founder</span><small>Ex-Fab.com</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/vidit-jain.webp" alt="Vidit Jain" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg" style="--h:11px"><img src="media/team/logo-mckinsey.svg" alt="" loading="lazy"></span><figcaption><b>Vidit Jain</b><span>SVP and Head, Scaler Schools</span><small>Ex-McKinsey, ISB</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/bhavik-rathod.webp" alt="Bhavik Rathod" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg" style="--h:16px"><img src="media/team/logo-uber.svg" alt="" loading="lazy"></span><figcaption><b>Bhavik Rathod</b><span>Founding leader, Uber India</span><small>Ex-Uber</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/sucheta-mahapatra.webp" alt="Sucheta Mahapatra" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg" style="--h:10.5px"><img src="media/team/logo-bain.svg" alt="" loading="lazy"></span><figcaption><b>Sucheta Mahapatra</b><span>VP Business, SSB</span><small>Ex-Bain, Airtel</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/adhiraj-arora.webp" alt="Adhiraj Arora" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg" style="--h:18px"><img src="media/team/logo-bcg.svg" alt="" loading="lazy"></span><figcaption><b>Adhiraj Arora</b><span>Programme Director</span><small>Ex-BCG, ISB</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/manish-pansari.webp" alt="Manish Pansari" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg" style="--h:8.5px"><img src="media/team/logo-kearney.svg" alt="" loading="lazy"></span><figcaption><b>Manish Pansari</b><span>Director, Business Ops, SSB</span><small>Ex-Myntra, Kearney</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/ratnakar-reddy.webp" alt="Ratnakar Reddy" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg" style="--h:16px"><img src="media/team/logo-google.svg" alt="" loading="lazy"></span><figcaption><b>Ratnakar Reddy</b><span>Enterprise Head</span><small>Ex-Google, Microsoft</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/rahul-karthikeyan.webp" alt="Rahul Karthikeyan" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg lt-lg--t" aria-hidden="true">upGrad</span><figcaption><b>Rahul Karthikeyan</b><span>CMO, Scaler</span><small>Ex-upGrad</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/amar-srivastava.webp" alt="Amar Srivastava" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg lt-lg--t" aria-hidden="true">Scaler</span><figcaption><b>Amar Srivastava</b><span>CEO, Scaler Online Business</span></figcaption></figure></li>
     </ul>
   </div>
 </section>
@@ -3824,6 +3824,27 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
 })();
 </script>
 <script>
+/* ===== outcomes ===== */
+/* Outcomes: the cards are not links, so hovering a row only slows its marquee (it never pauses or lifts a card) */
+(function(){
+  var sec=document.querySelector('.alumni-sec'); if(!sec) return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  [].slice.call(sec.querySelectorAll('.al-row')).forEach(function(row){
+    var track=row.querySelector('.al-track'); if(!track||!track.getAnimations) return;
+    var raf=0;
+    function ease(to){
+      cancelAnimationFrame(raf);
+      var an=track.getAnimations(); if(!an.length) return;
+      var from=an[0].playbackRate, t0=performance.now(), D=600;
+      (function step(now){ var p=Math.min(1,(now-t0)/D), e=1-Math.pow(1-p,3), r=from+(to-from)*e;
+        an.forEach(function(a){ a.playbackRate=r; }); if(p<1) raf=requestAnimationFrame(step); })(t0);
+    }
+    row.addEventListener('pointerenter',function(e){ if(e.pointerType==='mouse') ease(0.22); });
+    row.addEventListener('pointerleave',function(e){ if(e.pointerType==='mouse') ease(1); });
+  });
+})();
+</script>
+<script>
 /* ===== punch ===== */
 /* Punch line: the spine of the page in one line; the two halves close in on a photo that changes as you scroll (MONOLOG style) */
 (function(){
@@ -4061,22 +4082,22 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
 </script>
 <script>
 /* ===== breakers ===== */
-/* Breakers: videos load and play only while on screen; the voices breaker crossfades every 9s, controls at the bottom */
+/* Breakers: videos load and play only while on screen; the voices breaker crossfades every 9s, controls under the copy */
 (function(){
   var secs=[].slice.call(document.querySelectorAll('.bk-sec')); if(!secs.length) return;
   var rm=matchMedia('(prefers-reduced-motion: reduce)');
   function play(v){ if(rm.matches) return; if(!v.getAttribute('src')) v.src=v.dataset.src; var p=v.play(); if(p&&p.catch) p.catch(function(){}); }
   function stop(v){ if(!v.paused) v.pause(); }
   secs.forEach(function(sec){
-    var slides=[].slice.call(sec.querySelectorAll('.bk-slide')), bars=[].slice.call(sec.querySelectorAll('.bk-bars button')), cur=0, seen=false, t0=0, raf=0, DUR=9000;
+    var slides=[].slice.call(sec.querySelectorAll('.bk-slide')), groups=[].slice.call(sec.querySelectorAll('.bk-bars')).map(function(g){ return [].slice.call(g.querySelectorAll('button')); }), cur=0, seen=false, t0=0, raf=0, DUR=9000;
     function vidOf(i){ return slides[i]&&slides[i].querySelector('video'); }
     function show(i){ i=(i+slides.length)%slides.length;
       slides.forEach(function(s,k){ s.classList.toggle('is-on',k===i); if(slides.length>1) s.setAttribute('aria-hidden',k===i?'false':'true'); var v=vidOf(k); if(v&&k!==i) stop(v); });
-      cur=i; t0=performance.now(); bars.forEach(function(b,k){ b.querySelector('i').style.setProperty('--f',k<i?1:0); b.setAttribute('aria-current',k===i?'true':'false'); });
+      cur=i; t0=performance.now(); groups.forEach(function(g){ g.forEach(function(b,k){ b.querySelector('i').style.setProperty('--f',k<i?1:0); b.setAttribute('aria-current',k===i?'true':'false'); }); });
       if(seen) play(vidOf(i)); }
-    function loop(now){ if(!seen||slides.length<2||rm.matches){ raf=0; return; } var p=Math.min(1,(now-t0)/DUR); var b=bars[cur]; if(b) b.querySelector('i').style.setProperty('--f',p.toFixed(3));
+    function loop(now){ if(!seen||slides.length<2||rm.matches){ raf=0; return; } var p=Math.min(1,(now-t0)/DUR); groups.forEach(function(g){ var b=g[cur]; if(b) b.querySelector('i').style.setProperty('--f',p.toFixed(3)); });
       if(p>=1) show(cur+1); raf=requestAnimationFrame(loop); }
-    bars.forEach(function(b,k){ b.addEventListener('click',function(){ show(k); }); });
+    groups.forEach(function(g){ g.forEach(function(b,k){ b.addEventListener('click',function(){ show(k); }); }); });
     [].slice.call(sec.querySelectorAll('[data-step]')).forEach(function(b){ b.addEventListener('click',function(){ show(cur+ +b.dataset.step); }); });
     var sx=0; sec.addEventListener('touchstart',function(e){ sx=e.touches[0].clientX; },{passive:true});
     sec.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-sx; if(slides.length>1&&Math.abs(dx)>50) show(cur+(dx<0?1:-1)); },{passive:true});
