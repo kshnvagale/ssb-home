@@ -1,9 +1,9 @@
 /* Press: what the press has written about SSB, four article cards (rail on phones) */
-.pr-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:clamp(56px,7vw,96px) 0}
+.pr-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:var(--sec-y) 0}
 .pr-wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
-.pr-head{margin-bottom:clamp(22px,3vw,36px)}
-.pr-head .sec-eyebrow{color:var(--mint);margin-bottom:14px}
-.pr-title{font-size:clamp(28px,3vw,44px);line-height:1.06;letter-spacing:-.032em;font-weight:500}
+.pr-head{margin-bottom:var(--head-gap)}
+.pr-head .sec-eyebrow{color:var(--mint)}
+.pr-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500}
 .pr-grid{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .pr-card{display:flex;flex-direction:column;height:100%;padding:20px 20px 18px;border-radius:14px;background:#FBFAF7;color:var(--ink-t);transition:transform .6s var(--ease-spring),box-shadow .5s var(--ease-out)}
 .pr-card:hover{transform:translateY(-3px);box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
@@ -30,5 +30,5 @@
 }
 
 /* press runs straight into admissions: one gap, not two */
-.pr-sec{padding-bottom:clamp(40px,5vw,64px)}
-.pr-sec+.ad-sec{padding-top:clamp(48px,6vw,88px)}
+.pr-sec{padding-bottom:var(--sec-y-tight)}
+.pr-sec+.ad-sec{padding-top:var(--sec-y-tight)}

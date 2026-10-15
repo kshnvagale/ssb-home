@@ -1,11 +1,11 @@
 /* FAQ: questions parents and candidates ask first; each answer has a shareable link (#faq-*) */
-.fq-sec{position:relative;z-index:6;background:#FBFAF7;color:var(--ink-t);padding:clamp(88px,10vw,140px) 0 clamp(96px,11vw,150px)}
+.fq-sec{position:relative;z-index:6;background:#FBFAF7;color:var(--ink-t);padding:var(--sec-y) 0}
 .fq-wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;align-items:start}
 .fq-head{grid-column:1/5;position:sticky;top:112px}
-.fq-eyebrow{color:#075C32;font-family:var(--mono);font-size:12px;letter-spacing:.14em}
-.fq-title{font-size:clamp(34px,4vw,58px);font-weight:500;letter-spacing:-.045em;line-height:1.02}
+.fq-eyebrow{color:#075C32}
+.fq-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500}
 .fq-title span{color:#075C32}
-.fq-sub{margin:16px 0 26px;font-size:16.5px;line-height:1.5;color:rgba(10,28,19,.6);max-width:30ch}
+.fq-sub{margin:16px 0 26px;font-size:var(--t-lead);line-height:1.5;color:rgba(10,28,19,.6);max-width:30ch}
 .fq-list{grid-column:6/13;border-top:1px solid rgba(10,28,19,.1)}
 .fq-item{border-bottom:1px solid rgba(10,28,19,.1);scroll-margin-top:100px}
 .fq-q{margin:0;font:inherit}
@@ -29,13 +29,9 @@
   .fq-list{grid-column:1/-1}
 }
 @media (max-width:640px){
-  .fq-sec{padding:80px 0 88px}
-  .fq-title{font-size:34px}
-  .fq-sub{font-size:15.5px}
   .fq-b{padding:20px 0;font-size:17px;gap:16px}
   .fq-i{width:28px;height:28px}
   .fq-a p{padding-right:0;font-size:15px}
 }
 @media (prefers-reduced-motion:reduce){ .fq-a, .fq-a p, .fq-i, .fq-i::after{transition:none!important} }
-.seam+.fq-sec{padding-top:clamp(32px,4vw,64px)}
-.fq-sec{padding-bottom:clamp(64px,7vw,104px)}
+.seam+.fq-sec{padding-top:var(--sec-y-tight)}

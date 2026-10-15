@@ -12,8 +12,8 @@
   linear-gradient(180deg,#050E09 0%,rgba(5,14,9,0) 16%,rgba(5,14,9,0) 82%,#050E09 100%)}
 .bk-in{position:relative;z-index:1;width:100%;max-width:1440px;margin:0 auto;padding:clamp(72px,11vh,128px) var(--pad);display:flex;justify-content:flex-end}
 .bk-copy{width:min(560px,46%)}
-.bk-copy .sec-eyebrow{color:var(--mint);margin-bottom:16px}
-.bk-h{font-size:clamp(30px,3.2vw,48px);font-weight:500;letter-spacing:-.035em;line-height:1.05}
+.bk-copy .sec-eyebrow{color:var(--mint)}
+.bk-h{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500}
 .bk-q{margin:22px 0 0}
 .bk-q p{font-size:clamp(19px,1.7vw,24px);line-height:1.35;letter-spacing:-.015em;color:rgba(255,255,255,.8)}
 .bk-q footer{margin-top:12px;font-size:14px;color:rgba(255,255,255,.56)}
@@ -28,11 +28,9 @@
 .bk-who b{display:block;font-size:16px;font-weight:500;letter-spacing:-.01em}
 .bk-who small{display:block;margin-top:3px;font-size:13px;color:rgba(255,255,255,.6)}
 .bk-who img{flex:none;padding-left:18px;border-left:1px solid rgba(255,255,255,.16);box-sizing:content-box}
-/* controls sit at the bottom, under the copy column */
-.bk-ctlwrap{position:absolute;z-index:2;left:0;right:0;bottom:clamp(28px,5vh,56px)}
-.bk-ctl{max-width:1440px;margin:0 auto;padding:0 var(--pad);display:flex;justify-content:flex-end}
-.bk-ctl-in{width:min(560px,46%);display:flex;align-items:center;gap:8px}
-.bk-bars{display:flex;gap:6px;width:min(220px,30vw)}
+/* controls sit right under the copy, one set per slide (kept in sync) */
+.bk-ctl{display:flex;align-items:center;gap:8px;margin-top:24px;max-width:340px}
+.bk-bars{flex:1;display:flex;gap:6px}
 .bk-bars button{flex:1;height:24px;display:flex;align-items:center}
 .bk-bars i{display:block;width:100%;height:2px;border-radius:2px;background:rgba(255,255,255,.24);overflow:hidden}
 .bk-bars i::before{content:"";display:block;height:100%;background:#fff;transform-origin:0 50%;transform:scaleX(var(--f,0))}
@@ -42,7 +40,7 @@
 .bk-btn svg{width:13px;height:13px}
 .bk-sec button:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
 @media (max-width:1000px){
-  .bk-copy, .bk-ctl-in{width:min(520px,56%)}
+  .bk-copy{width:min(520px,56%)}
 }
 @media (max-width:760px){
   .bk-slide{display:block;min-height:0}
@@ -50,7 +48,6 @@
   .bk-media::after{background:linear-gradient(180deg,#050E09 0%,rgba(5,14,9,0) 18%,rgba(5,14,9,0) 52%,rgba(5,14,9,.85) 82%,#050E09 100%)}
   .bk-in{margin-top:-96px;padding:0 20px 32px}
   .bk-copy{width:100%}
-  .bk-h{font-size:30px}
   .bk-q p{font-size:18px}
   .bk-stats{gap:16px}
   .bk-stats b{font-size:30px}
@@ -58,11 +55,7 @@
   .bk-big{font-size:24px}
   .bk-who{padding:14px;gap:14px}
   .bk-who img{padding-left:14px;max-width:84px;height:auto}
-  .bk-voices .bk-in{padding-bottom:88px}
-  .bk-ctlwrap{bottom:28px}
-  .bk-ctl{padding:0 20px}
-  .bk-ctl-in{width:100%}
-  .bk-bars{flex:1;width:auto}
+  .bk-ctl{max-width:none;margin-top:20px}
 }
 @media (prefers-reduced-motion:reduce){
   .bk-voices .bk-slide{transition:none}

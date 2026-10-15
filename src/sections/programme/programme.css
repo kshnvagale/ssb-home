@@ -69,12 +69,12 @@
   .pg-close{position:sticky;top:12px;display:grid;margin:12px 22px -46px auto;width:34px;height:34px;background:rgba(5,14,9,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   .pg-pager{position:static;background:none;padding:8px 0 28px;margin-top:28px}
 }
-.pg-sec2{position:relative;z-index:6;padding:clamp(90px,12vh,140px) 0 clamp(70px,10vh,110px);overflow:hidden}
+.pg-sec2{position:relative;z-index:6;padding:var(--sec-y) 0;overflow:hidden}
 .pg-sec2::before{content:"";position:absolute;left:50%;top:-10%;width:1100px;height:700px;margin-left:-550px;pointer-events:none}
 .tm-head{position:relative;text-align:center;max-width:820px;margin:0 auto;padding:0 var(--pad)}
 .tm-head .sec-eyebrow{justify-content:center;color:var(--mint)}
-.tm-h{font-weight:500;letter-spacing:-.045em;line-height:1.02}
-.tm-sub{margin:18px auto 0;font-size:17px;line-height:1.5;max-width:46ch}
+.tm-h{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500}
+.tm-sub{margin:18px auto 0;font-size:var(--t-lead);line-height:1.5;max-width:46ch}
 .tm-link{display:inline-flex;gap:6px;font-size:15px;font-weight:500;border-bottom:1px solid rgba(255,255,255,.25);padding-bottom:2px;transition:border-color .3s,color .3s}
 .tm-stage{position:relative;height:520px;outline:none}
 .tm-card{position:absolute;left:50%;top:50%;border-radius:22px;overflow:hidden;transition:width .75s cubic-bezier(.65,0,.25,1),height .75s cubic-bezier(.65,0,.25,1),transform .75s cubic-bezier(.65,0,.25,1),border-radius .75s}
@@ -112,7 +112,6 @@
   .tm-sum{display:none}
 }
 @media (max-width:700px){
-  .tm-sub{font-size:15.5px}
   .tm-full{grid-template-columns:1fr;grid-template-rows:38% 1fr}
   .tm-info{padding:16px 18px 18px}
   .tm-title{font-size:24px;margin-top:8px}
@@ -127,8 +126,6 @@
 @media (prefers-reduced-motion:reduce){
   .tm-card, .tm-face, .tm-full{transition:none!important}
 }
-.pg-sec2{padding-top:clamp(80px,10vh,120px)}
-.tm-h{font-size:clamp(34px,3.9vw,58px)}
 .tm-sub{margin-top:14px}
 .tm-link{margin-top:14px}
 .tm-stage{margin-top:clamp(30px,4.5vh,48px)}

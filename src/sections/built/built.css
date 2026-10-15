@@ -1,10 +1,10 @@
 /* Built at SSB: full-bleed company showcase, tabs inside the image, hotspots */
 #built, #faculty{position:relative;z-index:6}
-.bs-sec{position:relative;background:var(--ink);color:#fff;padding:clamp(60px,7.5vh,84px) 0 clamp(40px,6vh,64px)}
+.bs-sec{position:relative;background:var(--ink);color:#fff;padding:var(--sec-y) 0 var(--sec-y-tight)}
 .bs-wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
 .bs-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:clamp(20px,3vh,32px)}
-.bs-head .sec-eyebrow{color:var(--mint);margin-bottom:14px}
-.bs-title{font-size:clamp(28px,3vw,44px);line-height:1.06;letter-spacing:-.032em;font-weight:500;max-width:22ch}
+.bs-head .sec-eyebrow{color:var(--mint)}
+.bs-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500;max-width:22ch}
 .bs-title span{color:rgba(255,255,255,.46)}
 .bs-grid{display:grid;gap:12px}
 .bs-stage{position:relative;height:100%;border-radius:24px;overflow:hidden;background:#0b1510;isolation:isolate;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
@@ -59,9 +59,8 @@
   .bs-tab{height:38px;padding:0 14px;font-size:13px}
 }
 @media (max-width:640px){
-  .bs-sec{padding:56px 0 40px}
   .bs-head{margin-bottom:18px}
-  .bs-title{font-size:30px;max-width:15ch}
+  .bs-title{max-width:15ch}
   .bs-title span{display:block}
   .bs-top{flex-direction:column;gap:14px}
   .bs-met{text-align:left}

@@ -86,7 +86,7 @@
   .pl-head{padding-bottom:16px}
   .pl-dock{bottom:calc(10px + env(safe-area-inset-bottom,0px))}
   .pl-idx a{height:34px;padding:0 11px;font-size:13px}
-  .pl-title{font-size:28px;line-height:1.08}
+  .pl-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500}
   .pl-stack{padding:0 8px}
   .pl-panel{margin-bottom:8px}
   .pl-stage{border-radius:18px}
@@ -118,8 +118,8 @@
 
 /* ---------- detail: 85% sheet (phone) or modal (desktop) ---------- */
 html.pl-lock, html.pl-lock body{overflow:hidden}
-.pl-dlg{position:fixed;inset:0;z-index:50;visibility:hidden;pointer-events:none;color:var(--ink-t)}
-.pl-dlg.is-open{visibility:visible;pointer-events:auto}
+.pl-dlg{position:fixed;inset:0;z-index:50;visibility:hidden;pointer-events:none;color:var(--ink-t);transition:visibility 0s linear .5s}
+.pl-dlg.is-open{visibility:visible;pointer-events:auto;transition-delay:0s}
 .pl-dlg-scrim{position:absolute;inset:0;background:rgba(5,14,9,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .45s var(--ease-out)}
 .pl-dlg.is-open .pl-dlg-scrim{opacity:1}
 .pl-dlg-box{position:absolute;left:50%;top:50%;width:min(1120px,calc(100vw - 48px));height:85vh;height:85dvh;display:grid;grid-template-columns:40% minmax(0,1fr);border-radius:20px;overflow:hidden;background:#FBFAF7;box-shadow:0 60px 120px -40px rgba(0,0,0,.7);opacity:0;transform:translate3d(-50%,calc(-50% + 24px),0) scale(.98);transition:opacity .45s var(--ease-out),transform .7s var(--ease-out)}
@@ -193,8 +193,8 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 }
 
 /* ---------- reel viewer ---------- */
-.pl-rv{position:fixed;inset:0;z-index:55;visibility:hidden;pointer-events:none}
-.pl-rv.is-open{visibility:visible;pointer-events:auto}
+.pl-rv{position:fixed;inset:0;z-index:55;visibility:hidden;pointer-events:none;transition:visibility 0s linear .45s}
+.pl-rv.is-open{visibility:visible;pointer-events:auto;transition-delay:0s}
 .pl-rv-scrim{position:absolute;inset:0;background:rgba(3,8,5,.9);opacity:0;transition:opacity .4s var(--ease-out)}
 .pl-rv.is-open .pl-rv-scrim{opacity:1}
 .pl-rv-frame{position:absolute;left:50%;top:50%;height:min(88vh,880px);aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#000;color:#fff;opacity:0;transform:translate3d(-50%,-48%,0) scale(.96);transition:opacity .4s var(--ease-out),transform .6s var(--ease-out)}

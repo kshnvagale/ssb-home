@@ -39,9 +39,9 @@ body{color:var(--ink-t);background:radial-gradient(50% 40% at 95% 0%,rgba(29,146
 .cta-glass:hover{background:#fff}
 .cta-glass .orb{background:rgba(10,28,19,.07)}
 .sec-head{max-width:1440px;margin:0 auto;padding:0 var(--pad);display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:48px;align-items:end}
-.sec-eyebrow{display:flex;align-items:center;gap:12px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:20px}
-.sec-title{font-size:clamp(36px,4.6vw,68px);font-weight:500;letter-spacing:-.045em;line-height:1}
-.sec-side p{font-size:17px;line-height:1.5;margin-bottom:22px}
+.sec-eyebrow{display:flex;align-items:center;gap:12px;font:500 12px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:var(--t-eb-gap)}
+.sec-title{font-size:var(--t-h2);line-height:var(--t-h2-lh);letter-spacing:var(--t-h2-ls);font-weight:500}
+.sec-side p{font-size:var(--t-lead);line-height:1.5;margin-bottom:22px}
 .cta-dark{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#fff}
 .cta-dark:hover{background:rgba(255,255,255,.14)}
 .cta-dark .orb{background:rgba(255,255,255,.1)}
@@ -50,9 +50,11 @@ body{color:var(--ink-t);background:radial-gradient(50% 40% at 95% 0%,rgba(29,146
 }
 html.pg-lock, html.pg-lock body{overflow:hidden}
 :root{--lh:clamp(40px,3.3vw,48px);--gn-h:clamp(76px,9.4vh,88px)}
+/* type scale and section rhythm: every section title, eyebrow, lead line and section padding uses these */
+:root{--t-h2:clamp(32px,3.4vw,50px);--t-h2-lh:1.04;--t-h2-ls:-.038em;--t-h3:clamp(24px,2.3vw,34px);--t-lead:17px;--t-eb-gap:16px;--sec-y:clamp(80px,9vw,128px);--sec-y-tight:clamp(40px,4.5vw,64px);--head-gap:clamp(28px,3.4vw,44px)}
 html.sheet-open{overflow:hidden}
 @media (max-width:760px){
-  :root{--lh:32px;--gn-h:68px}
+  :root{--lh:32px;--gn-h:68px;--t-h2:32px;--t-h3:24px;--t-lead:15.5px;--t-eb-gap:14px;--sec-y:72px;--sec-y-tight:40px}
 }
 @keyframes fadeUp{to{opacity:1;transform:none}}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(107,238,159,.55)}70%{box-shadow:0 0 0 10px rgba(107,238,159,0)}100%{box-shadow:0 0 0 0 rgba(107,238,159,0)}}
