@@ -106,10 +106,27 @@
 .pl-go:active{transform:scale(.98)}
 .pl-go svg{width:12px;height:12px}
 .pl-it:focus-visible,.pl-go:focus-visible,.pl-ar button:focus-visible{outline:2px solid #1D925B;outline-offset:2px}
-@media (max-height:780px) and (min-width:1181px){
-  .pl-it{height:164px;width:100px}
-  .pl-t{font-size:26px}
-  .pl-n{margin:14px 0 16px}
+/* Short screens (800px tall or less, 761px wide or more): the card turns landscape so it fits between the pinned headline
+   and the pillar index. Text, numbers and the Explore button on the left; the reels on the right. */
+@media (min-width:761px) and (max-height:800px){
+  .pl-card{display:grid;width:min(900px,calc(100% - 48px));grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);grid-template-rows:auto auto auto 1fr auto;grid-template-areas:"k rh" "t rail" "d rail" "n rail" "go rail";column-gap:28px;padding:22px 24px;top:calc(50% - 22px)}
+  .pl-card>.pl-in{display:contents}
+  .pl-k{grid-area:k;align-self:center}
+  .pl-t{grid-area:t;font-size:26px;margin:4px 0 6px}
+  .pl-d{grid-area:d;font-size:14px}
+  .pl-n{grid-area:n;margin:14px 0 0;align-self:start}
+  .pl-n b{font-size:21px}
+  .pl-rh{grid-area:rh;margin:0 0 10px;align-self:end}
+  .pl-rail{grid-area:rail;align-self:stretch;align-items:stretch;margin-right:-24px;padding:0 24px 0 0;scroll-padding:0}
+  .pl-go{grid-area:go;margin-top:16px;height:44px}
+  .pl-it{width:auto;height:auto;min-height:140px;aspect-ratio:10/16}
+}
+/* tablets: the logo row sits at the top of the panel, so the card sits a little lower instead of higher */
+@media (min-width:761px) and (max-width:1180px) and (max-height:800px){
+  .pl-card{top:calc(50% + 18px)}
+}
+@media (min-width:761px) and (max-width:1180px) and (max-height:660px){
+  .pl-d{display:none}
 }
 
 /* tablet and phone: floaters move to a band above and a band below the card */
@@ -135,7 +152,7 @@
   .pl-chip small{font-size:9px}
   .pl-ft{top:calc(12px + var(--row) * 50px)}
   .pl-fb{bottom:calc(12px + var(--row) * 50px)}
-  .pl-card{width:calc(100% - 24px);padding:18px 0 16px;border-radius:16px}
+  .pl-card{width:calc(100% - 24px);padding:18px 0 16px;border-radius:16px;top:calc(50% + 28px)}
   .pl-in{padding:0 16px}
   .pl-t{margin:10px 0 4px;font-size:24px}
   .pl-d{font-size:13.5px}
