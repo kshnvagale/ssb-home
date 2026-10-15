@@ -183,3 +183,8 @@ Stay inside 0 to 6 for section content unless the section really needs to sit ab
 6. Show a screenshot of the result to the user.
 
 Remote media from `https://ssb-school-concept.vercel.app/` needs a network connection. Lazy images (`loading="lazy"`) can look broken in a screenshot until you scroll to them.
+
+## Deploying (ssb-school-concept.vercel.app/v4)
+
+`python3 build.py && python3 tools/deploy_v4.py` makes a preview; add `--prod` for production. The script talks to the Vercel REST API with the CLI login (the CLI fails on Node 26). It rebuilds the existing Next.js project from the exact source files of the current production deployment (reused by hash), adds this page under `public/v4/` with asset paths rewritten to `/v4/media/` (Next strips trailing slashes, so relative paths would hit v3's `/media`), and adds one rewrite to `next.config.ts` (`/v4` -> `/v4/index.html`). v3 and `/` (which redirects to `/v3`) are untouched. Before promoting, compare `/v3` on the preview with live. Rollback: `python3 tools/deploy_v4.py --rollback <previous deployment id>` (the id is printed and saved in `.vercel-last-deploy.json`, which is git-ignored). If the login has expired, run `vercel login` (needs Node 20/22/24) and re-run.
+First production deploy: 15 Oct 2026, dpl_4YRqmXCY4mrCZmVCKPJbHpAxJyiT (previous: dpl_EMGijhAgcJ5p5F8g5FT8Ect7FW4z).
