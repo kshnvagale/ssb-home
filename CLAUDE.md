@@ -14,7 +14,7 @@ Instructions for AI agents that work on this project. Read `README.md` first for
    - Mobile and desktop are equally important. Verify both.
    - Eyebrows have no leading or trailing line. Do not add one back.
    - Keep gaps tight: a seam replaces section padding (see the rhythm rules at the end of `seams.css`), it does not add to it.
-4. **Brandfetch:** logos are already in `media/brands/`. The API key is not stored anywhere in the project. Never write it to a file.
+4. **Brandfetch:** logos are already in `media/brands/`. The API key is not stored anywhere in the project. Never write it to a file. To fetch more, pass the key through an environment variable for that one command only (`https://api.brandfetch.io/v2/brands/<domain>`, `Authorization: Bearer $KEY`) and save the square `icon` as `media/brands/<slug>/icon-dark.<ext>`.
 5. **Media:** `media/` holds only the files the page uses. If you add a file, use it. If you stop using a file, delete it.
 
 ## How the build works
@@ -42,7 +42,7 @@ Follow these in every section:
 
   | Section | Prefix(es) |
   |---------|------------|
-  | nav | `gn-`, `ln-`, `tb-`, `sheet-`, `sh-`, `brand-` |
+  | nav | `gn-`, `ln-`, `mh-`, `mx-`, `sheet-`, `sh-`, `brand-` |
   | hero | `hero`, `tile`, `stat`, `track`, `alumni`, `warp`, `logos-` |
   | film | `film-`, `flyer`, `fc-`, `stage-` |
   | outcomes | `alumni-sec`, `al-`, `am-` |
@@ -50,6 +50,11 @@ Follow these in every section:
   | built | `bs-` |
   | faculty | `fx-` |
   | punch | `pn-` |
+  | pillars | `pl-`, `pd-` (detail sheet content) |
+  | lead | `ld-` |
+  | breakers | `bk-` |
+  | team | `lt-` |
+  | press | `pr-` |
   | campus | `cl-` |
   | admissions | `ad-` |
   | faq | `fq-` |
@@ -75,8 +80,14 @@ These sections depend on each other. If you change one side, check the other.
 | `nav.js` | film | Reads `.film-scroll` to time the nav change. |
 | `nav.js` | all sections | Reads every `[data-nav]` element to pick the nav colour. A section without `data-nav` keeps the previous colour. |
 | `nav.js` | global | Sets `window.__nav` (logo and bar state). |
-| `nav.html` / `nav.js` | all sections | Anchor links and the scrollspy list (`ids` and `tabOf` in `nav.js`) cover `#film`, `#outcomes`, `#programme`, `#built`, `#faculty`, `#campus`, `#admissions`, `#faq`. `tabOf` -1 means no mobile tab (the section lives in More). Changing a section `id` breaks these. |
+| `nav.html` / `nav.js` | all sections | Anchor links, the section list rows (`.mx-row`, in nav.html) and the scrollspy list (`ids` in `nav.js`) cover `#film`, `#outcomes`, `#programme`, `#learn`, `#built`, `#faculty`, `#campus`, `#team`, `#press`, `#admissions`, `#faq`, in that order (the desktop bar shows 9 of them and matches hooks by href; `#team` and `#press` live in the phone list and the menu). Changing a section `id` breaks these. |
 | `admissions.js` | page | The scholarship sheet is moved to `<body>` at load so it stacks above every section. Deep links: `#scholarship-<slug>`. |
+| `pillars.js` | page | The detail sheet (`#pl-dlg`) and reel viewer (`#pl-rv`) are moved to `<body>`. Deep links: `#pillar-<key>` (ai, build, projects, immersions, mentors). The back gesture closes the sheet. |
+| `breakers.js` | page | Videos load and play only while their breaker is on screen (IntersectionObserver). The voices breaker crossfades every 9s. `main>.bk-sec` is exempt from the seam rhythm padding. |
+| `pillars.js` | `nav.js` | Sets `data-sub` on `#learn` to the active pillar and fires `ssb:sub`; the phone header shows it. Any section can do the same to name the item it is showing. |
+| `lead.js` | all | Intercepts clicks on `[data-lead]` and on links to `/school-of-business/admission/`, `#brochure`, `#advisor`, and opens the lead modal (apply, brochure, callback). Exit intent: desktop only, once a session, after 20s. Nothing is sent; submit shows a success state. |
+| `nav.js` | desktop | The section bar's menu button (`.ln-menu`) and, from 761px to 1020px, the top-nav menu button open the site menu (`#nm`): the bar grows into a panel (left/top/width/height animate from the bar's rect), big page links on the left, the image on the right swaps on hover, "On this page" anchors at the bottom. Page links carry `data-no-lead` so `lead.js` does not turn "Admissions & fees" into the modal. Phones keep the bottom sheet. |
+| `nav.js` | phone | The bottom tab bar is gone. `.mh` is the sticky section header (section name, n / 9, item from `data-sub`, progress line); `.mh-where` opens the section list (`#mx-list`). Anchor jumps offset by 44px on phones. |
 | `faq.js` | page | Deep links `#faq-<slug>` open that answer and scroll to it. Answers link to `#admissions`. |
 | `seams.css` | all | Rhythm rules: `main>section:has(+ .seam)` and `.seam+section` cut the padding next to a seam. `main>*+*{margin-top:-1px}` overlaps every block by 1px to hide sub-pixel hairlines. Do not remove it. |
 | `hero.js` | first fold | The film card video loads but stays on its poster until the first scroll of 8px or more (sets `window.__heroPlay`). Keep the first fold to at most two moving things. |
@@ -92,6 +103,12 @@ The `.cta` base rule in `global.css` still says `border-radius:999px`. A later r
 
 - Admissions figures (intakes, deadlines, ₹15.5L / ₹16L course fee, ₹1,000 application fee) are from the Sep 2026 deck. The live admissions page (Oct 2026) shows a different 2027-batch structure (Early bird to 1 Nov 2026, ₹1,500 application fee, ₹23,00,000 course fee). Confirm with the admissions team before changing either; all figures sit in `admissions.html` (fee table) and `faq.html` (fees answer) and the hero accent tile.
 - Outcome and internship numbers need placement-team sign-off (footnotes after the footer).
+- Pillar figures come from the v3 lab (ssb-school-concept.vercel.app/v3): 150 hrs AI, 25+ tools, 5 AI products, 3 hackathons, ₹25K / ₹5L+ / ₹50K / ₹25L business funding, 6 briefs, 3 immersions, 6 months at Jio Creative Labs, 4 super mentor sessions. Confirm before launch.
+- Breaker stats (60% of MBA students, Forbes 2026; 62% AI wage premium, PwC 2026) come from v3 and are not yet traced to the source reports.
+- Press: the Inshorts piece says the founding cohort's average CTC is ₹18 LPA; outcomes elsewhere use ₹19L (Cohort 1). The Tribune piece is a syndicated press release (VMPL / ANI advertorial).
+- Student clubs: Marketing and Consulting are real (v3); the other eight are placeholders.
+- Founding team names and roles come from v3; Vidit Jain's title matches the July 2026 press release.
+- Reels are placeholders: real posters, but every reel plays the same campus film (`REEL_SRC` in `tools/pillars_data.py`).
 
 ## Faculty data
 
@@ -109,7 +126,11 @@ The `.cta` base rule in `global.css` still says `border-radius:999px`. A later r
 | Grain overlay | 3 |
 | Nav layers | 22, 30, 31 |
 | Intro wipe | 40 |
-| Nav menu sheet | 45 |
+| Nav menu sheet, phone section list | 45 |
+| Desktop site menu panel (`#nm`) | 46 |
+| Pillar detail sheet | 50 |
+| Reel viewer | 55 |
+| Lead modal | 60 |
 | Programme term detail sheet | 100 |
 
 Stay inside 0 to 6 for section content unless the section really needs to sit above the nav.

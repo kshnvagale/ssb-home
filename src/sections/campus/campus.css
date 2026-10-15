@@ -68,3 +68,19 @@
 .cl-sub{color:rgba(10,28,19,.62)}
 .cl-tile{background:#E7E8E2}
 .cl-title em{font-style:normal;color:#075C32}
+
+/* student clubs: a small sideways strip under the mosaic (first two are real, the rest are placeholders) */
+.cl-clubs{margin-top:clamp(24px,3vw,36px);padding-bottom:clamp(64px,8vw,104px)}
+.cl-clubs-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:14px}
+.cl-clubs-head h3{font-size:clamp(20px,1.8vw,26px);font-weight:500;letter-spacing:-.025em}
+.cl-clubs-head span{font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint-t)}
+.cl-clubs-row{list-style:none;display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding:0 max(var(--pad),calc((100vw - 1440px) / 2 + var(--pad)));scroll-padding:0 max(var(--pad),calc((100vw - 1440px) / 2 + var(--pad)));scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 48px),transparent);mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 48px),transparent)}
+.cl-clubs-row::-webkit-scrollbar{display:none}
+.cl-club{flex:none;width:236px;padding:16px 16px 18px;border-radius:12px;background:#F1F0EB;box-shadow:inset 0 0 0 1px rgba(10,28,19,.06);scroll-snap-align:start}
+.cl-ck{font:500 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--cta)}
+.cl-club b{display:block;margin-top:10px;font-size:16px;font-weight:500;letter-spacing:-.015em}
+.cl-club p{margin-top:6px;font-size:13px;line-height:1.45;color:var(--dim-t)}
+@media (max-width:760px){
+  .cl-club{width:72vw;max-width:260px}
+  .cl-clubs{padding-bottom:44px}
+}

@@ -68,7 +68,7 @@ html.sheet-open{overflow:hidden}
 @keyframes wipeUp{to{transform:translateY(-101%)}}
 
 /* ===== nav ===== */
-/* Navigation: global nav (layer 1), flying logo, section bar (layer 2), mobile tab bar, menu sheet */
+/* Navigation: global nav (layer 1), flying logo, section bar (layer 2), mobile section header with section list, menu sheet */
 .gn{position:absolute;z-index:22;top:0;left:0;right:0;height:var(--gn-h);pointer-events:none}
 .gn-in{max-width:1440px;height:100%;margin:0 auto;padding:0 var(--pad);display:flex;align-items:center;gap:clamp(20px,2.6vw,44px);pointer-events:auto}
 .gn-slot{flex:none;height:var(--lh);width:calc(var(--lh) * 103 / 40)}
@@ -106,8 +106,10 @@ html.sheet-open .gn-menu i::after{top:5.3px;transform:rotate(-45deg)}
 .gn-cta a:focus-visible,
 .gn-menu:focus-visible,
 .ln a:focus-visible,
-.tb a:focus-visible,
-.tb button:focus-visible,
+.mh a:focus-visible,
+.mh button:focus-visible,
+.mx a:focus-visible,
+.mx button:focus-visible,
 .brand:focus-visible,
 .sheet a:focus-visible,
 .sheet button:focus-visible{outline:2px solid #1D925B;outline-offset:2px;border-radius:8px}
@@ -133,7 +135,7 @@ html.nav-dark .ln-hooks a{color:rgba(255,255,255,.56)}
 html.nav-dark .ln-hooks a:hover, html.nav-dark .ln-hooks a.on{color:#fff}
 html.nav-dark .ln-ind{background:rgba(255,255,255,.12)}
 html.nav-dark .ln-sep{background:rgba(255,255,255,.14)}
-.tb{display:none}
+.mh, .mx{display:none}
 .sheet{position:fixed;inset:0;z-index:45;visibility:hidden;pointer-events:none}
 .sheet-scrim{position:absolute;inset:0;background:rgba(5,14,9,.32);opacity:0;transition:opacity .5s var(--ease-out)}
 .sheet-panel{position:absolute;top:10px;right:10px;width:min(392px,calc(100vw - 20px));max-height:calc(100dvh - 20px);overflow:auto;overscroll-behavior:contain;padding:8px 8px 14px;border-radius:16px;color:var(--ink-t);background:rgba(250,250,246,.95);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:0 30px 70px -30px rgba(10,28,19,.5),0 1px 1px rgba(10,28,19,.04);opacity:0;transform:translateY(-10px) scale(.98);transform-origin:100% 0;transition:opacity .4s var(--ease-out),transform .6s var(--ease-out)}
@@ -176,34 +178,155 @@ html.sheet-open .sh-i{opacity:1;transform:none;transition-delay:calc(.06s + var(
   .gn-ghost, .gn-apply{display:none}
   .brand-fly{position:absolute;z-index:22}
   .ln{display:none}
-  .tb{display:flex;position:fixed;z-index:30;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));height:60px;padding:4px;border-radius:14px;background:rgba(250,250,246,.76);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);box-shadow:0 16px 36px -18px rgba(10,28,19,.5),0 1px 1px rgba(10,28,19,.04);transform:translateY(calc(100% + 20px + env(safe-area-inset-bottom,0px)));opacity:0;transition:transform .65s var(--ease-out),opacity .45s var(--ease-out),background .5s var(--ease-out),box-shadow .5s var(--ease-out)}
-  html.tb-on .tb{transform:none;opacity:1}
-  html.tb-on.tb-hide .tb, html.sheet-open .tb{transform:translateY(calc(100% + 20px + env(safe-area-inset-bottom,0px)));opacity:0}
-  .tb a, .tb button{position:relative;z-index:1;flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:10px;font:500 10.5px/1 var(--font);letter-spacing:.005em;color:rgba(10,28,19,.5);-webkit-tap-highlight-color:transparent;transition:color .3s var(--ease-out),transform .5s var(--ease-spring)}
-  .tb a:active, .tb button:active{transform:scale(.94)}
-  .tb svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round}
-  .tb .on{color:var(--ink-t)}
-  .tb .on svg{stroke-width:1.45}
-  .tb-ind{position:absolute;z-index:0;left:0;top:4px;bottom:4px;width:0;border-radius:10px;background:rgba(10,28,19,.06);opacity:0;transition:transform .55s var(--ease-out),width .55s var(--ease-out),opacity .3s var(--ease-out),background .5s var(--ease-out)}
-  .tb-dot{position:absolute;top:9px;left:calc(50% + 9px);width:6px;height:6px;border-radius:50%;background:#1D925B;box-shadow:0 0 0 2px rgba(250,250,246,.9)}
-  html.tb-dark .tb{background:rgba(8,20,13,.72);box-shadow:0 16px 36px -16px rgba(0,0,0,.8)}
-  html.tb-dark .tb a, html.tb-dark .tb button{color:rgba(255,255,255,.55)}
-  html.tb-dark .tb .on{color:#fff}
-  html.tb-dark .tb-ind{background:rgba(255,255,255,.12)}
-  html.tb-dark .tb-dot{background:var(--mint);box-shadow:0 0 0 2px rgba(8,20,13,.9)}
+  /* sticky section header: which section you are in, the item inside it, progress through it */
+  .mh{display:flex;align-items:center;gap:6px;position:fixed;z-index:30;left:0;right:0;top:0;height:calc(52px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 8px 0 12px;background:rgba(250,250,246,.86);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);box-shadow:0 1px 0 rgba(10,28,19,.08);color:var(--ink-t);transform:translateY(-102%);transition:transform .55s var(--ease-out),background .45s var(--ease-out),color .45s var(--ease-out),box-shadow .45s var(--ease-out)}
+  html.mh-on .mh{transform:none}
+  html.sheet-open .mh, html.mx-open .mh{transform:translateY(-102%)}
+  .mh-mark{flex:none;display:grid;place-items:center;width:30px;height:36px}
+  .mh-shield{width:20px;height:28px}
+  .mh-shield path{fill:currentColor}
+  .mh-shield path[fill="#1D925B"]{fill:#1D925B}
+  .mh-where{flex:1;min-width:0;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:6px;height:42px;padding:0 8px;border-radius:8px;text-align:left;-webkit-tap-highlight-color:transparent;transition:background .3s var(--ease-out)}
+  .mh-where:active{background:rgba(10,28,19,.06)}
+  .mh-name{grid-column:1;font-size:14.5px;font-weight:550;letter-spacing:-.015em;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mh-sub{grid-column:1;display:flex;gap:6px;font:500 10px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faint-t);white-space:nowrap;overflow:hidden}
+  .mh-s{overflow:hidden;text-overflow:ellipsis;color:var(--cta)}
+  .mh-s:empty{display:none}
+  .mh-s::before{content:"\00B7";margin-right:6px;color:var(--faint-t)}
+  .mh-chev{grid-column:2;grid-row:1 / span 2;width:12px;height:12px;opacity:.55}
+  .mh-apply{flex:none;display:flex;align-items:center;height:34px;padding:0 12px;border-radius:8px;background:var(--cta);color:#fff;font-size:13px;font-weight:500;transition:transform .5s var(--ease-spring)}
+  .mh-apply:active{transform:scale(.96)}
+  .mh-menu{flex:none;position:relative;width:38px;height:38px;border-radius:8px}
+  .mh-menu i{position:absolute;left:50%;top:50%;width:16px;height:12px;margin:-6px 0 0 -8px}
+  .mh-menu i::before, .mh-menu i::after{content:"";position:absolute;left:0;width:16px;height:1.4px;border-radius:1px;background:currentColor}
+  .mh-menu i::before{top:3px}
+  .mh-menu i::after{top:8px}
+  .mh-pg{position:absolute;left:0;right:0;bottom:0;height:2px}
+  .mh-pg b{display:block;height:100%;width:100%;background:var(--brand);transform-origin:0 50%;transform:scaleX(var(--p,0))}
+  html.nav-dark .mh{background:rgba(8,20,13,.8);color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.08)}
+  html.nav-dark .mh-sub{color:rgba(255,255,255,.5)}
+  html.nav-dark .mh-s{color:var(--mint)}
+  html.nav-dark .mh-where:active{background:rgba(255,255,255,.08)}
+  html.nav-dark .mh-pg b{background:var(--mint)}
+  /* section list: bottom sheet */
+  .mx{display:block;position:fixed;inset:0;z-index:45;visibility:hidden;pointer-events:none}
+  html.mx-open .mx{visibility:visible;pointer-events:auto}
+  .mx-scrim{position:absolute;inset:0;background:rgba(5,14,9,.42);opacity:0;transition:opacity .45s var(--ease-out)}
+  html.mx-open .mx-scrim{opacity:1}
+  .mx-panel{position:absolute;left:0;right:0;bottom:0;max-height:85svh;overflow:auto;overscroll-behavior:contain;padding:0 8px calc(10px + env(safe-area-inset-bottom,0px));border-radius:20px 20px 0 0;background:#FBFAF7;color:var(--ink-t);transform:translateY(102%);transition:transform .55s var(--ease-out)}
+  html.mx-open .mx-panel{transform:translateY(var(--drag,0px))}
+  .mx-panel.is-drag{transition:none}
+  .mx-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;padding:18px 6px 8px 10px;background:#FBFAF7;touch-action:none}
+  .mx-grab{position:absolute;left:50%;top:7px;width:38px;height:4px;margin-left:-19px;border-radius:2px;background:rgba(10,28,19,.18)}
+  .mx-h{font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint-t)}
+  .mx-x{position:relative;width:36px;height:36px;border-radius:8px;background:rgba(10,28,19,.06)}
+  .mx-x i{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px}
+  .mx-x i::before, .mx-x i::after{content:"";position:absolute;left:0;top:6.3px;width:14px;height:1.4px;border-radius:1px;background:var(--ink-t)}
+  .mx-x i::before{transform:rotate(45deg)}
+  .mx-x i::after{transform:rotate(-45deg)}
+  .mx-row{display:grid;grid-template-columns:30px minmax(0,1fr) 8px;align-items:center;gap:10px;min-height:56px;padding:6px 10px;border-radius:10px;-webkit-tap-highlight-color:transparent;transition:background .3s var(--ease-out)}
+  .mx-row:active{background:rgba(10,28,19,.05)}
+  .mx-row>b{font:500 11px/1 var(--mono);letter-spacing:.06em;color:var(--faint-t)}
+  .mx-row strong{display:block;font-size:16px;font-weight:500;letter-spacing:-.015em}
+  .mx-row small{display:block;margin-top:2px;font-size:12.5px;color:var(--dim-t)}
+  .mx-row i{width:8px;height:8px;border-radius:50%}
+  .mx-row.on{background:rgba(29,146,91,.09)}
+  .mx-row.on>b{color:var(--cta)}
+  .mx-row.on i{background:var(--brand)}
+  .mx-cta{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px 2px 0}
   .sheet-panel{top:auto;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:auto;max-height:calc(100dvh - 56px);transform:translateY(40px);transform-origin:50% 100%}
   .sheet-links a{height:44px;font-size:16.5px}
 }
 @media (prefers-reduced-motion:reduce){
   .brand-fly,
 .ln-bar,
-.tb,
+.mh,
+.mx-panel,
 .sheet-panel,
 .sh-i,
 .ln-ind,
-.tb-ind,
 .gn-links a::after{transition-duration:.01s!important}
   .brand-fly{transition:opacity .25s var(--ease-out)!important}
+}
+
+/* ---------- site menu (desktop): the section bar opens into a panel; big links on the left, the image swaps on hover ---------- */
+.ln-menu{position:relative;flex:none;width:30px;height:30px;margin-left:4px;border-radius:8px;color:var(--ink-t);transition:background .3s var(--ease-out)}
+.ln-menu:hover{background:rgba(10,28,19,.07)}
+.ln-menu i{position:absolute;left:50%;top:50%;width:14px;height:10px;margin:-5px 0 0 -7px}
+.ln-menu i::before, .ln-menu i::after{content:"";position:absolute;left:0;width:14px;height:1.4px;border-radius:1px;background:currentColor}
+.ln-menu i::before{top:2px}
+.ln-menu i::after{top:7px}
+html.nav-dark .ln-menu{color:#fff}
+html.nav-dark .ln-menu:hover{background:rgba(255,255,255,.1)}
+.ln-menu:focus-visible{outline:2px solid #1D925B;outline-offset:2px}
+html.nm-open .ln{opacity:0!important;pointer-events:none!important;transition:opacity .2s}
+html.nm-open, html.nm-open body{overflow:hidden}
+.nm{position:fixed;inset:0;z-index:46;visibility:hidden;pointer-events:none;color:var(--ink-t)}
+html.nm-open .nm, .nm.is-closing{visibility:visible}
+html.nm-open .nm{pointer-events:auto}
+.nm-scrim{position:absolute;inset:0;background:rgba(5,14,9,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;transition:opacity .45s var(--ease-out)}
+html.nm-open .nm-scrim{opacity:1}
+.nm-box{position:absolute;left:var(--x,50%);top:var(--y,8px);width:var(--w,300px);height:var(--h,36px);border-radius:var(--r,11px);overflow:hidden;background:#FBFAF7;box-shadow:0 40px 100px -30px rgba(0,0,0,.6),0 0 0 1px rgba(10,28,19,.06);transition:left .65s cubic-bezier(.32,.72,0,1),top .65s cubic-bezier(.32,.72,0,1),width .65s cubic-bezier(.32,.72,0,1),height .65s cubic-bezier(.32,.72,0,1),border-radius .65s cubic-bezier(.32,.72,0,1)}
+.nm-box.is-snap{transition:none}
+.nm-in{position:absolute;left:0;top:0;width:var(--w1,1040px);opacity:0;transition:opacity .18s var(--ease-out)}
+html.nm-open .nm-in{opacity:1;transition:opacity .4s var(--ease-out) .16s}
+.nm-head{display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 14px 0 22px}
+.nm-brand{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:550;letter-spacing:-.01em}
+.nm-shield{width:20px;height:28px}
+.nm-shield path{fill:currentColor}
+.nm-shield path[fill="#1D925B"]{fill:#1D925B}
+.nm-x{position:relative;width:40px;height:40px;border-radius:8px;background:rgba(10,28,19,.06);transition:background .3s var(--ease-out)}
+.nm-x:hover{background:rgba(10,28,19,.11)}
+.nm-x i{position:absolute;left:50%;top:50%;width:16px;height:16px;margin:-8px 0 0 -8px}
+.nm-x i::before, .nm-x i::after{content:"";position:absolute;left:0;top:7.3px;width:16px;height:1.5px;border-radius:1px;background:var(--ink-t)}
+.nm-x i::before{transform:rotate(45deg)}
+.nm-x i::after{transform:rotate(-45deg)}
+.nm-body{display:grid;grid-template-columns:minmax(0,1fr) 46%;gap:28px;padding:8px 22px 22px 22px}
+.nm-list{list-style:none;align-self:center}
+.nm-a{display:flex;align-items:center;gap:14px;width:max-content;max-width:100%;padding:3px 0;font-size:clamp(30px,2.7vw,40px);font-weight:600;letter-spacing:-.04em;line-height:1.08;transition:opacity .3s var(--ease-out),color .3s var(--ease-out)}
+.nm-a svg{width:22px;height:22px;color:var(--cta);opacity:0;transform:translateX(-10px);transition:opacity .35s var(--ease-out),transform .5s var(--ease-spring)}
+.nm-list:hover .nm-a, .nm-list:focus-within .nm-a{opacity:.3}
+.nm-list .nm-a:hover, .nm-list .nm-a:focus-visible, .nm-list .nm-a.on{opacity:1}
+.nm-a:hover svg, .nm-a:focus-visible svg, .nm-a.on svg{opacity:1;transform:none}
+.nm .nm-a:focus-visible{outline:none}
+.nm-box:focus{outline:none}
+.nm-a:focus-visible span{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px;text-decoration-color:#1D925B}
+.nm-media{position:relative;min-height:380px;border-radius:14px;overflow:hidden;background:#0b1510}
+.nm-im{position:absolute;inset:0;margin:0;opacity:0;transition:opacity .55s var(--ease-out)}
+.nm-im.on{opacity:1}
+.nm-im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform 1.2s var(--ease-out)}
+.nm-im.on img{transform:scale(1)}
+.nm-im::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,14,9,0) 50%,rgba(5,14,9,.78))}
+.nm-im figcaption{position:absolute;z-index:1;left:20px;right:20px;bottom:18px;color:#fff}
+.nm-im b{display:block;font:500 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
+.nm-im span{display:block;margin-top:8px;font-size:17px;font-weight:500;letter-spacing:-.015em;line-height:1.3;max-width:34ch}
+.nm-foot{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px 22px 16px;border-top:1px solid var(--hair-t)}
+.nm-here{display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px;font-size:13.5px;color:var(--dim-t)}
+.nm-here span{font:500 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint-t);margin-right:4px}
+.nm-here a{transition:color .25s var(--ease-out)}
+.nm-here a:hover{color:var(--ink-t)}
+.nm-cta{flex:none;display:flex;align-items:center;gap:8px}
+.nm-head .nm-x{margin-left:6px}
+.nm-login{padding:0 10px;font-size:14px;color:var(--dim-t)}
+.nm-login:hover{color:var(--ink-t)}
+.nm-ghost, .nm-apply{display:inline-flex;align-items:center;height:40px;padding:0 16px;border-radius:8px;font-size:14px;font-weight:500;transition:background .3s var(--ease-out),transform .5s var(--ease-spring)}
+.nm-ghost{background:rgba(10,28,19,.06)}
+.nm-ghost:hover{background:rgba(10,28,19,.1)}
+.nm-apply{background:var(--cta);color:#fff}
+.nm-apply:hover{background:var(--cta-hi)}
+.nm-ghost:active, .nm-apply:active{transform:scale(.97)}
+.nm a:focus-visible, .nm button:focus-visible{outline:2px solid #1D925B;outline-offset:2px;border-radius:6px}
+@media (max-width:1020px){
+  .nm-body{grid-template-columns:minmax(0,1fr) 40%}
+  .nm-media{min-height:320px}
+  .nm-foot{flex-direction:column;align-items:flex-start}
+}
+@media (max-width:760px){
+  .nm, .ln-menu{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .nm-box{transition:none}
+  .nm-im, .nm-im img, .nm-a, .nm-a svg{transition-duration:.01s}
 }
 
 /* ===== hero ===== */
@@ -500,6 +623,79 @@ h1 .h1-sub{margin-top:.5em}
   .al-rows{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%)}
 }
 
+/* ===== breakers ===== */
+/* Breakers: full-width video breakers (why: Kamath quote and stats; voices: Mittal and Warikoo) */
+.bk-sec{position:relative;z-index:6;background:var(--ink);color:#fff;overflow:hidden}
+.bk-slides{display:grid}
+.bk-slides>.bk-slide{grid-area:1 / 1}
+.bk-slide{position:relative;display:flex;align-items:center;min-height:clamp(560px,86svh,840px)}
+.bk-voices .bk-slide{opacity:0;visibility:hidden;transition:opacity .9s var(--ease-out),visibility 0s .9s}
+.bk-voices .bk-slide.is-on{opacity:1;visibility:visible;transition:opacity .9s var(--ease-out)}
+.bk-media{position:absolute;inset:0;background:#0b1510}
+.bk-media video{width:100%;height:100%;object-fit:cover;object-position:var(--fx,30% 50%)}
+.bk-media::after{content:"";position:absolute;inset:0;pointer-events:none;background:
+  linear-gradient(90deg,rgba(5,14,9,0) 26%,rgba(5,14,9,.72) 52%,rgba(5,14,9,.94) 70%,#050E09 86%),
+  linear-gradient(180deg,#050E09 0%,rgba(5,14,9,0) 16%,rgba(5,14,9,0) 82%,#050E09 100%)}
+.bk-in{position:relative;z-index:1;width:100%;max-width:1440px;margin:0 auto;padding:clamp(72px,11vh,128px) var(--pad);display:flex;justify-content:flex-end}
+.bk-copy{width:min(560px,46%)}
+.bk-copy .sec-eyebrow{color:var(--mint);margin-bottom:16px}
+.bk-h{font-size:clamp(30px,3.2vw,48px);font-weight:500;letter-spacing:-.035em;line-height:1.05}
+.bk-q{margin:22px 0 0}
+.bk-q p{font-size:clamp(19px,1.7vw,24px);line-height:1.35;letter-spacing:-.015em;color:rgba(255,255,255,.8)}
+.bk-q footer{margin-top:12px;font-size:14px;color:rgba(255,255,255,.56)}
+.bk-stats{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:clamp(28px,4vh,44px)}
+.bk-stats>div{padding-top:16px;border-top:1px solid rgba(255,255,255,.16)}
+.bk-stats b{display:block;font-size:clamp(34px,3.2vw,46px);font-weight:500;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.bk-stats p{margin-top:10px;font-size:14px;line-height:1.45;color:rgba(255,255,255,.72)}
+.bk-src{display:flex;align-items:center;gap:10px;margin-top:14px;font:500 11px/1 var(--mono);letter-spacing:.06em;color:rgba(255,255,255,.5)}
+.bk-src img, .bk-who img{width:auto;filter:brightness(0) invert(1);opacity:.85}
+.bk-big{font-size:clamp(26px,2.7vw,40px);font-weight:500;letter-spacing:-.03em;line-height:1.14}
+.bk-who{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:28px;padding:16px 18px;border-radius:12px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.bk-who b{display:block;font-size:16px;font-weight:500;letter-spacing:-.01em}
+.bk-who small{display:block;margin-top:3px;font-size:13px;color:rgba(255,255,255,.6)}
+.bk-who img{flex:none;padding-left:18px;border-left:1px solid rgba(255,255,255,.16);box-sizing:content-box}
+/* controls sit at the bottom, under the copy column */
+.bk-ctlwrap{position:absolute;z-index:2;left:0;right:0;bottom:clamp(28px,5vh,56px)}
+.bk-ctl{max-width:1440px;margin:0 auto;padding:0 var(--pad);display:flex;justify-content:flex-end}
+.bk-ctl-in{width:min(560px,46%);display:flex;align-items:center;gap:8px}
+.bk-bars{display:flex;gap:6px;width:min(220px,30vw)}
+.bk-bars button{flex:1;height:24px;display:flex;align-items:center}
+.bk-bars i{display:block;width:100%;height:2px;border-radius:2px;background:rgba(255,255,255,.24);overflow:hidden}
+.bk-bars i::before{content:"";display:block;height:100%;background:#fff;transform-origin:0 50%;transform:scaleX(var(--f,0))}
+.bk-btn{display:grid;place-items:center;width:40px;height:40px;border-radius:8px;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);color:#fff;transition:background .3s var(--ease-out),transform .5s var(--ease-spring)}
+.bk-btn:hover{background:rgba(255,255,255,.14)}
+.bk-btn:active{transform:scale(.95)}
+.bk-btn svg{width:13px;height:13px}
+.bk-sec button:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+@media (max-width:1000px){
+  .bk-copy, .bk-ctl-in{width:min(520px,56%)}
+}
+@media (max-width:760px){
+  .bk-slide{display:block;min-height:0}
+  .bk-media{position:relative;inset:auto;height:54svh;min-height:300px}
+  .bk-media::after{background:linear-gradient(180deg,#050E09 0%,rgba(5,14,9,0) 18%,rgba(5,14,9,0) 52%,rgba(5,14,9,.85) 82%,#050E09 100%)}
+  .bk-in{margin-top:-96px;padding:0 20px 32px}
+  .bk-copy{width:100%}
+  .bk-h{font-size:30px}
+  .bk-q p{font-size:18px}
+  .bk-stats{gap:16px}
+  .bk-stats b{font-size:30px}
+  .bk-stats p{font-size:13px}
+  .bk-big{font-size:24px}
+  .bk-who{padding:14px;gap:14px}
+  .bk-who img{padding-left:14px;max-width:84px;height:auto}
+  .bk-voices .bk-in{padding-bottom:88px}
+  .bk-ctlwrap{bottom:28px}
+  .bk-ctl{padding:0 20px}
+  .bk-ctl-in{width:100%}
+  .bk-bars{flex:1;width:auto}
+}
+@media (prefers-reduced-motion:reduce){
+  .bk-voices .bk-slide{transition:none}
+}
+
+main>.bk-sec{padding:0!important}
+
 /* ===== programme ===== */
 /* Programme: five-term carousel (Lovable style) + term detail sheet */
 .pg-date{position:absolute;left:12px;top:12px;padding:7px 10px;border-radius:8px;background:rgba(5,14,9,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:500 12px/1 var(--sans,inherit);letter-spacing:-.01em;color:#fff}
@@ -735,6 +931,239 @@ h1 .h1-sub{margin-top:.5em}
   .pn-stage{position:relative;height:auto;min-height:80svh;padding:96px var(--pad)}
   .pn-note{position:static;transform:none;opacity:1;margin-top:40px}
   .pn-stage{display:flex;flex-direction:column;justify-content:center}
+}
+
+/* ===== pillars ===== */
+/* How you learn: five pillars as stacked photo panels; a card per pillar with a sideways rail; logos float around it; 85% detail sheet; reel viewer */
+.pl-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:clamp(28px,4vh,48px) 0 12px;--pl-bar:120px;--pl-top:calc(52px + var(--pl-bar));--pl-h:calc(100svh - var(--pl-top) - 12px)}
+/* the headline stays pinned under the section bar while the panels stack, with the pillar index beside it */
+.pl-bar{position:sticky;top:52px;z-index:7;background:var(--ink)}
+.pl-bar::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px;background:linear-gradient(var(--ink),rgba(5,14,9,0));pointer-events:none}
+.pl-head{max-width:1440px;margin:0 auto;padding:12px var(--pad) 18px}
+.pl-head .sec-eyebrow{color:var(--mint);margin:0 0 10px}
+.pl-title{font-size:clamp(24px,2.3vw,34px);line-height:1.1;letter-spacing:-.03em;font-weight:500}
+.pl-title span{color:rgba(255,255,255,.46)}
+/* pillar index: a floating bar at the bottom of the screen while the panels are on screen */
+.pl-dock{position:fixed;z-index:8;left:0;right:0;bottom:calc(18px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;padding:0 8px;pointer-events:none;opacity:0;transform:translate3d(0,24px,0);transition:opacity .45s var(--ease-out),transform .6s var(--ease-out)}
+.pl-sec.dock-on .pl-dock{opacity:1;transform:none}
+.pl-idx{pointer-events:auto;display:flex;gap:2px;max-width:100%;min-width:0;overflow-x:auto;padding:4px;border-radius:12px;background:rgba(8,20,13,.74);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);box-shadow:0 0 0 1px rgba(255,255,255,.08),0 20px 40px -18px rgba(0,0,0,.8);scrollbar-width:none;scroll-snap-type:x proximity}
+.pl-sec:not(.dock-on) .pl-idx{pointer-events:none}
+.pl-idx::-webkit-scrollbar{display:none}
+.pl-idx a{flex:none;display:flex;align-items:center;gap:7px;height:36px;padding:0 13px;border-radius:9px;font-size:13.5px;letter-spacing:-.005em;color:rgba(255,255,255,.62);scroll-snap-align:start;transition:background .35s var(--ease-out),color .35s var(--ease-out)}
+.pl-idx a b{font:500 10.5px/1 var(--mono);letter-spacing:.06em;color:rgba(255,255,255,.36);transition:color .35s var(--ease-out)}
+.pl-idx a:hover{color:#fff;background:rgba(255,255,255,.07)}
+.pl-idx a.on{background:#F3F5F1;color:var(--ink-t)}
+.pl-idx a.on b{color:var(--cta)}
+.pl-idx a:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+.pl-stack{padding:0 12px}
+.pl-panel{position:sticky;top:var(--pl-top);height:var(--pl-h);margin-bottom:12px}
+.pl-panel:last-child{margin-bottom:0}
+.pl-stage{position:relative;height:100%;border-radius:24px;overflow:hidden;background:#0b1510;isolation:isolate;transform-origin:50% 0;transform:scale(calc(1 - var(--cov,0) * .06));will-change:transform}
+.pl-stage::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(70% 60% at 50% 50%,rgba(5,14,9,.42),rgba(5,14,9,.12) 70%),linear-gradient(180deg,rgba(5,14,9,.25),rgba(5,14,9,0) 30%,rgba(5,14,9,0) 70%,rgba(5,14,9,.3))}
+.pl-stage::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:#050E09;opacity:calc(var(--cov,0) * .55)}
+.pl-bg{position:absolute;left:0;top:-8%;width:100%;height:116%;object-fit:cover;transform:translate3d(0,var(--bgy,0px),0) scale(1.02);will-change:transform}
+.pl-fl{position:absolute;inset:0;z-index:2}
+.pl-f{position:absolute;left:var(--x);top:var(--y);transform:translate3d(-50%,calc(-50% + var(--fy,0px)),0);will-change:transform}
+.pl-ic{width:64px;height:64px;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.5),0 22px 44px -18px rgba(0,0,0,.7)}
+.pl-ic img{width:100%;height:100%;object-fit:cover}
+.pl-chip{display:flex;flex-direction:column;gap:3px;padding:10px 13px;border-radius:10px;background:rgba(251,250,247,.94);color:var(--ink-t);font-size:13.5px;font-weight:500;letter-spacing:-.01em;line-height:1.2;white-space:nowrap;box-shadow:0 22px 44px -20px rgba(0,0,0,.7);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.pl-chip small{font:500 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--cta)}
+.pl-card{position:absolute;z-index:3;left:50%;top:50%;width:min(460px,calc(100% - 28px));transform:translate3d(-50%,calc(-50% + var(--cy,0px)),0);background:#FBFAF7;color:var(--ink-t);border-radius:20px;padding:24px 0 22px;box-shadow:0 50px 90px -34px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.4)}
+.pl-in{padding:0 24px}
+.pl-k{font:500 11px/1 var(--mono);letter-spacing:.12em;color:var(--faint-t)}
+.pl-k b{font-weight:500;color:var(--cta)}
+.pl-t{margin:12px 0 6px;font-size:30px;font-weight:500;letter-spacing:-.032em;line-height:1.05}
+.pl-d{font-size:15px;line-height:1.45;color:var(--dim-t)}
+.pl-n{list-style:none;display:flex;gap:18px;margin:18px 0 20px}
+.pl-n li{flex:1;min-width:0;padding-top:10px;border-top:1px solid var(--hair-t)}
+.pl-n b{display:block;font-size:24px;font-weight:500;letter-spacing:-.03em;line-height:1;color:var(--cta);font-variant-numeric:tabular-nums}
+.pl-n span{display:block;margin-top:6px;font-size:12.5px;line-height:1.3;color:var(--dim-t)}
+.pl-rh{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font:500 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint-t)}
+.pl-ar{display:flex;gap:4px}
+.pl-ar button{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:rgba(10,28,19,.06);color:var(--ink-t);transition:background .3s var(--ease-out),opacity .3s}
+.pl-ar button:hover{background:rgba(10,28,19,.11)}
+.pl-ar button:disabled{opacity:.3;cursor:default}
+.pl-ar svg{width:12px;height:12px}
+.pl-rail{display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding:0 24px;padding:0 24px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.pl-rail::-webkit-scrollbar{display:none}
+.pl-rail.is-drag{scroll-snap-type:none;cursor:grabbing}
+.pl-rail.is-drag .pl-it{pointer-events:none}
+.pl-it{position:relative;flex:none;width:118px;height:196px;border-radius:12px;overflow:hidden;scroll-snap-align:start;background:#0b1510;color:#fff;text-align:left;-webkit-tap-highlight-color:transparent;transition:transform .5s var(--ease-spring)}
+.pl-it:active{transform:scale(.97)}
+.pl-it img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease-out);-webkit-user-drag:none}
+.pl-it:hover img{transform:scale(1.05)}
+.pl-it::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,14,9,0) 40%,rgba(5,14,9,.82));pointer-events:none}
+.pl-cap{position:absolute;z-index:1;left:9px;right:9px;bottom:9px;font-size:12.5px;font-weight:500;line-height:1.22;letter-spacing:-.01em}
+.pl-cap small{display:block;margin-bottom:4px;font:500 9.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.pl-play{position:absolute;z-index:1;left:8px;top:8px;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--ink-t)}
+.pl-play svg{width:10px;height:10px;margin-left:1px}
+.pl-go{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:46px;margin-top:18px;border-radius:8px;background:var(--ink);color:#fff;font-size:14.5px;font-weight:500;letter-spacing:-.01em;transition:background .3s var(--ease-out),transform .5s var(--ease-spring)}
+.pl-go:hover{background:var(--cta)}
+.pl-go:active{transform:scale(.98)}
+.pl-go svg{width:12px;height:12px}
+.pl-it:focus-visible,.pl-go:focus-visible,.pl-ar button:focus-visible{outline:2px solid #1D925B;outline-offset:2px}
+@media (max-height:780px) and (min-width:1181px){
+  .pl-it{height:164px;width:100px}
+  .pl-t{font-size:26px}
+  .pl-n{margin:14px 0 16px}
+}
+
+/* tablet and phone: floaters move to a band above and a band below the card */
+@media (max-width:1180px){
+  .pl-dk{display:none}
+  .pl-ft, .pl-fb{left:var(--mx);transform:translate3d(0,var(--fy,0px),0)}
+  .pl-ft{top:calc(14px + var(--row) * 54px)}
+  .pl-fb{top:auto;bottom:calc(14px + var(--row) * 54px)}
+}
+@media (max-width:760px){
+  .pl-sec{padding-top:clamp(36px,5vh,56px);--pl-top:calc(60px + env(safe-area-inset-top,0px));--pl-h:calc(100svh - var(--pl-top) - 62px - env(safe-area-inset-bottom,0px))}
+  .pl-bar{position:relative;top:auto}
+  .pl-bar::after{display:none}
+  .pl-head{padding-bottom:16px}
+  .pl-dock{bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+  .pl-idx a{height:34px;padding:0 11px;font-size:13px}
+  .pl-title{font-size:28px;line-height:1.08}
+  .pl-stack{padding:0 8px}
+  .pl-panel{margin-bottom:8px}
+  .pl-stage{border-radius:18px}
+  .pl-ic{width:44px;height:44px;border-radius:12px}
+  .pl-chip{padding:8px 10px;font-size:12px;border-radius:9px;white-space:normal;max-width:calc(96% - var(--mx,0%))}
+  .pl-chip small{font-size:9px}
+  .pl-ft{top:calc(12px + var(--row) * 50px)}
+  .pl-fb{bottom:calc(12px + var(--row) * 50px)}
+  .pl-card{width:calc(100% - 24px);padding:18px 0 16px;border-radius:16px}
+  .pl-in{padding:0 16px}
+  .pl-t{margin:10px 0 4px;font-size:24px}
+  .pl-d{font-size:13.5px}
+  .pl-n{gap:12px;margin:14px 0 14px}
+  .pl-n b{font-size:20px}
+  .pl-n span{font-size:11px}
+  .pl-ar{display:none}
+  .pl-rh{margin-bottom:8px;font-size:9.5px}
+  .pl-rail{padding:0 16px;scroll-padding:0 16px;gap:7px}
+  .pl-it{width:94px;height:152px;border-radius:10px}
+  .pl-cap{left:7px;right:7px;bottom:7px;font-size:11px}
+  .pl-cap small{font-size:8.5px;margin-bottom:3px}
+  .pl-play{width:22px;height:22px;left:7px;top:7px}
+  .pl-go{height:44px;margin-top:14px;font-size:14px}
+}
+@media (max-width:760px) and (max-height:700px){
+  .pl-d{display:none}
+  .pl-it{height:132px;width:84px}
+}
+
+/* ---------- detail: 85% sheet (phone) or modal (desktop) ---------- */
+html.pl-lock, html.pl-lock body{overflow:hidden}
+.pl-dlg{position:fixed;inset:0;z-index:50;visibility:hidden;pointer-events:none;color:var(--ink-t)}
+.pl-dlg.is-open{visibility:visible;pointer-events:auto}
+.pl-dlg-scrim{position:absolute;inset:0;background:rgba(5,14,9,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .45s var(--ease-out)}
+.pl-dlg.is-open .pl-dlg-scrim{opacity:1}
+.pl-dlg-box{position:absolute;left:50%;top:50%;width:min(1120px,calc(100vw - 48px));height:85vh;height:85dvh;display:grid;grid-template-columns:40% minmax(0,1fr);border-radius:20px;overflow:hidden;background:#FBFAF7;box-shadow:0 60px 120px -40px rgba(0,0,0,.7);opacity:0;transform:translate3d(-50%,calc(-50% + 24px),0) scale(.98);transition:opacity .45s var(--ease-out),transform .7s var(--ease-out)}
+.pl-dlg.is-open .pl-dlg-box{opacity:1;transform:translate3d(-50%,-50%,0)}
+.pl-dlg-media{position:relative;background:#0b1510}
+.pl-dlg-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pl-dlg-body{display:flex;flex-direction:column;min-height:0}
+.pl-dlg-head{position:relative;flex:none;padding:24px 72px 18px 32px;border-bottom:1px solid var(--hair-t)}
+.pl-dlg-grab{display:none}
+.pl-dlg-t{margin-top:10px;font-size:32px;font-weight:500;letter-spacing:-.032em;line-height:1.05}
+.pl-dlg-x{position:absolute;right:20px;top:20px;width:40px;height:40px;border-radius:8px;background:rgba(10,28,19,.06);transition:background .3s var(--ease-out)}
+.pl-dlg-x:hover{background:rgba(10,28,19,.11)}
+.pl-dlg-x i, .pl-rv-x i{position:absolute;left:50%;top:50%;width:16px;height:16px;margin:-8px 0 0 -8px}
+.pl-dlg-x i::before, .pl-dlg-x i::after, .pl-rv-x i::before, .pl-rv-x i::after{content:"";position:absolute;left:0;top:7.3px;width:16px;height:1.4px;border-radius:1px;background:currentColor}
+.pl-dlg-x i::before, .pl-rv-x i::before{transform:rotate(45deg)}
+.pl-dlg-x i::after, .pl-rv-x i::after{transform:rotate(-45deg)}
+.pl-dlg-c{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:24px 32px 32px}
+.pl-dlg-foot{flex:none;display:flex;gap:8px;padding:14px 32px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--hair-t);background:#FBFAF7}
+.pl-dlg-next, .pl-dlg-apply{flex:1;display:flex;align-items:center;justify-content:center;height:46px;border-radius:8px;font-size:14.5px;font-weight:500;letter-spacing:-.01em;transition:background .3s var(--ease-out),transform .5s var(--ease-spring)}
+.pl-dlg-next{border:1px solid rgba(10,28,19,.16);color:var(--ink-t)}
+.pl-dlg-next:hover{background:rgba(10,28,19,.05)}
+.pl-dlg-apply{background:var(--cta);color:#fff}
+.pl-dlg-apply:hover{background:var(--cta-hi)}
+.pl-dlg-next:active, .pl-dlg-apply:active{transform:scale(.98)}
+.pl-dlg button:focus-visible, .pl-dlg a:focus-visible{outline:2px solid #1D925B;outline-offset:2px}
+.pd-lead{font-size:18px;line-height:1.5;letter-spacing:-.012em;max-width:52ch}
+.pd-stats{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:24px 0 8px}
+.pd-stats li{padding-top:10px;border-top:1px solid var(--hair-t)}
+.pd-stats b{display:block;font-size:26px;font-weight:500;letter-spacing:-.03em;line-height:1;color:var(--cta);font-variant-numeric:tabular-nums}
+.pd-stats span{display:block;margin-top:6px;font-size:12.5px;line-height:1.3;color:var(--dim-t)}
+.pd-g{margin-top:28px}
+.pd-gh{margin-bottom:6px;font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint-t)}
+.pd-g ul{list-style:none}
+.pd-row{display:grid;grid-template-columns:132px minmax(0,1fr);gap:18px;padding:16px 0;border-bottom:1px solid var(--hair-t);scroll-margin-top:12px}
+.pd-row.is-hit{animation:pdHit 1.6s var(--ease-out)}
+@keyframes pdHit{0%,40%{background:rgba(107,238,159,.22)}100%{background:rgba(107,238,159,0)}}
+.pd-row img{width:132px;height:96px;border-radius:10px;object-fit:cover;background:#e9ece6}
+.pd-rk{font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--cta)}
+.pd-row h4{margin:7px 0 5px;font-size:18px;font-weight:500;letter-spacing:-.02em}
+.pd-rb{font-size:14.5px;line-height:1.5;color:var(--dim-t)}
+.pd-out{position:relative;margin-top:8px;padding-left:14px;font-size:13.5px;line-height:1.45;color:var(--ink-t)}
+.pd-out::before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+.pd-tools{margin-top:6px;font-size:12.5px;line-height:1.45;color:var(--dim-t)}
+.pd-tools span{margin-right:8px;font:500 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint-t)}
+.pd-link{display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-size:15px;font-weight:500;color:var(--cta);border-bottom:1px solid rgba(7,92,50,.3);padding-bottom:3px}
+.pd-link svg{width:12px;height:12px}
+@media (max-width:1000px){
+  .pl-dlg-box{grid-template-columns:32% minmax(0,1fr)}
+  .pd-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .pl-dlg-box{left:0;right:0;top:auto;bottom:0;width:auto;height:85svh;grid-template-columns:1fr;border-radius:20px 20px 0 0;opacity:1;transform:translate3d(0,102%,0);transition:transform .55s var(--ease-out)}
+  .pl-dlg.is-open .pl-dlg-box{transform:translate3d(0,var(--drag,0px),0)}
+  .pl-dlg-box.is-drag{transition:none}
+  .pl-dlg-media{display:none}
+  .pl-dlg-head{padding:10px 64px 14px 18px;touch-action:none}
+  .pl-dlg-grab{display:block;position:absolute;left:50%;top:7px;width:38px;height:4px;margin-left:-19px;border-radius:2px;background:rgba(10,28,19,.18)}
+  .pl-dlg-head .pl-k{margin-top:12px}
+  .pl-dlg-t{margin-top:8px;font-size:24px}
+  .pl-dlg-x{right:12px;top:18px;width:36px;height:36px}
+  .pl-dlg-c{padding:16px 18px 24px}
+  .pl-dlg-foot{padding:10px 18px calc(10px + env(safe-area-inset-bottom,0px))}
+  .pl-dlg-next, .pl-dlg-apply{height:44px;font-size:13.5px}
+  .pd-lead{font-size:15.5px}
+  .pd-stats{gap:12px;margin-top:18px}
+  .pd-stats b{font-size:22px}
+  .pd-row{grid-template-columns:88px minmax(0,1fr);gap:12px;padding:14px 0}
+  .pd-row img{width:88px;height:72px;border-radius:8px}
+  .pd-row h4{font-size:16px}
+  .pd-rb{font-size:13.5px}
+}
+
+/* ---------- reel viewer ---------- */
+.pl-rv{position:fixed;inset:0;z-index:55;visibility:hidden;pointer-events:none}
+.pl-rv.is-open{visibility:visible;pointer-events:auto}
+.pl-rv-scrim{position:absolute;inset:0;background:rgba(3,8,5,.9);opacity:0;transition:opacity .4s var(--ease-out)}
+.pl-rv.is-open .pl-rv-scrim{opacity:1}
+.pl-rv-frame{position:absolute;left:50%;top:50%;height:min(88vh,880px);aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#000;color:#fff;opacity:0;transform:translate3d(-50%,-48%,0) scale(.96);transition:opacity .4s var(--ease-out),transform .6s var(--ease-out)}
+.pl-rv.is-open .pl-rv-frame{opacity:1;transform:translate3d(-50%,-50%,0)}
+.pl-rv-frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pl-rv-frame::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,0) 18%,rgba(0,0,0,0) 62%,rgba(0,0,0,.7))}
+.pl-rv-bars{position:absolute;z-index:2;left:10px;right:10px;top:10px;display:flex;gap:4px}
+.pl-rv-bars i{flex:1;height:2px;border-radius:2px;background:rgba(255,255,255,.3);overflow:hidden}
+.pl-rv-bars i b{display:block;height:100%;width:0;background:#fff}
+.pl-rv-bars i.done b{width:100%}
+.pl-rv-zone{position:absolute;z-index:1;top:0;bottom:0;width:34%;-webkit-tap-highlight-color:transparent}
+.pl-rv-prev{left:0}
+.pl-rv-next{right:0}
+.pl-rv-cap{position:absolute;z-index:2;left:16px;right:16px;bottom:18px;pointer-events:none}
+.pl-rv-cap small{display:block;margin-bottom:6px;font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.pl-rv-cap b{font-size:20px;font-weight:500;letter-spacing:-.02em;line-height:1.15}
+.pl-rv-snd{position:absolute;z-index:3;left:12px;top:24px;height:30px;padding:0 10px;border-radius:8px;background:rgba(0,0,0,.4);font:500 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.pl-rv-x{position:absolute;z-index:3;right:10px;top:22px;width:36px;height:36px;border-radius:8px;background:rgba(0,0,0,.4);color:#fff;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.pl-rv button:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+@media (max-width:760px){
+  .pl-rv-frame{left:0;top:0;width:100%;height:100%;aspect-ratio:auto;border-radius:0;transform:translate3d(0,4%,0)}
+  .pl-rv.is-open .pl-rv-frame{transform:none}
+  .pl-rv-bars{top:calc(10px + env(safe-area-inset-top,0px))}
+  .pl-rv-snd{top:calc(24px + env(safe-area-inset-top,0px))}
+  .pl-rv-x{top:calc(22px + env(safe-area-inset-top,0px))}
+  .pl-rv-cap{bottom:calc(22px + env(safe-area-inset-bottom,0px))}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .pl-stage{transform:none}
+  .pl-stage::after{opacity:0}
+  .pl-bg, .pl-f, .pl-card{will-change:auto}
+  .pl-it img, .pl-dlg-box, .pl-dlg-scrim, .pl-rv-frame, .pl-rv-scrim{transition-duration:.01s!important}
 }
 
 /* ===== built ===== */
@@ -1066,6 +1495,95 @@ h1 .h1-sub{margin-top:.5em}
 .cl-tile{background:#E7E8E2}
 .cl-title em{font-style:normal;color:#075C32}
 
+/* student clubs: a small sideways strip under the mosaic (first two are real, the rest are placeholders) */
+.cl-clubs{margin-top:clamp(24px,3vw,36px);padding-bottom:clamp(64px,8vw,104px)}
+.cl-clubs-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:14px}
+.cl-clubs-head h3{font-size:clamp(20px,1.8vw,26px);font-weight:500;letter-spacing:-.025em}
+.cl-clubs-head span{font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint-t)}
+.cl-clubs-row{list-style:none;display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding:0 max(var(--pad),calc((100vw - 1440px) / 2 + var(--pad)));scroll-padding:0 max(var(--pad),calc((100vw - 1440px) / 2 + var(--pad)));scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 48px),transparent);mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 48px),transparent)}
+.cl-clubs-row::-webkit-scrollbar{display:none}
+.cl-club{flex:none;width:236px;padding:16px 16px 18px;border-radius:12px;background:#F1F0EB;box-shadow:inset 0 0 0 1px rgba(10,28,19,.06);scroll-snap-align:start}
+.cl-ck{font:500 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--cta)}
+.cl-club b{display:block;margin-top:10px;font-size:16px;font-weight:500;letter-spacing:-.015em}
+.cl-club p{margin-top:6px;font-size:13px;line-height:1.45;color:var(--dim-t)}
+@media (max-width:760px){
+  .cl-club{width:72vw;max-width:260px}
+  .cl-clubs{padding-bottom:44px}
+}
+
+/* ===== team ===== */
+/* Founding team: the people who built SSB, portrait grid (rail on phones) with each person's past company */
+.lt-sec{position:relative;z-index:6;background:#FBFAF7;color:var(--ink-t);padding:clamp(64px,8vw,112px) 0}
+.lt-wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
+.lt-head{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:clamp(24px,3vw,40px)}
+.lt-head .sec-eyebrow{color:var(--cta);margin-bottom:14px}
+.lt-title{font-size:clamp(28px,3vw,44px);line-height:1.06;letter-spacing:-.032em;font-weight:500;max-width:30ch}
+.lt-title span{color:rgba(10,28,19,.42)}
+.lt-side{max-width:34ch;font-size:15.5px;line-height:1.5;color:var(--dim-t)}
+.lt-grid{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.lt-card figure{position:relative;margin:0;aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:#E7EAE4}
+.lt-ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;transition:transform .9s var(--ease-out)}
+.lt-card:hover .lt-ph{transform:scale(1.04)}
+.lt-card figure::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,14,9,0) 48%,rgba(5,14,9,.82));pointer-events:none}
+.lt-card figcaption{position:absolute;z-index:1;left:14px;right:14px;bottom:13px;color:#fff}
+.lt-card b{display:block;font-size:16px;font-weight:500;letter-spacing:-.015em;line-height:1.2}
+.lt-card span{display:block;margin-top:3px;font-size:12.5px;line-height:1.3;color:rgba(255,255,255,.78)}
+.lt-card small{display:block;margin-top:5px;font:500 10px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mint)}
+.lt-lg{position:absolute;z-index:1;left:12px;top:12px;display:grid;place-items:center;height:28px;padding:0 9px;border-radius:8px;background:rgba(255,255,255,.92);box-shadow:0 8px 20px -10px rgba(0,0,0,.5)}
+.lt-lg img{height:13px;width:auto;max-width:64px}
+@media (max-width:1000px){
+  .lt-head{flex-direction:column;align-items:flex-start;gap:14px}
+  .lt-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .lt-grid{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 var(--pad);margin:0 calc(var(--pad) * -1);padding:0 var(--pad);scrollbar-width:none}
+  .lt-grid::-webkit-scrollbar{display:none}
+  .lt-card{flex:none;width:58vw;max-width:240px;scroll-snap-align:start}
+  .lt-side{font-size:14.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  .lt-ph{transition:none}
+}
+
+/* campus already ends with its own bottom padding */
+.cl-sec+.lt-sec{padding-top:0}
+
+/* ===== press ===== */
+/* Press: what the press has written about SSB, four article cards (rail on phones) */
+.pr-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:clamp(56px,7vw,96px) 0}
+.pr-wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
+.pr-head{margin-bottom:clamp(22px,3vw,36px)}
+.pr-head .sec-eyebrow{color:var(--mint);margin-bottom:14px}
+.pr-title{font-size:clamp(28px,3vw,44px);line-height:1.06;letter-spacing:-.032em;font-weight:500}
+.pr-grid{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.pr-card{display:flex;flex-direction:column;height:100%;padding:20px 20px 18px;border-radius:14px;background:#FBFAF7;color:var(--ink-t);transition:transform .6s var(--ease-spring),box-shadow .5s var(--ease-out)}
+.pr-card:hover{transform:translateY(-3px);box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+.pr-lg{display:flex;align-items:center;height:32px}
+.pr-lg img{width:auto;max-width:170px;object-fit:contain}
+.pr-card time{margin-top:18px;font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint-t)}
+.pr-card h3{margin-top:10px;font-size:18px;font-weight:500;letter-spacing:-.02em;line-height:1.28}
+.pr-card p{margin-top:8px;font-size:13.5px;line-height:1.45;color:var(--dim-t)}
+.pr-go{display:flex;align-items:center;gap:6px;margin-top:auto;padding-top:18px;font-size:13px;font-weight:500;color:var(--cta)}
+.pr-go svg{width:12px;height:12px;transition:transform .5s var(--ease-spring)}
+.pr-card:hover .pr-go svg{transform:translate(2px,-2px)}
+.pr-card:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+@media (max-width:1000px){
+  .pr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .pr-grid{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 var(--pad);margin:0 calc(var(--pad) * -1);padding:0 var(--pad);scrollbar-width:none}
+  .pr-grid::-webkit-scrollbar{display:none}
+  .pr-grid li{flex:none;width:78vw;max-width:320px;scroll-snap-align:start}
+  .pr-card h3{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){
+  .pr-card, .pr-go svg{transition:none}
+}
+
+/* press runs straight into admissions: one gap, not two */
+.pr-sec{padding-bottom:clamp(40px,5vw,64px)}
+.pr-sec+.ad-sec{padding-top:clamp(48px,6vw,88px)}
+
 /* ===== admissions ===== */
 /* Admissions & fees: five-step process, eligibility, intakes and fees, scholarships (sheet per scholarship, #scholarship-*), Impact Foundation backers */
 .ad-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:clamp(96px,11vw,150px) 0 clamp(96px,11vw,140px);overflow:hidden}
@@ -1326,6 +1844,98 @@ html.ad-lock, html.ad-lock body{overflow:hidden}
 }
 @keyframes ft-shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
 
+/* ===== lead ===== */
+/* Lead modal: apply / brochure / callback / exit intent. Photo carousel with proof on the left, form on the right (85% sheet on phones) */
+html.ld-lock, html.ld-lock body{overflow:hidden}
+.ld{position:fixed;inset:0;z-index:60;visibility:hidden;pointer-events:none;color:var(--ink-t)}
+.ld.is-open{visibility:visible;pointer-events:auto}
+.ld-scrim{position:absolute;inset:0;background:rgba(5,14,9,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .45s var(--ease-out)}
+.ld.is-open .ld-scrim{opacity:1}
+.ld-box{position:absolute;left:50%;top:50%;width:min(980px,calc(100vw - 48px));height:min(640px,85vh);display:grid;grid-template-columns:42% minmax(0,1fr);border-radius:20px;overflow:hidden;background:#FBFAF7;box-shadow:0 60px 120px -40px rgba(0,0,0,.7);opacity:0;transform:translate3d(-50%,calc(-50% + 24px),0) scale(.98);transition:opacity .45s var(--ease-out),transform .7s var(--ease-out)}
+.ld.is-open .ld-box{opacity:1;transform:translate3d(-50%,-50%,0)}
+
+/* carousel: photo with the proof written on it, bars fill while a slide is on */
+.ld-car{position:relative;overflow:hidden;background:#0b1510;color:#fff}
+.ld-sl{position:absolute;inset:0;margin:0;opacity:0;transition:opacity .8s var(--ease-out)}
+.ld-sl.is-on{opacity:1}
+.ld-sl img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform 6s linear}
+.ld-sl.is-on img{transform:scale(1)}
+.ld-sl::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,14,9,.1) 30%,rgba(5,14,9,.86))}
+.ld-sl figcaption{position:absolute;z-index:1;left:28px;right:28px;bottom:58px}
+.ld-sl b{display:block;font-size:clamp(40px,4.4vw,56px);font-weight:500;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.ld-sl span{display:block;margin-top:10px;max-width:30ch;font-size:15px;line-height:1.45;color:rgba(255,255,255,.82)}
+.ld-bars{position:absolute;z-index:2;left:28px;right:28px;bottom:26px;display:flex;gap:6px}
+.ld-bars button{flex:1;height:18px;display:flex;align-items:center}
+.ld-bars i{display:block;width:100%;height:2px;border-radius:2px;background:rgba(255,255,255,.28);overflow:hidden}
+.ld-bars i::before{content:"";display:block;height:100%;width:100%;background:#fff;transform-origin:0 50%;transform:scaleX(var(--f,0))}
+
+/* form side */
+.ld-main{position:relative;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.ld-body{padding:40px 40px 28px}
+.ld-x{position:absolute;z-index:4;right:16px;top:16px;width:40px;height:40px;border-radius:8px;background:rgba(10,28,19,.06);transition:background .3s var(--ease-out)}
+.ld-x:hover{background:rgba(10,28,19,.11)}
+.ld-x i{position:absolute;left:50%;top:50%;width:16px;height:16px;margin:-8px 0 0 -8px}
+.ld-x i::before, .ld-x i::after{content:"";position:absolute;left:0;top:7.3px;width:16px;height:1.4px;border-radius:1px;background:currentColor}
+.ld-x i::before{transform:rotate(45deg)}
+.ld-x i::after{transform:rotate(-45deg)}
+.ld-grab{display:none}
+.ld-k{display:flex;align-items:center;gap:8px;font:500 11px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--cta)}
+.ld-k .dot{flex:none;background:var(--brand)}
+.ld-t{margin-top:14px;font-size:30px;font-weight:500;letter-spacing:-.032em;line-height:1.08}
+.ld-sub{margin-top:8px;font-size:15px;line-height:1.5;color:var(--dim-t);max-width:42ch}
+.ld-form{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;margin-top:24px}
+.ld-f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.ld-f:nth-child(3), .ld-f:nth-child(4){grid-column:span 1}
+.ld-f>span:first-child{font-size:13px;font-weight:500;letter-spacing:-.005em}
+.ld-f input, .ld-f select{width:100%;height:46px;padding:0 14px;border:1px solid rgba(10,28,19,.14);border-radius:8px;background:#fff;font:400 15px var(--font);color:var(--ink-t);outline:none;-webkit-appearance:none;appearance:none;transition:border-color .25s var(--ease-out),box-shadow .25s var(--ease-out)}
+.ld-f select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none'%3E%3Cpath d='M3 4.5 6 7.5l3-3' stroke='%230A1C13' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.ld-f input::placeholder{color:rgba(10,28,19,.38)}
+.ld-f input:focus, .ld-f select:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(29,146,91,.16)}
+.ld-ph{display:flex;align-items:stretch}
+.ld-ph i{display:flex;align-items:center;padding:0 12px;border:1px solid rgba(10,28,19,.14);border-right:0;border-radius:8px 0 0 8px;background:rgba(10,28,19,.04);font:500 14px var(--font);font-style:normal;color:var(--dim-t)}
+.ld-ph input{border-radius:0 8px 8px 0}
+.ld-f em{display:none;font-size:12px;font-style:normal;color:#B42318}
+.ld-f.is-bad em{display:block}
+.ld-f.is-bad input, .ld-f.is-bad select, .ld-f.is-bad .ld-ph i{border-color:#D92D20}
+.ld-go{grid-column:1 / -1;display:flex;align-items:center;justify-content:center;gap:10px;height:50px;margin-top:4px;border-radius:8px;background:var(--cta);color:#fff;font-size:15px;font-weight:500;letter-spacing:-.01em;transition:background .3s var(--ease-out),transform .5s var(--ease-spring)}
+.ld-go:hover{background:var(--cta-hi)}
+.ld-go:active{transform:scale(.98)}
+.ld-go svg{width:13px;height:13px}
+.ld-fine{grid-column:1 / -1;font-size:12px;line-height:1.5;color:var(--faint-t)}
+.ld-fine a{color:var(--dim-t);text-decoration:underline;text-underline-offset:2px}
+.ld-done{margin-top:28px;padding-top:22px;border-top:1px solid var(--hair-t)}
+.ld-done-k{font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--cta)}
+.ld-done-t{margin-top:12px;font-size:26px;font-weight:500;letter-spacing:-.03em}
+.ld-done-p{margin-top:6px;font-size:15px;line-height:1.5;color:var(--dim-t)}
+.ld-done-a{display:inline-flex;align-items:center;height:46px;margin-top:18px;padding:0 18px;border-radius:8px;background:var(--cta);color:#fff;font-size:14.5px;font-weight:500}
+.ld[data-v="brochure"] .ld-done-a, .ld[data-v="exit"] .ld-done-a, .ld[data-v="callback"] .ld-done-a{display:none}
+.ld button:focus-visible, .ld a:focus-visible{outline:2px solid #1D925B;outline-offset:2px}
+
+@media (max-width:760px){
+  .ld-box{left:0;right:0;top:auto;bottom:0;width:auto;height:85svh;display:flex;flex-direction:column;border-radius:20px 20px 0 0;opacity:1;transform:translate3d(0,102%,0);transition:transform .55s var(--ease-out)}
+  .ld.is-open .ld-box{transform:translate3d(0,var(--drag,0px),0)}
+  .ld-box.is-drag{transition:none}
+  .ld-car{flex:none;height:150px;touch-action:none}
+  .ld-sl figcaption{left:18px;right:64px;bottom:30px}
+  .ld-sl b{font-size:30px}
+  .ld-sl span{margin-top:4px;font-size:12.5px;line-height:1.35}
+  .ld-bars{left:18px;right:18px;bottom:10px}
+  .ld-main{flex:1}
+  .ld-grab{display:block;position:absolute;z-index:4;left:50%;top:7px;width:38px;height:4px;margin-left:-19px;border-radius:2px;background:rgba(255,255,255,.75)}
+  .ld-x{right:12px;top:14px;width:36px;height:36px;background:rgba(0,0,0,.4);color:#fff;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  .ld-body{padding:20px 18px calc(18px + env(safe-area-inset-bottom,0px))}
+  .ld-t{margin-top:10px;font-size:24px}
+  .ld-sub{font-size:14px}
+  .ld-form{grid-template-columns:1fr;gap:12px;margin-top:18px}
+  .ld-f input, .ld-f select{height:48px;font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  .ld-box, .ld-scrim, .ld-sl, .ld-sl img{transition-duration:.01s!important}
+  .ld-sl img{transform:none}
+}
+.ld [hidden]{display:none!important}
+.ld-done-k:focus{outline:none}
+
 /* ===== seams ===== */
 /* Seams: the transitions between a dark and a light section. Markup sits between the slots in src/page.html.
    .seam-grad = a curved green horizon (United Carriers style); .seam-px = small cells that fill in as you scroll (Transform9 / Bynar style). */
@@ -1367,13 +1977,13 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
 <body>
 <div class="wipe" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
-<!-- Navigation: global nav (layer 1), flying logo, section bar (layer 2), mobile tab bar, menu sheet -->
+<!-- Navigation: global nav (layer 1), flying logo, section bar (layer 2), mobile section header with section list, menu sheet -->
 <header class="gn" aria-label="Scaler School of Business">
   <div class="gn-in fade" style="--d:.95">
     <span class="gn-slot" aria-hidden="true"></span>
     <nav class="gn-links" aria-label="Scaler School of Business">
       <a href="https://www.scaler.com/school-of-business/program/">Programme</a>
-      <a href="https://www.scaler.com/school-of-business/admission/">Admissions &amp; fees</a>
+      <a href="https://www.scaler.com/school-of-business/admission/" data-no-lead>Admissions &amp; fees</a>
       <a href="https://www.scaler.com/school-of-business/internship/">Internships</a>
       <a href="https://www.scaler.com/school-of-business/campus-life/">Campus life</a>
       <a class="gn-x" href="https://www.scaler.com/school-of-business/events">Events</a>
@@ -1392,20 +2002,43 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
     <a class="ln-slot" href="#top" aria-label="Back to top"></a>
     <div class="ln-hooks">
       <span class="ln-ind" aria-hidden="true"></span>
-      <a href="#film" data-k="0">Overview</a><a href="#outcomes" data-k="1">Outcomes</a><a href="#programme" data-k="2">Programme</a><a href="#built" data-k="3">Ventures</a><a href="#faculty" data-k="4">Faculty</a><a href="#campus" data-k="5">Campus</a><a href="#admissions" data-k="6">Fees</a><a href="#faq" data-k="7">FAQ</a>
+      <a href="#film" data-k="0">Overview</a><a href="#outcomes" data-k="1">Outcomes</a><a href="#programme" data-k="2">Programme</a><a href="#learn" data-k="3">Learning</a><a href="#built" data-k="4">Ventures</a><a href="#faculty" data-k="5">Faculty</a><a href="#campus" data-k="6">Campus</a><a href="#admissions" data-k="7">Fees</a><a href="#faq" data-k="8">FAQ</a>
     </div>
     <span class="ln-sep" aria-hidden="true"></span>
     <a class="ln-apply" href="https://www.scaler.com/school-of-business/admission/">Apply</a>
+    <button class="ln-menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nm" data-open-nm><i></i></button>
   </nav>
 </div>
-<nav class="tb" aria-label="On this page">
-  <span class="tb-ind" aria-hidden="true"></span>
-  <a href="#film" data-t="0"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="3.2"/><path d="M10.4 9.6v4.8l4-2.4z"/></svg><span>Overview</span></a>
-  <a href="#outcomes" data-t="1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.8 17.2l5.6-5.6 3.9 3.9 6.9-6.9"/><path d="M15 8.6h5.2v5.2"/></svg><span>Outcomes</span></a>
-  <a href="#programme" data-t="2"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.2l8.3 4.3L12 12.8 3.7 8.5z"/><path d="M3.7 12.4L12 16.7l8.3-4.3"/><path d="M3.7 16.2L12 20.5l8.3-4.3"/></svg><span>Programme</span></a>
-  <a href="#faculty" data-t="3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.2" cy="8.6" r="3.3"/><path d="M3.6 19.2c.6-3.2 2.8-5 5.6-5s5 1.8 5.6 5"/><path d="M15.6 5.6a3.3 3.3 0 0 1 0 6.1"/><path d="M17.4 14.5c1.6.6 2.7 2.2 3.1 4.7"/></svg><span>People</span></a>
-  <button type="button" data-open-sheet aria-controls="ssb-sheet" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.2" y="4.2" width="6.3" height="6.3" rx="1.9"/><rect x="13.5" y="4.2" width="6.3" height="6.3" rx="1.9"/><rect x="4.2" y="13.5" width="6.3" height="6.3" rx="1.9"/><rect x="13.5" y="13.5" width="6.3" height="6.3" rx="1.9"/></svg><span>More</span><i class="tb-dot" aria-hidden="true"></i></button>
-</nav>
+<div class="nm" id="nm" aria-hidden="true">
+  <div class="nm-scrim" data-nm-close></div>
+  <div class="nm-box" role="dialog" aria-modal="true" aria-label="Site menu" tabindex="-1">
+    <div class="nm-in">
+      <div class="nm-head"><a class="nm-brand" href="https://www.scaler.com/school-of-business/" data-no-lead><svg class="nm-shield" viewBox="0 0 29 40" aria-hidden="true"><path d="M0 0V25.0228C0 28.7396 2.3557 32.3516 7.00032 35.7561C10.1593 38.0721 13.2912 39.4747 13.4212 39.5325L14.4718 40L15.5224 39.5325C15.6541 39.4747 18.7842 38.0721 21.945 35.7561C26.5896 32.3498 28.9454 28.7396 28.9454 25.0228V0H0ZM28.1836 25.0246C28.1836 28.485 25.9326 31.8913 21.4956 35.146C18.4016 37.415 15.3437 38.7851 15.2137 38.8411L14.4718 39.1714L13.7299 38.8411C13.6017 38.7833 10.5438 37.415 7.44799 35.146C3.00916 31.8913 0.759962 28.4868 0.759962 25.0246V0.759962H28.1818V25.0228L28.1836 25.0246Z" fill="currentColor"></path><path d="M19.251 25.5066L16.2714 28.4872V20.7682H8.5955L11.5761 17.7875H19.251V25.5066Z" fill="#1D925B"></path><path d="M13.6141 26.9653H10.0723V23.4235H13.6141V26.9653Z" fill="#1D925B"></path><path d="M26.4069 10.6357V24.9143C26.4069 31.781 14.5216 37.0627 14.5216 37.0627C14.435 37.0241 2.63531 31.754 2.63527 24.9143V10.6357H26.4069ZM7.41691 20.7661V29.6207H16.2714L22.6633 23.2287V14.3742H13.8088L7.41691 20.7661Z" fill="#1D925B" fill-rule="evenodd" clip-rule="evenodd"></path><path d="M12.3653 8.95323C11.7515 8.09399 10.7822 7.53981 9.69547 7.53981H2.63558V8.6951H9.69547C10.2533 8.6951 10.7641 8.91171 11.1612 9.26733H12.5638C12.5025 9.15902 12.4375 9.05251 12.3653 8.95323Z" fill="currentColor"></path><path d="M14.5892 8.69695C14.434 8.33772 14.2444 7.99836 14.0242 7.68246C13.8003 7.35934 13.5458 7.06149 13.2624 6.79433C12.3039 5.88093 11.0403 5.32676 9.65937 5.32676H2.63558V6.48204H9.66117C10.8616 6.48204 11.9501 7.00373 12.7389 7.84853C13.0404 8.17165 13.2985 8.5399 13.5007 8.94425C13.553 9.04895 13.6 9.15726 13.6451 9.26737H14.8058C14.7444 9.07241 14.6722 8.88107 14.591 8.69695H14.5892Z" fill="currentColor"></path><path d="M26.5029 4.15544V3.00016H19.6976C17.7336 3.00016 15.9393 3.79983 14.589 5.11036C13.237 3.79983 11.4463 3.00016 9.48231 3.00016H2.63543V4.15544H9.48231C11.1575 4.15544 12.6864 4.83237 13.8417 5.94433C14.1125 6.20427 14.3634 6.48768 14.5908 6.79275C14.8002 7.07254 14.988 7.36859 15.1558 7.68087C15.3689 8.07981 15.5458 8.50221 15.6829 8.94447C15.7154 9.05097 15.7461 9.15748 15.7732 9.26759H18.0188C18.4159 8.91017 18.9268 8.69536 19.4846 8.69536H26.5047V7.54007H19.4846C18.3961 7.54007 17.4285 8.09606 16.813 8.9553C16.7155 8.57442 16.5909 8.20436 16.4429 7.84875C17.2318 7.00575 18.3203 6.48407 19.2427 6.48407H26.5047V5.32878H19.5207C18.1397 5.32878 16.8761 5.88296 15.9158 6.79636C15.7407 6.50032 15.5476 6.21691 15.3382 5.94794C16.4935 4.83418 18.0242 4.15725 19.6994 4.15725H26.5047L26.5029 4.15544Z" fill="currentColor"></path></svg><span>Scaler School of Business</span></a><div class="nm-cta"><a class="nm-login" href="https://www.scaler.com/users/sign_in/">Log in</a><a class="nm-ghost" href="https://www.scaler.com/school-of-business/#brochure" data-lead="brochure">Brochure</a><a class="nm-apply" href="https://www.scaler.com/school-of-business/admission/" data-lead="apply">Apply now</a><button class="nm-x" type="button" aria-label="Close menu" data-nm-close><i></i></button></div></div>
+      <div class="nm-body">
+        <ul class="nm-list"><li><a class="nm-a" href="https://www.scaler.com/school-of-business/program/" data-no-lead data-i="0"><span>Programme</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a class="nm-a" href="https://www.scaler.com/school-of-business/admission/" data-no-lead data-i="1"><span>Admissions &amp; fees</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a class="nm-a" href="https://www.scaler.com/school-of-business/internship/" data-no-lead data-i="2"><span>Internships</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a class="nm-a" href="https://www.scaler.com/school-of-business/campus-life/" data-no-lead data-i="3"><span>Campus life</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a class="nm-a" href="https://www.scaler.com/school-of-business/events" data-no-lead data-i="4"><span>Events</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a class="nm-a" href="https://www.scaler.com/school-of-business/guide" data-no-lead data-i="5"><span>Guide</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a class="nm-a" href="https://interviewbit.typeform.com/career-planning/" data-no-lead data-i="6"><span>Career roadmap</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a class="nm-a" href="https://www.scaler.com/school-of-business/faq/" data-no-lead data-i="7"><span>FAQs</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li></ul>
+        <div class="nm-media" aria-hidden="true"><figure class="nm-im on" data-i="0"><img src="media/pg/t1.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><figcaption><b>Programme</b><span>18 months, five terms. Every term ends in a build.</span></figcaption></figure><figure class="nm-im" data-i="1"><img src="media/campus/arch.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><figcaption><b>Admissions &amp; fees</b><span>Eligibility, intakes, fees and scholarships.</span></figcaption></figure><figure class="nm-im" data-i="2"><img src="media/pillars/term3-students.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><figcaption><b>Internships</b><span>A 3 to 6 month internship inside the programme.</span></figcaption></figure><figure class="nm-im" data-i="3"><img src="media/campus/building.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 55%"><figcaption><b>Campus life</b><span>A residential campus in Bengaluru.</span></figcaption></figure><figure class="nm-im" data-i="4"><img src="media/pillars/lab-mentor-1400.webp" alt="" loading="lazy" decoding="async" style="object-position:60% 40%"><figcaption><b>Events</b><span>Free masterclasses and campus visits for applicants.</span></figcaption></figure><figure class="nm-im" data-i="5"><img src="media/campus/classroom.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 40%"><figcaption><b>Guide</b><span>Guides for applicants.</span></figcaption></figure><figure class="nm-im" data-i="6"><img src="media/pillars/term5-students.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><figcaption><b>Career roadmap</b><span>A short career-planning form.</span></figcaption></figure><figure class="nm-im" data-i="7"><img src="media/campus/cohort.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><figcaption><b>FAQs</b><span>What applicants ask most.</span></figcaption></figure></div>
+      </div>
+      <div class="nm-foot">
+        <nav class="nm-here" aria-label="On this page"><span>On this page</span><a href="#film">Overview</a><a href="#outcomes">Outcomes</a><a href="#programme">Programme</a><a href="#learn">How you learn</a><a href="#built">Ventures</a><a href="#faculty">Faculty</a><a href="#campus">Campus</a><a href="#team">Team</a><a href="#press">Press</a><a href="#admissions">Fees</a><a href="#faq">FAQ</a></nav>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mh" role="banner">
+  <a class="mh-mark" href="#top" aria-label="Back to top"><svg class="mh-shield" viewBox="0 0 29 40" aria-hidden="true"><path d="M0 0V25.0228C0 28.7396 2.3557 32.3516 7.00032 35.7561C10.1593 38.0721 13.2912 39.4747 13.4212 39.5325L14.4718 40L15.5224 39.5325C15.6541 39.4747 18.7842 38.0721 21.945 35.7561C26.5896 32.3498 28.9454 28.7396 28.9454 25.0228V0H0ZM28.1836 25.0246C28.1836 28.485 25.9326 31.8913 21.4956 35.146C18.4016 37.415 15.3437 38.7851 15.2137 38.8411L14.4718 39.1714L13.7299 38.8411C13.6017 38.7833 10.5438 37.415 7.44799 35.146C3.00916 31.8913 0.759962 28.4868 0.759962 25.0246V0.759962H28.1818V25.0228L28.1836 25.0246Z" fill="currentColor"></path><path d="M19.251 25.5066L16.2714 28.4872V20.7682H8.5955L11.5761 17.7875H19.251V25.5066Z" fill="#1D925B"></path><path d="M13.6141 26.9653H10.0723V23.4235H13.6141V26.9653Z" fill="#1D925B"></path><path d="M26.4069 10.6357V24.9143C26.4069 31.781 14.5216 37.0627 14.5216 37.0627C14.435 37.0241 2.63531 31.754 2.63527 24.9143V10.6357H26.4069ZM7.41691 20.7661V29.6207H16.2714L22.6633 23.2287V14.3742H13.8088L7.41691 20.7661Z" fill="#1D925B" fill-rule="evenodd" clip-rule="evenodd"></path><path d="M12.3653 8.95323C11.7515 8.09399 10.7822 7.53981 9.69547 7.53981H2.63558V8.6951H9.69547C10.2533 8.6951 10.7641 8.91171 11.1612 9.26733H12.5638C12.5025 9.15902 12.4375 9.05251 12.3653 8.95323Z" fill="currentColor"></path><path d="M14.5892 8.69695C14.434 8.33772 14.2444 7.99836 14.0242 7.68246C13.8003 7.35934 13.5458 7.06149 13.2624 6.79433C12.3039 5.88093 11.0403 5.32676 9.65937 5.32676H2.63558V6.48204H9.66117C10.8616 6.48204 11.9501 7.00373 12.7389 7.84853C13.0404 8.17165 13.2985 8.5399 13.5007 8.94425C13.553 9.04895 13.6 9.15726 13.6451 9.26737H14.8058C14.7444 9.07241 14.6722 8.88107 14.591 8.69695H14.5892Z" fill="currentColor"></path><path d="M26.5029 4.15544V3.00016H19.6976C17.7336 3.00016 15.9393 3.79983 14.589 5.11036C13.237 3.79983 11.4463 3.00016 9.48231 3.00016H2.63543V4.15544H9.48231C11.1575 4.15544 12.6864 4.83237 13.8417 5.94433C14.1125 6.20427 14.3634 6.48768 14.5908 6.79275C14.8002 7.07254 14.988 7.36859 15.1558 7.68087C15.3689 8.07981 15.5458 8.50221 15.6829 8.94447C15.7154 9.05097 15.7461 9.15748 15.7732 9.26759H18.0188C18.4159 8.91017 18.9268 8.69536 19.4846 8.69536H26.5047V7.54007H19.4846C18.3961 7.54007 17.4285 8.09606 16.813 8.9553C16.7155 8.57442 16.5909 8.20436 16.4429 7.84875C17.2318 7.00575 18.3203 6.48407 19.2427 6.48407H26.5047V5.32878H19.5207C18.1397 5.32878 16.8761 5.88296 15.9158 6.79636C15.7407 6.50032 15.5476 6.21691 15.3382 5.94794C16.4935 4.83418 18.0242 4.15725 19.6994 4.15725H26.5047L26.5029 4.15544Z" fill="currentColor"></path></svg></a>
+  <button class="mh-where" type="button" aria-haspopup="dialog" aria-controls="mx-list" aria-expanded="false"><b class="mh-name">Overview</b><span class="mh-sub"><span class="mh-k">01 / 11</span><span class="mh-s"></span></span><svg class="mh-chev" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5 6 7.5l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <a class="mh-apply" href="https://www.scaler.com/school-of-business/admission/" data-lead="apply">Apply</a>
+  <button class="mh-menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="ssb-sheet" data-open-sheet><i></i></button>
+  <span class="mh-pg" aria-hidden="true"><b></b></span>
+</div>
+<div class="mx" id="mx-list" aria-hidden="true">
+  <div class="mx-scrim" data-mx-close></div>
+  <div class="mx-panel" role="dialog" aria-modal="true" aria-labelledby="mx-h" tabindex="-1">
+    <div class="mx-head"><span class="mx-grab" aria-hidden="true"></span><p class="mx-h" id="mx-h">On this page</p><button class="mx-x" type="button" aria-label="Close" data-mx-close><i></i></button></div>
+    <nav class="mx-rows" aria-label="Sections"><a class="mx-row" href="#film" data-mx="0"><b>01</b><span><strong>Overview</strong><small>The campus film</small></span><i aria-hidden="true"></i></a><a class="mx-row" href="#outcomes" data-mx="1"><b>02</b><span><strong>Outcomes</strong><small>Where Cohort 1 and 2 work now</small></span><i aria-hidden="true"></i></a><a class="mx-row" href="#programme" data-mx="2"><b>03</b><span><strong>Programme</strong><small>18 months, five terms</small></span><i aria-hidden="true"></i></a><a class="mx-row" href="#learn" data-mx="3"><b>04</b><span><strong>How you learn</strong><small>AI, businesses, briefs, immersions, mentors</small></span><i aria-hidden="true"></i></a><a class="mx-row" href="#built" data-mx="4"><b>05</b><span><strong>Ventures</strong><small>Companies students built</small></span><i aria-hidden="true"></i></a><a class="mx-row" href="#faculty" data-mx="5"><b>06</b><span><strong>Faculty</strong><small>Who teaches and mentors</small></span><i aria-hidden="true"></i></a><a class="mx-row" href="#campus" data-mx="6"><b>07</b><span><strong>Campus</strong><small>Life in Bengaluru, student clubs</small></span><i aria-hidden="true"></i></a><a class="mx-row" href="#team" data-mx="7"><b>08</b><span><strong>Founding team</strong><small>The people who built SSB</small></span><i aria-hidden="true"></i></a><a class="mx-row" href="#press" data-mx="8"><b>09</b><span><strong>Press</strong><small>What the press has written</small></span><i aria-hidden="true"></i></a><a class="mx-row" href="#admissions" data-mx="9"><b>10</b><span><strong>Admissions and fees</strong><small>Eligibility, fees, scholarships</small></span><i aria-hidden="true"></i></a><a class="mx-row" href="#faq" data-mx="10"><b>11</b><span><strong>FAQ</strong><small>What applicants ask</small></span><i aria-hidden="true"></i></a></nav>
+    <div class="mx-cta"><a class="sh-apply" href="https://www.scaler.com/school-of-business/admission/" data-lead="apply">Apply now</a><a class="sh-ghost" href="https://www.scaler.com/school-of-business/#brochure" data-lead="brochure">Brochure</a></div>
+  </div>
+</div>
 <div class="sheet" id="ssb-sheet" aria-hidden="true">
   <div class="sheet-scrim" data-close-sheet></div>
   <div class="sheet-panel" role="dialog" aria-modal="true" aria-label="Menu" tabindex="-1">
@@ -1424,12 +2057,12 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
     </div>
     <p class="sheet-h sh-i">On this page</p>
     <div class="sheet-hooks sh-i">
-      <a href="#film">Overview</a><a href="#outcomes">Outcomes</a><a href="#programme">Programme</a><a href="#built">Ventures</a><a href="#faculty">Faculty</a><a href="#campus">Campus</a><a href="#admissions">Admissions &amp; fees</a><a href="#faq">FAQ</a>
+      <a href="#film">Overview</a><a href="#outcomes">Outcomes</a><a href="#programme">Programme</a><a href="#learn">How you learn</a><a href="#built">Ventures</a><a href="#faculty">Faculty</a><a href="#campus">Campus</a><a href="#team">Founding team</a><a href="#press">Press</a><a href="#admissions">Admissions &amp; fees</a><a href="#faq">FAQ</a>
     </div>
     <p class="sheet-h sh-i">Explore SSB</p>
     <nav class="sheet-links" aria-label="Scaler School of Business pages">
       <a class="sh-i" href="https://www.scaler.com/school-of-business/program/">Programme</a>
-      <a class="sh-i" href="https://www.scaler.com/school-of-business/admission/">Admissions &amp; fees</a>
+      <a class="sh-i" href="https://www.scaler.com/school-of-business/admission/" data-no-lead>Admissions &amp; fees</a>
       <a class="sh-i" href="https://www.scaler.com/school-of-business/internship/">Internships</a>
       <a class="sh-i" href="https://www.scaler.com/school-of-business/campus-life/">Campus life</a>
       <a class="sh-i" href="https://www.scaler.com/school-of-business/events">Events</a>
@@ -1454,8 +2087,8 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
           <div class="intro fade" style="--d:1.0">
             <p class="sub">Build startups &amp; AI products. No tech background required.</p>
             <div class="actions">
-              <a class="cta" href="#">Apply now <span class="orb"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-              <a class="cta cta-glass" href="#">Brochure <span class="orb"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+              <a class="cta" href="https://www.scaler.com/school-of-business/admission/" data-lead="apply">Apply now <span class="orb"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+              <a class="cta cta-glass" href="https://www.scaler.com/school-of-business/#brochure" data-lead="brochure">Brochure <span class="orb"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
             </div>
           </div>
         </div>
@@ -1507,7 +2140,7 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
           <div class="cap">
             <div class="num">Intake 2 closes 27 Dec 2026</div>
             <div class="lbl">Scholarships up to 100%</div>
-            <a class="go" href="#">Apply <span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+            <a class="go" href="https://www.scaler.com/school-of-business/admission/" data-lead="apply">Apply <span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
           </div>
         </div>
       </div>
@@ -1790,6 +2423,25 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
     </div>
   
   </section>
+<!-- Breaker (why): full-width video breaker with Nikhil Kamath's quote and two AI-workforce stats -->
+<section class="bk-sec bk-why" id="why" data-nav="dark" aria-labelledby="bk-why-t">
+  <div class="bk-slide is-on">
+    <div class="bk-media" style="--fx:28% 40%">
+      <video class="bk-v" muted playsinline loop preload="none" poster="media/breakers/kamath-clip.webp" data-src="https://ssb-school-concept.vercel.app/media/kamath-clip.mp4" aria-hidden="true"></video>
+    </div>
+    <div class="bk-in">
+      <div class="bk-copy">
+        <p class="sec-eyebrow">Why SSB</p>
+        <h2 class="bk-h" id="bk-why-t">Why the traditional MBA doesn’t work</h2>
+        <blockquote class="bk-q"><p>“If you’re 25 and going to an MBA college today, you must be some kind of idiot, if you ask me.”</p><footer>Nikhil Kamath, Co-founder, Zerodha</footer></blockquote>
+        <div class="bk-stats">
+          <div><b>60%</b><p>of MBA students say their own coursework isn’t built for an AI-first workforce</p><span class="bk-src"><img src="media/breakers/forbes.svg" alt="Forbes" height="18" loading="lazy">2026</span></div>
+          <div><b>62% more</b><p>pay for workers with AI skills than for peers in the same role without them</p><span class="bk-src"><img src="media/breakers/pwc.svg" alt="PwC" height="22" loading="lazy">2026</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 <div class="seam seam-grad" data-from="#050E09" data-to="#FBFAF7" aria-hidden="true"></div>
 <!-- Programme: five-term carousel (Lovable style) + term detail sheet -->
 <section class="pg-sec2" id="programme" data-nav="light" aria-labelledby="pg-h">
@@ -1911,6 +2563,157 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
     </div>
   </div>
 </section>
+<!-- How you learn: five pillars as stacked photo panels; a card per pillar with a sideways rail; logos float around it; 85% detail sheet; reel viewer. GENERATED by tools/pillars_data.py -->
+<section class="pl-sec" id="learn" data-nav="dark" aria-labelledby="pl-title">
+  <div class="pl-bar">
+    <div class="pl-head">
+      <p class="sec-eyebrow">How you learn</p>
+      <h2 class="pl-title" id="pl-title">Five ways SSB teaches business. <span>All of them by doing it.</span></h2>
+    </div>
+  </div>
+  <div class="pl-stack">
+    <article class="pl-panel" id="learn-ai" data-key="ai" data-sub="AI fluency" aria-labelledby="pl-t-ai">
+      <div class="pl-stage">
+        <img class="pl-bg" src="media/pillars/term4-lab-robotics.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 40%">
+        <div class="pl-fl" aria-hidden="false"><span class="pl-f pl-ft pl-ic" style="--x:9%;--y:16%;--mx:6%;--row:0" data-d="0.8"><img src="media/brands/openai/icon-dark.jpg" alt="OpenAI" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:22%;--y:30%;--mx:30%;--row:1" data-d="0.45"><img src="media/brands/anthropic/icon-dark.jpg" alt="Claude" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:12%;--y:52%;--mx:56%;--row:0" data-d="0.7"><img src="media/brands/gemini/icon-dark.png" alt="Gemini" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:25%;--y:70%;--mx:80%;--row:1" data-d="0.35"><img src="media/brands/lovable/icon-dark.jpg" alt="Lovable" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:8%;--y:84%;--mx:8%;--row:0" data-d="0.9"><img src="media/brands/elevenlabs/icon-dark.jpg" alt="ElevenLabs" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:76%;--y:14%;--mx:33%;--row:1" data-d="0.6"><img src="media/brands/n8n/icon-dark.jpg" alt="n8n" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:90%;--y:30%;--mx:58%;--row:0" data-d="0.4"><img src="media/brands/zapier/icon-dark.jpg" alt="Zapier" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:78%;--y:50%;--mx:82%;--row:1" data-d="0.85"><img src="media/brands/cursor/icon-dark.jpg" alt="Cursor" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:91%;--y:70%" data-d="0.5"><img src="media/brands/crewai/icon-dark.jpg" alt="CrewAI" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:74%;--y:86%" data-d="0.75"><img src="media/brands/perplexity/icon-dark.jpg" alt="Perplexity" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:31%;--y:10%" data-d="0.3"><img src="media/brands/heygen/icon-dark.jpg" alt="HeyGen" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:71%;--y:32%" data-d="0.3"><img src="media/brands/notion/icon-dark.jpg" alt="Notion" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-chip" style="--x:18%;--y:90%" data-d="0.55">3 hackathons</span></div>
+        <div class="pl-card">
+          <div class="pl-in">
+            <p class="pl-k"><b>01</b> / 05</p>
+            <h3 class="pl-t" id="pl-t-ai">AI fluency</h3>
+            <p class="pl-d">Ship an AI product every term. No coding background needed.</p>
+            <ul class="pl-n"><li><b>150 hrs</b><span>hands-on AI</span></li><li><b>25+</b><span>AI tools</span></li><li><b>5</b><span>AI products shipped</span></li></ul>
+            <div class="pl-rh"><span>Term by term</span><span class="pl-ar"><button type="button" class="pl-pv" aria-label="Previous"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="pl-nx" aria-label="Next"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4.5 2.5 8 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></div>
+          </div>
+          <div class="pl-rail"><button class="pl-it pl-reel" type="button" data-reel="ai" data-i="0" data-t="Vibe-coding hackathon" data-s="Term 1" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Vibe-coding hackathon"><img src="media/pillars/term1-lab.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Term 1</small>Vibe-coding hackathon</span></button><button class="pl-it pl-reel" type="button" data-reel="ai" data-i="1" data-t="AI voice agent" data-s="Term 2" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: AI voice agent"><img src="media/pillars/term2-lab-voice.webp" alt="" loading="lazy" decoding="async" style="object-position:42% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Term 2</small>AI voice agent</span></button><button class="pl-it pl-reel" type="button" data-reel="ai" data-i="2" data-t="Automate a business process" data-s="Term 3" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Automate a business process"><img src="media/pillars/term3-students.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Term 3</small>Automate a business process</span></button><button class="pl-it pl-reel" type="button" data-reel="ai" data-i="3" data-t="48-hour AI hackathon" data-s="Term 4" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: 48-hour AI hackathon"><img src="media/pillars/term4-lab-robotics.webp" alt="" loading="lazy" decoding="async" style="object-position:45% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Term 4</small>48-hour AI hackathon</span></button><button class="pl-it pl-reel" type="button" data-reel="ai" data-i="4" data-t="Capstone with real users" data-s="Term 5" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Capstone with real users"><img src="media/pillars/term5-students.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Term 5</small>Capstone with real users</span></button></div>
+          <div class="pl-in"><button class="pl-go" type="button" data-pl-open="ai">Explore AI fluency<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5 10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        </div>
+      </div>
+    </article>
+    <article class="pl-panel" id="learn-build" data-key="build" data-sub="Build businesses" aria-labelledby="pl-t-build">
+      <div class="pl-stage">
+        <img class="pl-bg" src="media/pillars/lab-build-1890.webp" alt="" loading="lazy" decoding="async" style="object-position:55% 45%">
+        <div class="pl-fl" aria-hidden="false"><span class="pl-f pl-ft pl-ic" style="--x:10%;--y:20%;--mx:8%;--row:0" data-d="0.8"><img src="media/brands/peakxv/icon-dark.jpg" alt="Peak XV" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:22%;--y:42%;--mx:30%;--row:1" data-d="0.45"><img src="media/brands/lightrock/icon-dark.jpg" alt="Lightrock" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-chip" style="--x:15%;--y:64%;--mx:52%;--row:0" data-d="0.65">₹50L offered by Anupam Mittal</span><span class="pl-f pl-fb pl-ic" style="--x:24%;--y:84%;--mx:8%;--row:0" data-d="0.9"><img src="media/brands/zomato/icon-dark.png" alt="Zomato" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:77%;--y:16%;--mx:30%;--row:1" data-d="0.55"><img src="media/brands/swiggy/icon-dark.jpg" alt="Swiggy" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-chip" style="--x:84%;--y:38%;--mx:56%;--row:0" data-d="0.4"><small>Gredo</small>₹1Cr+ ARR</span><span class="pl-f pl-dk pl-chip" style="--x:80%;--y:62%" data-d="0.75"><small>Pitch to VCs</small>Demo Day</span><span class="pl-f pl-dk pl-ic" style="--x:89%;--y:82%" data-d="0.5"><img src="media/brands/thewholetruth/icon-dark.jpg" alt="The Whole Truth" width="64" height="64" decoding="async"></span></div>
+        <div class="pl-card">
+          <div class="pl-in">
+            <p class="pl-k"><b>02</b> / 05</p>
+            <h3 class="pl-t" id="pl-t-build">Build businesses</h3>
+            <p class="pl-d">Build two real businesses with real money, then pitch one to VCs.</p>
+            <ul class="pl-n"><li><b>₹25K</b><span>D2C seed money</span></li><li><b>₹5L+</b><span>6-week revenue target</span></li><li><b>₹25L</b><span>funding pathway</span></li></ul>
+            <div class="pl-rh"><span>From the cohort</span><span class="pl-ar"><button type="button" class="pl-pv" aria-label="Previous"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="pl-nx" aria-label="Next"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4.5 2.5 8 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></div>
+          </div>
+          <div class="pl-rail"><button class="pl-it pl-reel" type="button" data-reel="build" data-i="0" data-t="D2C Startup Challenge" data-s="6 weeks" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: D2C Startup Challenge"><img src="media/pillars/d2c.webp" alt="" loading="lazy" decoding="async" style="object-position:62% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>6 weeks</small>D2C Startup Challenge</span></button><button class="pl-it pl-reel" type="button" data-reel="build" data-i="1" data-t="The Hustle Program" data-s="6 months" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: The Hustle Program"><img src="media/pillars/hustle.webp" alt="" loading="lazy" decoding="async" style="object-position:70% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>6 months</small>The Hustle Program</span></button><button class="pl-it pl-reel" type="button" data-reel="build" data-i="2" data-t="Hummusapiens: ₹50L offer" data-s="Cohort 1" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Hummusapiens: ₹50L offer"><img src="media/built/hummus.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Cohort 1</small>Hummusapiens: ₹50L offer</span></button><button class="pl-it pl-reel" type="button" data-reel="build" data-i="3" data-t="Gredo: ₹1Cr+ ARR" data-s="Cohort 1" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Gredo: ₹1Cr+ ARR"><img src="media/built/gredo.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Cohort 1</small>Gredo: ₹1Cr+ ARR</span></button><button class="pl-it pl-reel" type="button" data-reel="build" data-i="4" data-t="Dream Kit: 12,000+ students" data-s="Cohort 1" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Dream Kit: 12,000+ students"><img src="media/built/dreamkit.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Cohort 1</small>Dream Kit: 12,000+ students</span></button></div>
+          <div class="pl-in"><button class="pl-go" type="button" data-pl-open="build">Explore build businesses<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5 10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        </div>
+      </div>
+    </article>
+    <article class="pl-panel" id="learn-projects" data-key="projects" data-sub="Live projects" aria-labelledby="pl-t-projects">
+      <div class="pl-stage">
+        <img class="pl-bg" src="media/pillars/term3-students.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%">
+        <div class="pl-fl" aria-hidden="false"><span class="pl-f pl-ft pl-ic" style="--x:10%;--y:18%;--mx:8%;--row:0" data-d="0.8"><img src="media/brands/ajio/icon-dark.jpg" alt="AJIO" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-chip" style="--x:18%;--y:40%;--mx:30%;--row:1" data-d="0.5"><small>APAC plan</small>Mokobara</span><span class="pl-f pl-ft pl-ic" style="--x:9%;--y:62%;--mx:64%;--row:0" data-d="0.7"><img src="media/brands/practo/icon-dark.jpg" alt="Practo" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:24%;--y:82%;--mx:8%;--row:0" data-d="0.9"><img src="media/brands/meolaa/icon-dark.jpg" alt="Meolaa" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:78%;--y:18%;--mx:30%;--row:1" data-d="0.55"><img src="media/brands/stockgro/icon-dark.jpg" alt="StockGro" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-chip" style="--x:84%;--y:40%;--mx:56%;--row:0" data-d="0.4"><small>Go-to-market</small>Quenzy</span><span class="pl-f pl-dk pl-chip" style="--x:82%;--y:64%" data-d="0.75">Pitch to founders</span><span class="pl-f pl-dk pl-chip" style="--x:84%;--y:84%" data-d="0.5"><small>StockGro</small>Live market sim</span></div>
+        <div class="pl-card">
+          <div class="pl-in">
+            <p class="pl-k"><b>03</b> / 05</p>
+            <h3 class="pl-t" id="pl-t-projects">Live projects</h3>
+            <p class="pl-d">Work real briefs from real companies, then defend your plan to their founders.</p>
+            <ul class="pl-n"><li><b>6</b><span>company briefs</span></li><li><b>₹200Cr</b><span>business, APAC plan</span></li><li><b>1</b><span>stock-market sim</span></li></ul>
+            <div class="pl-rh"><span>The briefs</span><span class="pl-ar"><button type="button" class="pl-pv" aria-label="Previous"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="pl-nx" aria-label="Next"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4.5 2.5 8 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></div>
+          </div>
+          <div class="pl-rail"><button class="pl-it pl-tile" type="button" data-pl-open="projects" data-at="0" aria-label="Mokobara: International expansion"><img src="media/pillars/mokobara.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 60%"><span class="pl-cap"><small>International expansion</small>Mokobara</span></button><button class="pl-it pl-tile" type="button" data-pl-open="projects" data-at="1" aria-label="AJIO: Product teardown"><img src="media/pillars/ajio.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><span class="pl-cap"><small>Product teardown</small>AJIO</span></button><button class="pl-it pl-tile" type="button" data-pl-open="projects" data-at="2" aria-label="Practo: Healthcare growth"><img src="media/pillars/practo.webp" alt="" loading="lazy" decoding="async" style="object-position:40% 50%"><span class="pl-cap"><small>Healthcare growth</small>Practo</span></button><button class="pl-it pl-tile" type="button" data-pl-open="projects" data-at="3" aria-label="Meolaa: Launch strategy"><img src="media/pillars/meolaa.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><span class="pl-cap"><small>Launch strategy</small>Meolaa</span></button><button class="pl-it pl-tile" type="button" data-pl-open="projects" data-at="4" aria-label="Quenzy: Product-market fit"><img src="media/pillars/quenzy.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><span class="pl-cap"><small>Product-market fit</small>Quenzy</span></button><button class="pl-it pl-tile" type="button" data-pl-open="projects" data-at="5" aria-label="StockGro: Stockathon"><img src="media/pillars/stockgro.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 50%"><span class="pl-cap"><small>Stockathon</small>StockGro</span></button></div>
+          <div class="pl-in"><button class="pl-go" type="button" data-pl-open="projects">Explore live projects<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5 10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        </div>
+      </div>
+    </article>
+    <article class="pl-panel" id="learn-immersions" data-key="immersions" data-sub="Immersions" aria-labelledby="pl-t-immersions">
+      <div class="pl-stage">
+        <img class="pl-bg" src="media/pillars/domestic-immersions.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 45%">
+        <div class="pl-fl" aria-hidden="false"><span class="pl-f pl-ft pl-ic" style="--x:10%;--y:20%;--mx:8%;--row:0" data-d="0.8"><img src="media/brands/jio/icon-dark.png" alt="Jio" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:22%;--y:44%;--mx:30%;--row:1" data-d="0.45"><img src="media/brands/reliance/icon-dark.jpg" alt="Reliance" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-chip" style="--x:14%;--y:66%;--mx:52%;--row:0" data-d="0.65">Manufacturing floor</span><span class="pl-f pl-fb pl-chip" style="--x:18%;--y:86%;--mx:8%;--row:0" data-d="0.9">Quick-commerce ops</span><span class="pl-f pl-fb pl-chip" style="--x:82%;--y:16%;--mx:50%;--row:1" data-d="0.55">Fashion brand HQ</span><span class="pl-f pl-dk pl-chip" style="--x:84%;--y:40%" data-d="0.4"><small>Campaign</small>Jio Dhan Dhana Dhan</span><span class="pl-f pl-dk pl-ic" style="--x:90%;--y:64%" data-d="0.75"><img src="media/brands/jio/icon-dark.png" alt="Jio" width="64" height="64" decoding="async"></span></div>
+        <div class="pl-card">
+          <div class="pl-in">
+            <p class="pl-k"><b>04</b> / 05</p>
+            <h3 class="pl-t" id="pl-t-immersions">Immersions</h3>
+            <p class="pl-d">Learn where the work happens: factory floors, quick-commerce ops and a creative agency.</p>
+            <ul class="pl-n"><li><b>3</b><span>industry immersions</span></li><li><b>6 mo</b><span>creator track at Jio Creative Labs</span></li></ul>
+            <div class="pl-rh"><span>On the ground</span><span class="pl-ar"><button type="button" class="pl-pv" aria-label="Previous"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="pl-nx" aria-label="Next"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4.5 2.5 8 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></div>
+          </div>
+          <div class="pl-rail"><button class="pl-it pl-reel" type="button" data-reel="immersions" data-i="0" data-t="Quick-commerce backend" data-s="Immersion" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Quick-commerce backend"><img src="media/pillars/domestic-immersions.webp" alt="" loading="lazy" decoding="async" style="object-position:45% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Immersion</small>Quick-commerce backend</span></button><button class="pl-it pl-reel" type="button" data-reel="immersions" data-i="1" data-t="Jio Creative Labs" data-s="Creator track" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Jio Creative Labs"><img src="media/pillars/creator-preneur-track.webp" alt="" loading="lazy" decoding="async" style="object-position:30% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Creator track</small>Jio Creative Labs</span></button><button class="pl-it pl-reel" type="button" data-reel="immersions" data-i="2" data-t="Tanisha Singhal" data-s="Tech events" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Tanisha Singhal"><img src="media/pillars/tanisha-singhal.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 30%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Tech events</small>Tanisha Singhal</span></button><button class="pl-it pl-reel" type="button" data-reel="immersions" data-i="3" data-t="Pallavi O P" data-s="PCOS and weight loss" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Pallavi O P"><img src="media/pillars/pallavi-op.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 30%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>PCOS and weight loss</small>Pallavi O P</span></button><button class="pl-it pl-reel" type="button" data-reel="immersions" data-i="4" data-t="Shubham Singh" data-s="Bollywood x business" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Shubham Singh"><img src="media/pillars/shubham-singh.webp" alt="" loading="lazy" decoding="async" style="object-position:50% 30%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Bollywood x business</small>Shubham Singh</span></button></div>
+          <div class="pl-in"><button class="pl-go" type="button" data-pl-open="immersions">Explore immersions<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5 10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        </div>
+      </div>
+    </article>
+    <article class="pl-panel" id="learn-mentors" data-key="mentors" data-sub="Mentor sessions" aria-labelledby="pl-t-mentors">
+      <div class="pl-stage">
+        <img class="pl-bg" src="media/pillars/lab-mentor-1400.webp" alt="" loading="lazy" decoding="async" style="object-position:60% 40%">
+        <div class="pl-fl" aria-hidden="false"><span class="pl-f pl-ft pl-ic" style="--x:10%;--y:20%;--mx:8%;--row:0" data-d="0.8"><img src="media/brands/google/icon-dark.jpg" alt="Google" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:23%;--y:44%;--mx:30%;--row:1" data-d="0.45"><img src="media/brands/blinkit/icon-dark.jpg" alt="Blinkit" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-chip" style="--x:16%;--y:66%;--mx:40%;--row:0" data-d="0.65">Rejected by Google, built PhonePe</span><span class="pl-f pl-fb pl-ic" style="--x:24%;--y:86%;--mx:8%;--row:0" data-d="0.9"><img src="media/brands/phonepe/icon-dark.jpg" alt="PhonePe" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:77%;--y:16%;--mx:30%;--row:1" data-d="0.55"><img src="media/brands/openai/icon-dark.jpg" alt="OpenAI" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-chip" style="--x:84%;--y:40%;--mx:40%;--row:0" data-d="0.4">Creator of OpenAI’s first agent</span><span class="pl-f pl-dk pl-ic" style="--x:90%;--y:64%" data-d="0.75"><img src="media/brands/peakxv/icon-dark.jpg" alt="Peak XV" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-chip" style="--x:82%;--y:86%" data-d="0.5"><small>Yash Kumar</small>Commencement Day</span></div>
+        <div class="pl-card">
+          <div class="pl-in">
+            <p class="pl-k"><b>05</b> / 05</p>
+            <h3 class="pl-t" id="pl-t-mentors">Mentor sessions</h3>
+            <p class="pl-d">The people who built India’s best-known companies come to campus to teach how.</p>
+            <ul class="pl-n"><li><b>4</b><span>super mentor sessions</span></li><li><b>1</b><span>Commencement Day address</span></li></ul>
+            <div class="pl-rh"><span>The sessions</span><span class="pl-ar"><button type="button" class="pl-pv" aria-label="Previous"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="pl-nx" aria-label="Next"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4.5 2.5 8 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></div>
+          </div>
+          <div class="pl-rail"><button class="pl-it pl-reel" type="button" data-reel="mentors" data-i="0" data-t="Rajan Anandan" data-s="Ex-MD SEA, Google" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Rajan Anandan"><img src="media/pillars/rajan-anandan.webp" alt="" loading="lazy" decoding="async" style="object-position:78% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Ex-MD SEA, Google</small>Rajan Anandan</span></button><button class="pl-it pl-reel" type="button" data-reel="mentors" data-i="1" data-t="Jacob Singh" data-s="Ex-CTO, Blinkit" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Jacob Singh"><img src="media/pillars/jacob-singh.webp" alt="" loading="lazy" decoding="async" style="object-position:18% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Ex-CTO, Blinkit</small>Jacob Singh</span></button><button class="pl-it pl-reel" type="button" data-reel="mentors" data-i="2" data-t="Rahul Chari" data-s="Co-founder, PhonePe" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Rahul Chari"><img src="media/pillars/rahul-chari.webp" alt="" loading="lazy" decoding="async" style="object-position:42% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>Co-founder, PhonePe</small>Rahul Chari</span></button><button class="pl-it pl-reel" type="button" data-reel="mentors" data-i="3" data-t="Yash Kumar" data-s="OpenAI" data-src="https://ssb-school-concept.vercel.app/media/campus-film.mp4" aria-label="Play reel: Yash Kumar"><img src="media/pillars/yash-kumar.webp" alt="" loading="lazy" decoding="async" style="object-position:30% 50%"><span class="pl-play"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 2.2v7.6L9.8 6z" fill="currentColor"/></svg></span><span class="pl-cap"><small>OpenAI</small>Yash Kumar</span></button></div>
+          <div class="pl-in"><button class="pl-go" type="button" data-pl-open="mentors">Explore mentor sessions<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5 10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        </div>
+      </div>
+    </article>
+  </div>
+  <div class="pl-dock"><nav class="pl-idx" aria-label="Pillars"><a href="#learn-ai" data-i="0"><b>01</b>AI fluency</a><a href="#learn-build" data-i="1"><b>02</b>Build businesses</a><a href="#learn-projects" data-i="2"><b>03</b>Live projects</a><a href="#learn-immersions" data-i="3"><b>04</b>Immersions</a><a href="#learn-mentors" data-i="4"><b>05</b>Mentor sessions</a></nav></div>
+  
+    <template id="pl-tpl-ai" data-n="01 / 05" data-name="AI fluency" data-bg="media/pillars/term4-lab-robotics.webp" data-fx="50% 40%" data-next="build" data-next-name="Build businesses">
+      <p class="pd-lead">AI runs through every term, from using it to work faster to building agents that do the work. No coding background is needed.</p>
+      <ul class="pd-stats"><li><b>150 hrs</b><span>of hands-on AI</span></li><li><b>25+</b><span>AI tools</span></li><li><b>5</b><span>AI products shipped</span></li><li><b>3</b><span>hackathons</span></li></ul>
+      <section class="pd-g"><h3 class="pd-gh">Term by term</h3><ul><li class="pd-row"><img src="media/pillars/term1-lab.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Term 1</p><h4>Work smarter with AI</h4><p class="pd-rb">Use AI to research, write, analyse and present faster, then build your first app just by describing it.</p><p class="pd-out">Vibe Coding Hackathon, e.g. a Splitwise-style expense splitter</p><p class="pd-tools"><span>Tools</span>ChatGPT, Claude, Gemini, Perplexity, NotebookLM, Lovable</p></div></li><li class="pd-row"><img src="media/pillars/term2-lab-voice.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Term 2</p><h4>Create with AI</h4><p class="pd-rb">Build AI that can speak, see, listen and generate images and video, from a support voice bot to product demos.</p><p class="pd-out">AI Agent Hackathon, e.g. a language-learning voice assistant</p><p class="pd-tools"><span>Tools</span>ElevenLabs, Vapi, Midjourney, HeyGen</p></div></li><li class="pd-row"><img src="media/pillars/term3-students.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Term 3</p><h4>Automate with AI</h4><p class="pd-rb">Connect everyday tools so that repetitive work in sales, marketing and operations runs on its own.</p><p class="pd-out">An automation that runs a real business process, e.g. a case-interview practice tool</p><p class="pd-tools"><span>Tools</span>Zapier, n8n, Make, Airtable, Notion</p></div></li><li class="pd-row"><img src="media/pillars/term4-lab-robotics.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Term 4</p><h4>Build AI agents</h4><p class="pd-rb">Build agents that research, decide and complete tasks on their own, like a digital teammate.</p><p class="pd-out">48-Hour AI Hackathon, e.g. a negotiation-training AI coach</p><p class="pd-tools"><span>Tools</span>Relevance AI, CrewAI, Hugging Face, Ollama</p></div></li><li class="pd-row"><img src="media/pillars/term5-students.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Term 5</p><h4>Scale AI products</h4><p class="pd-rb">Learn where AI creates real value in a business, how to price it and build its ROI case, and take it to market.</p><p class="pd-out">A capstone launched to real users with a go-to-market plan</p><p class="pd-tools"><span>Tools</span>Julius AI, Microsoft Copilot, Cursor</p></div></li></ul></section>
+      
+    </template>
+    <template id="pl-tpl-build" data-n="02 / 05" data-name="Build businesses" data-bg="media/pillars/lab-build-1890.webp" data-fx="55% 45%" data-next="projects" data-next-name="Live projects">
+      <p class="pd-lead">Two businesses, both with real money and real customers. The second one is pitched to investors on Demo Day.</p>
+      <ul class="pd-stats"><li><b>₹25K</b><span>D2C seed money</span></li><li><b>₹5L+</b><span>D2C revenue target</span></li><li><b>₹50K</b><span>Hustle seed money</span></li><li><b>₹25L</b><span>funding pathway</span></li></ul>
+      <section class="pd-g"><h3 class="pd-gh">The two builds</h3><ul><li class="pd-row"><img src="media/pillars/d2c.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">6 weeks</p><h4>D2C Startup Challenge</h4><p class="pd-rb">Take a brand from zero to its first customers: sourcing, branding, packaging, pricing and selling. Teams get ₹25,000 in startup funding and target ₹5L+ in revenue.</p><p class="pd-out">Working capital grows as teams hit revenue milestones</p></div></li><li class="pd-row"><img src="media/pillars/hustle.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">6 months</p><h4>The Hustle Program</h4><p class="pd-rb">Build a business from MVP to revenue to a founder-ready pitch, with ₹50,000 to start and a pathway to funding of up to ₹25L.</p><p class="pd-out">Backed by Lightrock, Peak XV and Sidhant Goyal</p></div></li></ul></section><section class="pd-g"><h3 class="pd-gh">What Cohort 1 built</h3><ul><li class="pd-row"><img src="media/built/hummus.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Healthy snacking</p><h4>Hummusapiens</h4><p class="pd-rb">Pitched to Shark Tank India judge Anupam Mittal on campus.</p><p class="pd-out">₹50L offered by Anupam Mittal</p></div></li><li class="pd-row"><img src="media/built/gredo.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Food-tech</p><h4>Gredo</h4><p class="pd-rb">A protein-food brand live on Zomato and Swiggy, with vending machines across Bangalore.</p><p class="pd-out">₹1Cr+ ARR</p></div></li><li class="pd-row"><img src="media/built/dreamkit.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">STEAM toys</p><h4>Dream Kit</h4><p class="pd-rb">A homegrown STEAM toy brand that teaches science through play.</p><p class="pd-out">12,000+ students across schools</p></div></li></ul></section>
+      <a class="pd-link" href="#built" data-pd-jump>See every company Cohort 1 built<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5 10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </template>
+    <template id="pl-tpl-projects" data-n="03 / 05" data-name="Live projects" data-bg="media/pillars/term3-students.webp" data-fx="50% 50%" data-next="immersions" data-next-name="Immersions">
+      <p class="pd-lead">Each brief comes from a real company. Teams work it with founders and operators, then present and defend their recommendation.</p>
+      <ul class="pd-stats"><li><b>6</b><span>company briefs</span></li><li><b>₹200Cr</b><span>Mokobara, APAC plan</span></li><li><b>1</b><span>live market simulation</span></li></ul>
+      <section class="pd-g"><h3 class="pd-gh">The briefs</h3><ul><li class="pd-row"><img src="media/pillars/mokobara.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Mokobara</p><h4>International expansion</h4><p class="pd-rb">Design the APAC strategy for a ₹200Cr business and pitch it to the founders.</p></div></li><li class="pd-row"><img src="media/pillars/ajio.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">AJIO</p><h4>Product teardown</h4><p class="pd-rb">Map conversion friction from discovery and search to the product page and checkout.</p></div></li><li class="pd-row"><img src="media/pillars/practo.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Practo</p><h4>Healthcare growth</h4><p class="pd-rb">Grow healthcare GMV across primary, secondary and tertiary care.</p></div></li><li class="pd-row"><img src="media/pillars/meolaa.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Meolaa</p><h4>Launch strategy</h4><p class="pd-rb">Build onboarding flows, brand campaigns and an app-launch roadmap.</p></div></li><li class="pd-row"><img src="media/pillars/quenzy.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Quenzy</p><h4>Product-market fit</h4><p class="pd-rb">Build a PMF and go-to-market strategy across culture, distribution and positioning.</p></div></li><li class="pd-row"><img src="media/pillars/stockgro.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">StockGro</p><h4>Stockathon</h4><p class="pd-rb">Trade in a live mock-market simulation under real market conditions.</p></div></li></ul></section>
+      
+    </template>
+    <template id="pl-tpl-immersions" data-n="04 / 05" data-name="Immersions" data-bg="media/pillars/domestic-immersions.webp" data-fx="50% 45%" data-next="mentors" data-next-name="Mentor sessions">
+      <p class="pd-lead">Three domestic immersions put you inside working businesses. The creator-preneur track puts you inside Reliance’s creative agency for six months.</p>
+      <ul class="pd-stats"><li><b>3</b><span>domestic immersions</span></li><li><b>6 mo</b><span>at Jio Creative Labs</span></li></ul>
+      <section class="pd-g"><h3 class="pd-gh">The immersions</h3><ul><li class="pd-row"><img src="media/pillars/domestic-immersions.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Immersion</p><h4>3 domestic immersions</h4><p class="pd-rb">Across industries: manufacturing floors, quick-commerce backend ops and a fashion brand headquarters.</p></div></li><li class="pd-row"><img src="media/pillars/creator-preneur-track.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Creator track</p><h4>Creator-preneur track</h4><p class="pd-rb">6 months inside Reliance’s Jio Creative Labs, on campaigns like Jio Dhan Dhana Dhan.</p></div></li></ul></section><section class="pd-g"><h3 class="pd-gh">Creators from the track</h3><ul><li class="pd-row"><img src="media/pillars/tanisha-singhal.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Creator</p><h4>Tanisha Singhal</h4><p class="pd-rb">Tech events and resources.</p></div></li><li class="pd-row"><img src="media/pillars/pallavi-op.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Creator</p><h4>Pallavi O P</h4><p class="pd-rb">PCOS and weight loss.</p></div></li><li class="pd-row"><img src="media/pillars/shubham-singh.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Creator</p><h4>Shubham Singh</h4><p class="pd-rb">Bollywood x business.</p></div></li></ul></section>
+      
+    </template>
+    <template id="pl-tpl-mentors" data-n="05 / 05" data-name="Mentor sessions" data-bg="media/pillars/lab-mentor-1400.webp" data-fx="60% 40%" data-next="ai" data-next-name="AI fluency">
+      <p class="pd-lead">Super mentor sessions bring founders and operators to campus to share how they built what they built.</p>
+      <ul class="pd-stats"><li><b>4</b><span>super mentor sessions</span></li><li><b>1</b><span>Commencement Day address</span></li></ul>
+      <section class="pd-g"><h3 class="pd-gh">The sessions</h3><ul><li class="pd-row"><img src="media/pillars/rajan-anandan.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Ex-MD SEA, Google</p><h4>Rajan Anandan</h4><p class="pd-rb">On striving for excellence, learning from failure and staying hungry.</p></div></li><li class="pd-row"><img src="media/pillars/jacob-singh.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Ex-CTO, Blinkit</p><h4>Jacob Singh</h4><p class="pd-rb">On tech leadership and product thinking at India’s largest quick-commerce company.</p></div></li><li class="pd-row"><img src="media/pillars/rahul-chari.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Co-founder, PhonePe</p><h4>Rahul Chari</h4><p class="pd-rb">Rejected by Google, he went on to build India’s largest UPI app.</p></div></li><li class="pd-row"><img src="media/pillars/yash-kumar.webp" alt="" loading="lazy" decoding="async"><div><p class="pd-rk">Lead Engineer, OpenAI</p><h4>Yash Kumar</h4><p class="pd-rb">The creator of OpenAI’s first agent addressed students on Commencement Day.</p></div></li></ul></section>
+      
+    </template>
+  <div class="pl-dlg" id="pl-dlg" role="dialog" aria-modal="true" aria-labelledby="pl-dlg-t" aria-hidden="true">
+    <div class="pl-dlg-scrim" data-pl-close></div>
+    <div class="pl-dlg-box">
+      <div class="pl-dlg-media"><img alt="" decoding="async"></div>
+      <div class="pl-dlg-body">
+        <div class="pl-dlg-head"><span class="pl-dlg-grab" aria-hidden="true"></span><p class="pl-k pl-dlg-n"></p><h2 class="pl-dlg-t" id="pl-dlg-t"></h2><button class="pl-dlg-x" type="button" aria-label="Close" data-pl-close><i></i></button></div>
+        <div class="pl-dlg-c"></div>
+        <div class="pl-dlg-foot"><button class="pl-dlg-next" type="button"></button><a class="pl-dlg-apply" href="https://www.scaler.com/school-of-business/admission/" data-lead="apply">Apply now</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="pl-rv" id="pl-rv" role="dialog" aria-modal="true" aria-label="Reel" aria-hidden="true">
+    <div class="pl-rv-scrim" data-rv-close></div>
+    <div class="pl-rv-frame">
+      <div class="pl-rv-bars"></div>
+      <video playsinline loop preload="none"></video>
+      <button class="pl-rv-zone pl-rv-prev" type="button" aria-label="Previous reel"></button>
+      <button class="pl-rv-zone pl-rv-next" type="button" aria-label="Next reel"></button>
+      <div class="pl-rv-cap"><small></small><b></b></div>
+      <button class="pl-rv-snd" type="button" aria-pressed="true">Sound on</button>
+      <button class="pl-rv-x" type="button" aria-label="Close reel" data-rv-close><i></i></button>
+    </div>
+  </div>
+</section>
 <!-- Built at SSB: full-bleed company showcase, tabs inside the image, hotspots -->
 <section class="bs-sec" id="built" data-nav="dark" aria-labelledby="bs-title">
   <div class="bs-wrap">
@@ -2021,6 +2824,42 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
     </div>
   </div>
 </section>
+<!-- Breaker (voices): full-width video breaker, two slides (Anupam Mittal, Ankur Warikoo), controls at the bottom -->
+<section class="bk-sec bk-voices" id="voices" data-nav="dark" aria-roledescription="carousel" aria-label="Founders and investors on SSB">
+  <div class="bk-slides">
+    <div class="bk-slide is-on" aria-roledescription="slide" aria-label="1 of 2">
+      <div class="bk-media" style="--fx:22% 40%">
+        <video class="bk-v" muted playsinline loop preload="none" poster="media/breakers/mittal-band.webp" data-src="https://ssb-school-concept.vercel.app/media/mittal-band.mp4" aria-hidden="true"></video>
+      </div>
+      <div class="bk-in">
+        <div class="bk-copy">
+          <p class="sec-eyebrow">Founders and investors have noticed</p>
+          <p class="bk-big">In July 2026, Anupam Mittal heard four startups our students built, and offered ₹50 lakh to back one of them, Hummusapiens.</p>
+          <div class="bk-who"><span><b>Anupam Mittal</b><small>Founder and CEO, Shaadi.com · Shark Tank India judge</small></span><img src="media/breakers/shaadi.svg" alt="Shaadi.com" height="26" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+    <div class="bk-slide" aria-roledescription="slide" aria-label="2 of 2" aria-hidden="true">
+      <div class="bk-media" style="--fx:30% 35%">
+        <video class="bk-v" muted playsinline loop preload="none" poster="media/breakers/warikoo-band.webp" data-src="https://ssb-school-concept.vercel.app/media/warikoo-band.mp4" aria-hidden="true"></video>
+      </div>
+      <div class="bk-in">
+        <div class="bk-copy">
+          <p class="sec-eyebrow">Founders and investors have noticed</p>
+          <p class="bk-big">Ankur Warikoo handed our graduates their degrees, and one line: “Don’t get intellectually comfortable.”</p>
+          <div class="bk-who"><span><b>Ankur Warikoo</b><small>Founder, WebVeda · Author, Do Epic Shit</small></span><img src="media/breakers/webveda.svg" alt="WebVeda" height="20" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bk-ctlwrap">
+    <div class="bk-ctl"><div class="bk-ctl-in">
+      <button class="bk-btn" type="button" data-step="-1" aria-label="Previous"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="bk-bars"><button type="button" aria-label="Anupam Mittal"><i></i></button><button type="button" aria-label="Ankur Warikoo"><i></i></button></div>
+      <button class="bk-btn" type="button" data-step="1" aria-label="Next"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4.5 2.5 8 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div></div>
+  </div>
+</section>
 <div class="seam seam-px" data-from="#050E09" data-to="#FBFAF7" aria-hidden="true"></div>
 <!-- Faculty and mentors: name list with brand monograms, sticky portrait, topic filter -->
 <section class="fx-sec" id="faculty" data-nav="light" aria-labelledby="fx-title">
@@ -2078,8 +2917,75 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
       </div>
     </div>
   </div>
+  <div class="cl-clubs" role="region" aria-labelledby="cl-clubs-h">
+    <div class="cl-frame cl-clubs-head"><h3 id="cl-clubs-h">Student clubs, run by students.</h3></div>
+    <ul class="cl-clubs-row"><li class="cl-club"><span class="cl-ck">Marketing</span><b>Marketing Club</b><p>Branding sessions and case competitions with founders like Meolaa’s Ishita Sawant.</p></li><li class="cl-club"><span class="cl-ck">Consulting</span><b>Consulting Club</b><p>SSB’s own case book, and sessions with ex-McKinsey and BCG consultants.</p></li><li class="cl-club"><span class="cl-ck">Finance</span><b>Finance and Investing Club</b><p>Stock pitches, valuation sprints and a paper portfolio the club runs together.</p></li><li class="cl-club"><span class="cl-ck">Product</span><b>Product Club</b><p>Teardowns of apps you use every day, and product sense mock interviews.</p></li><li class="cl-club"><span class="cl-ck">Startups</span><b>Entrepreneurship Cell</b><p>Founder fireside chats, idea nights and office hours for student startups.</p></li><li class="cl-club"><span class="cl-ck">Speaking</span><b>Debate and Public Speaking</b><p>Weekly debates and pitch practice before Demo Day.</p></li><li class="cl-club"><span class="cl-ck">Creators</span><b>Content and Creators</b><p>Reels, newsletters and podcasts made by students, for students.</p></li><li class="cl-club"><span class="cl-ck">Sports</span><b>Sports Club</b><p>Turf football, cricket and badminton leagues on campus.</p></li><li class="cl-club"><span class="cl-ck">Culture</span><b>Music and Arts</b><p>Open mics, jam nights and the annual cultural fest.</p></li><li class="cl-club"><span class="cl-ck">Impact</span><b>Social Impact</b><p>Weekend projects with NGOs and community partners in Bengaluru.</p></li></ul>
+  </div>
+</section>
+<!-- Founding team: the people who built SSB, portrait grid (rail on phones) with each person's past company -->
+<section class="lt-sec" id="team" data-nav="light" aria-labelledby="lt-title">
+  <div class="lt-wrap">
+    <div class="lt-head">
+      <div>
+        <p class="sec-eyebrow">Founding team</p>
+        <h2 class="lt-title" id="lt-title">The team that built SSB. <span>From Meta, Uber, McKinsey, BCG, Bain and Google.</span></h2>
+      </div>
+      <p class="lt-side">Founded in 2024 by Anshuman Singh and Abhimanyu Saxena, the founders of Scaler.</p>
+    </div>
+    <ul class="lt-grid">
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/anshuman-singh.webp" alt="Anshuman Singh" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-meta.svg" alt="" loading="lazy"></span><figcaption><b>Anshuman Singh</b><span>Co-founder</span><small>Ex-Meta</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/abhimanyu-saxena.webp" alt="Abhimanyu Saxena" width="640" height="800" loading="lazy" decoding="async"><figcaption><b>Abhimanyu Saxena</b><span>Co-founder</span><small>Ex-Fab.com</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/vidit-jain.webp" alt="Vidit Jain" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-mckinsey.svg" alt="" loading="lazy"></span><figcaption><b>Vidit Jain</b><span>SVP and Head, Scaler Schools</span><small>Ex-McKinsey, ISB</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/bhavik-rathod.webp" alt="Bhavik Rathod" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-uber.svg" alt="" loading="lazy"></span><figcaption><b>Bhavik Rathod</b><span>Founding leader, Uber India</span><small>Ex-Uber</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/sucheta-mahapatra.webp" alt="Sucheta Mahapatra" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-bain.svg" alt="" loading="lazy"></span><figcaption><b>Sucheta Mahapatra</b><span>VP Business, SSB</span><small>Ex-Bain, Airtel</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/adhiraj-arora.webp" alt="Adhiraj Arora" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-bcg.svg" alt="" loading="lazy"></span><figcaption><b>Adhiraj Arora</b><span>Programme Director</span><small>Ex-BCG, ISB</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/manish-pansari.webp" alt="Manish Pansari" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-kearney.svg" alt="" loading="lazy"></span><figcaption><b>Manish Pansari</b><span>Director, Business Ops, SSB</span><small>Ex-Myntra, Kearney</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/ratnakar-reddy.webp" alt="Ratnakar Reddy" width="640" height="800" loading="lazy" decoding="async"><span class="lt-lg"><img src="media/team/logo-google.svg" alt="" loading="lazy"></span><figcaption><b>Ratnakar Reddy</b><span>Enterprise Head</span><small>Ex-Google, Microsoft</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/rahul-karthikeyan.webp" alt="Rahul Karthikeyan" width="640" height="800" loading="lazy" decoding="async"><figcaption><b>Rahul Karthikeyan</b><span>CMO, Scaler</span><small>Ex-upGrad</small></figcaption></figure></li>
+      <li class="lt-card"><figure><img class="lt-ph" src="media/team/amar-srivastava.webp" alt="Amar Srivastava" width="640" height="800" loading="lazy" decoding="async"><figcaption><b>Amar Srivastava</b><span>CEO, Scaler Online Business</span></figcaption></figure></li>
+    </ul>
+  </div>
 </section>
 <div class="seam seam-px" data-from="#FBFAF7" data-to="#050E09" aria-hidden="true"></div>
+<!-- Press: what the press has written about SSB, four article cards (rail on phones) -->
+<section class="pr-sec" id="press" data-nav="dark" aria-labelledby="pr-title">
+  <div class="pr-wrap">
+    <div class="pr-head">
+      <p class="sec-eyebrow">In the press</p>
+      <h2 class="pr-title" id="pr-title">What the press has written about SSB.</h2>
+    </div>
+    <ul class="pr-grid">
+      <li><a class="pr-card" href="https://www.thehindubusinessline.com/news/education/scaler-school-of-business-adopts-practice-led-mba-model/article70893572.ece" target="_blank" rel="noopener noreferrer">
+        <span class="pr-lg"><img src="media/press/businessline.svg" alt="The Hindu BusinessLine" height="20" loading="lazy"></span>
+        <time datetime="2026-04-22">22 Apr 2026</time>
+        <h3>Scaler School of Business adopts practice-led MBA model</h3>
+        <p>Student teams generated over ₹15 lakh in six weeks through D2C businesses.</p>
+        <span class="pr-go">Read on BusinessLine<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3.5 8.5 8.5 3.5M4 3.5h4.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a></li>
+      <li><a class="pr-card" href="https://www.tribuneindia.com/news/business/anupam-mittal-says-50-lakh-mein-kitna-equity-dega-after-meeting-startups-built-by-scaler-school-of-business-students" target="_blank" rel="noopener noreferrer">
+        <span class="pr-lg"><img src="media/press/tribune.png" alt="The Tribune" height="24" loading="lazy"></span>
+        <time datetime="2026-07-29">29 Jul 2026</time>
+        <h3>Anupam Mittal asks “50 lakh mein kitna equity dega?” after meeting SSB student startups</h3>
+        <p>He reviewed Hummusapiens, Gredo, GradeSense and Dream Kit on campus.</p>
+        <span class="pr-go">Read on The Tribune<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3.5 8.5 8.5 3.5M4 3.5h4.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a></li>
+      <li><a class="pr-card" href="https://inshorts.com/en/news/scaler-school-of-business-founding-cohort-achieves--18-lpa-average-ctc-1778474412054" target="_blank" rel="noopener noreferrer">
+        <span class="pr-lg"><img src="media/press/inshorts.png" alt="Inshorts" height="22" loading="lazy"></span>
+        <time datetime="2026-05-11">11 May 2026</time>
+        <h3>Scaler School of Business founding cohort achieves ₹18 LPA average CTC</h3>
+        <p>A 3.2x average hike, with hiring partners including Blinkit, Urban Company and Scapia.</p>
+        <span class="pr-go">Read on Inshorts<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3.5 8.5 8.5 3.5M4 3.5h4.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a></li>
+      <li><a class="pr-card" href="https://www.outlookbusiness.com/corporate/scaler-diversifies-its-educational-offering-launches-scaler-school-of-business" target="_blank" rel="noopener noreferrer">
+        <span class="pr-lg"><img src="media/press/outlookbusiness.png" alt="Outlook Business" height="30" loading="lazy"></span>
+        <time datetime="2024-05-01">1 May 2024</time>
+        <h3>Scaler diversifies its educational offering, launches Scaler School of Business</h3>
+        <p>The launch of the full-time PGP in Management and Technology in Bengaluru.</p>
+        <span class="pr-go">Read on Outlook Business<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3.5 8.5 8.5 3.5M4 3.5h4.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a></li>
+    </ul>
+  </div>
+</section>
 <!-- Admissions & fees: sticky intro with eligibility and CTAs; process and fee cards; scholarships (sheet per scholarship, #scholarship-*) with the Impact Foundation backers -->
 <section class="ad-sec" id="admissions" data-nav="dark" aria-labelledby="ad-title">
   <div class="ad-wrap">
@@ -2186,7 +3092,7 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
         <p class="ft-tag">For people who build.</p>
         <div class="ft-actions">
           <a class="ft-btn ft-btn--pri" href="https://www.scaler.com/school-of-business/admission/">Apply now<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true"><path d="M204,64V168a12,12,0,0,1-24,0V93L72.49,200.49a12,12,0,0,1-17-17L163,76H88a12,12,0,0,1,0-24H192A12,12,0,0,1,204,64Z"/></svg></a>
-          <a class="ft-btn ft-btn--sec" href="https://www.scaler.com/school-of-business/">Download Brochure<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true"><path d="M204,64V168a12,12,0,0,1-24,0V93L72.49,200.49a12,12,0,0,1-17-17L163,76H88a12,12,0,0,1,0-24H192A12,12,0,0,1,204,64Z"/></svg></a>
+          <a class="ft-btn ft-btn--sec" href="https://www.scaler.com/school-of-business/#brochure" data-lead="brochure">Download Brochure<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true"><path d="M204,64V168a12,12,0,0,1-24,0V93L72.49,200.49a12,12,0,0,1-17-17L163,76H88a12,12,0,0,1,0-24H192A12,12,0,0,1,204,64Z"/></svg></a>
         </div>
       </div>
       <nav class="ft-links" aria-label="Footer">
@@ -2222,6 +3128,50 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
     <p class="ft-draft">Draft footnotes: sources and methodology to be confirmed with the placement team before launch.</p>
   </div>
 </footer>
+<!-- Lead modal: apply / brochure / callback / exit intent. Photo carousel with proof on the left, form on the right (85% sheet on phones) -->
+<div class="ld" id="ld" role="dialog" aria-modal="true" aria-labelledby="ld-t" aria-hidden="true" data-v="apply">
+  <div class="ld-scrim" data-ld-close></div>
+  <div class="ld-box">
+    <div class="ld-car" aria-roledescription="carousel" aria-label="Proof from SSB">
+      <figure class="ld-sl is-on" aria-roledescription="slide" aria-label="1 of 3">
+        <img src="media/campus/cohort.webp" alt="" decoding="async" loading="lazy">
+        <figcaption><b>₹25.7L</b><span>Top-quartile average CTC, Cohort 1</span></figcaption>
+      </figure>
+      <figure class="ld-sl" aria-roledescription="slide" aria-label="2 of 3">
+        <img src="media/built/hummus.webp" alt="" decoding="async" loading="lazy">
+        <figcaption><b>₹50L</b><span>Offered by Shark Tank India judge Anupam Mittal to Hummusapiens, built at SSB</span></figcaption>
+      </figure>
+      <figure class="ld-sl" aria-roledescription="slide" aria-label="3 of 3">
+        <img src="media/pillars/lab-mentor-1400.webp" alt="" decoding="async" loading="lazy">
+        <figcaption><b>3.2x</b><span>Average salary hike vs. before SSB</span></figcaption>
+      </figure>
+      <div class="ld-bars"><button type="button" aria-label="Show slide 1"><i></i></button><button type="button" aria-label="Show slide 2"><i></i></button><button type="button" aria-label="Show slide 3"><i></i></button></div>
+    </div>
+    <button class="ld-x" type="button" aria-label="Close" data-ld-close><i></i></button>
+    <span class="ld-grab" aria-hidden="true"></span>
+    <div class="ld-main">
+      <div class="ld-body">
+        <p class="ld-k"><span class="dot"></span>Admissions open · Intake 2 closes 27 Dec 2026</p>
+        <h2 class="ld-t" id="ld-t">Start your application</h2>
+        <p class="ld-sub">Tell us a little about you. An admissions advisor will reach out about next steps.</p>
+        <form class="ld-form" novalidate>
+          <label class="ld-f"><span>Full name</span><input name="name" type="text" autocomplete="name" required placeholder="Your name"><em>Enter your name</em></label>
+          <label class="ld-f"><span>Phone</span><span class="ld-ph"><i>+91</i><input name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" required placeholder="10-digit mobile number" maxlength="10"></span><em>Enter a 10-digit mobile number</em></label>
+          <label class="ld-f"><span>Email</span><input name="email" type="email" autocomplete="email" required placeholder="you@example.com"><em>Enter a valid email</em></label>
+          <label class="ld-f"><span>Work experience</span><select name="exp" required><option value="" selected disabled>Select</option><option>Fresher</option><option>Less than 2 years</option><option>2 to 5 years</option><option>More than 5 years</option></select><em>Pick one</em></label>
+          <button class="ld-go" type="submit"><span class="ld-go-t">Continue to application</span><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5 10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <p class="ld-fine">By continuing, you agree to be contacted by Scaler School of Business about admissions, and to the <a href="https://www.scaler.com/privacy/">privacy policy</a>.</p>
+        </form>
+        <div class="ld-done" hidden>
+          <p class="ld-done-k">Got it</p>
+          <h3 class="ld-done-t">Thanks, <span></span>.</h3>
+          <p class="ld-done-p">An admissions advisor will be in touch soon.</p>
+          <a class="ld-done-a" href="https://www.scaler.com/school-of-business/admission/">Continue to the application form</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
 /* ===== built ===== */
 /* Built at SSB: full-bleed company showcase, tabs inside the image, hotspots */
@@ -2597,7 +3547,7 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
 </script>
 <script>
 /* ===== nav ===== */
-/* Navigation: global nav (layer 1), flying logo, section bar (layer 2), mobile tab bar, menu sheet */
+/* Navigation: global nav (layer 1), flying logo, section bar (layer 2), mobile section header with section list, menu sheet */
 (function(){
   // ---- nav theme follows the section under it ----
   var root=document.documentElement, film=document.querySelector('.film-scroll');
@@ -2610,15 +3560,16 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
   addEventListener('scroll',function(){ requestAnimationFrame(navTheme); },{passive:true}); setTimeout(navTheme,200);
 })();
 (function(){
-  // ===== NAV v3: layer switch, flying logo, scrollspy, tab bar, menu sheet =====
+  // ===== NAV v4: layer switch, flying logo, scrollspy, mobile section header, section list, menu sheet =====
   var root=document.documentElement, gn=document.querySelector('.gn'), fly=document.querySelector('.brand-fly');
   if(!gn||!fly) return;
   var slot=gn.querySelector('.gn-slot'), ln=document.querySelector('.ln'), bar=ln.querySelector('.ln-bar'), lslot=bar.querySelector('.ln-slot');
   var hooks=[].slice.call(ln.querySelectorAll('.ln-hooks a')), lind=ln.querySelector('.ln-ind');
-  var tb=document.querySelector('.tb'), tabs=[].slice.call(tb.querySelectorAll('a[data-t]')), tind=tb.querySelector('.tb-ind');
+  var mh=document.querySelector('.mh'), mhName=mh.querySelector('.mh-name'), mhK=mh.querySelector('.mh-k'), mhS=mh.querySelector('.mh-s'), mhPg=mh.querySelector('.mh-pg b');
+  var mx=document.getElementById('mx-list'), mxPanel=mx.querySelector('.mx-panel'), mxRows=[].slice.call(mx.querySelectorAll('.mx-row'));
   var mq=matchMedia('(max-width:760px)'), rm=matchMedia('(prefers-reduced-motion: reduce)');
-  var ids=['#film','#outcomes','#programme','#built','#faculty','#campus','#admissions','#faq'], secs=ids.map(function(s){ return document.querySelector(s); });
-  var tabOf=[0,1,2,2,3,3,-1,-1];               // ventures under Programme; faculty and campus under People; fees and FAQ live in More
+  var ids=['#film','#outcomes','#programme','#learn','#built','#faculty','#campus','#team','#press','#admissions','#faq'], secs=ids.map(function(s){ return document.querySelector(s); });
+  var names=mxRows.map(function(r){ return r.querySelector('strong').textContent; });
   var film=document.querySelector('.film-scroll');
   function clamp(v,a,b){ return v<a?a:v>b?b:v; }
   function lerp(a,b,t){ return a+(b-a)*t; }
@@ -2661,38 +3612,32 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
   function reducedSwap(){ if(!rm.matches||mob) return false; var g=goal(); if(g===lastSnap) return false; lastSnap=g;
     fly.style.opacity=0; setTimeout(function(){ cur=g; render(g); fly.style.opacity=1; },140); return true; }
 
-  // ---- scrollspy for both the bar and the tab bar ----
-  var k=-2;
+  // ---- scrollspy: the section bar (desktop) and the section header (phone) ----
+  var k=-2, lastSub=null;
   function spy(){
     var n=0; secs.forEach(function(s,i){ if(s&&s.getBoundingClientRect().top<=innerHeight*0.35) n=i; });
     var changed=n!==k; k=n;
-    if(changed){ hooks.forEach(function(a,i){ a.classList.toggle('on',i===n); }); tabs.forEach(function(a,i){ a.classList.toggle('on',i===tabOf[n]); }); }
-    var h=hooks[n]; if(h&&h.offsetWidth){ lind.style.opacity=1; lind.style.width=h.offsetWidth+'px'; lind.style.transform='translateX('+h.offsetLeft+'px)'; }
-    var t=tabs[tabOf[n]]; if(!t) tind.style.opacity=0; if(t&&t.offsetWidth){ tind.style.opacity=1; tind.style.width=t.offsetWidth+'px'; tind.style.transform='translateX('+t.offsetLeft+'px)'; }
+    // the desktop bar has fewer hooks than the page has sections: match by href, keep the last one lit
+    var hk=null; for(var j=n;j>=0&&!hk;j--){ hooks.forEach(function(a){ if(a.getAttribute('href')===ids[j]) hk=a; }); }
+    if(changed){ hooks.forEach(function(a){ a.classList.toggle('on',a===hk); });
+      mxRows.forEach(function(r,i){ r.classList.toggle('on',i===n); if(i===n) r.setAttribute('aria-current','true'); else r.removeAttribute('aria-current'); });
+      mhName.textContent=names[n]; mhK.textContent=(n<9?'0':'')+(n+1)+' / '+(ids.length<10?'0':'')+ids.length; }
+    var h=hk; if(h&&h.offsetWidth){ lind.style.opacity=1; lind.style.width=h.offsetWidth+'px'; lind.style.transform='translateX('+h.offsetLeft+'px)'; }
+    var sec=secs[n];
+    if(mob&&sec){
+      // a section can name the item you are on (pillar, term) through data-sub
+      var sub=sec.dataset.sub||''; if(sub!==lastSub){ lastSub=sub; mhS.textContent=sub; }
+      var r=sec.getBoundingClientRect(), p=clamp((60-r.top)/Math.max(1,r.height-innerHeight*0.5),0,1);
+      mhPg.style.setProperty('--p',p.toFixed(3));
+    }
   }
-  // ---- tab bar theme follows the section under the bottom edge ----
-  function tbTheme(){
-    if(!mob) return; var yb=innerHeight-40, dark=false;
-    if(film){ var fr=film.getBoundingClientRect(), b=parseFloat(film.style.getPropertyValue('--bgp')||0); if(fr.top<yb&&fr.bottom>yb&&b>0.5) dark=true; }
-    document.querySelectorAll('[data-nav]').forEach(function(s){ var r=s.getBoundingClientRect(); if(r.top<=yb&&r.bottom>yb) dark=s.dataset.nav==='dark'; });
-    root.classList.toggle('tb-dark',dark);
-  }
-  // ---- tab bar: in after the first fold, out on a fast flick down, back on any scroll up ----
-  var lastY=scrollY, lastT=performance.now(), acc=0;
-  var jumping=false, jt=0;   // programmatic jumps (tab taps, anchors) never hide the bar
-  function tbState(){
-    var y=scrollY, now=performance.now(), d=y-lastY, v=d/Math.max(16,now-lastT); lastY=y; lastT=now;
-    root.classList.toggle('tb-on',mob&&y>innerHeight*0.42);
-    if(!mob) return;
-    acc=(d>0)===(acc>0)?acc+d:d;
-    var nearEnd=y+innerHeight>=document.documentElement.scrollHeight-80;
-    if(d>0&&v>1.1&&acc>140&&d<innerHeight*0.6&&!nearEnd&&!jumping) root.classList.add('tb-hide');
-    if(acc<-28||nearEnd||y<innerHeight*0.42) root.classList.remove('tb-hide');
-  }
+  // ---- phone: the section header stays on once you are past the hero, so you always know where you are ----
+  function mhState(){ root.classList.toggle('mh-on',mob&&scrollY>innerHeight*0.42); }
   var sp=0;
-  function onScroll(){ if(!reducedSwap()) kick(); if(!sp) sp=requestAnimationFrame(function(){ sp=0; spy(); tbTheme(); tbState(); }); }
+  function onScroll(){ if(!reducedSwap()) kick(); if(!sp) sp=requestAnimationFrame(function(){ sp=0; spy(); mhState(); }); }
   addEventListener('scroll',onScroll,{passive:true});
-  function relayout(){ mob=mq.matches; measure(); cur=-1; lastSnap=null; k=-2; tick(); spy(); tbTheme(); tbState(); }
+  addEventListener('ssb:sub',function(){ requestAnimationFrame(spy); });   // a section changed the item it is showing
+  function relayout(){ mob=mq.matches; measure(); cur=-1; lastSnap=null; k=-2; lastSub=null; tick(); spy(); mhState(); }
   addEventListener('resize',relayout);
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(relayout);
   setTimeout(relayout,400);
@@ -2700,11 +3645,10 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
 
   // ---- smooth in-page jumps ----
   function jump(e){ var h=this.getAttribute('href'); if(!h||h.charAt(0)!=='#') return; e.preventDefault();
-    closeSheet(true);
-    jumping=true; clearTimeout(jt); jt=setTimeout(function(){ jumping=false; },1400); root.classList.remove('tb-hide');
-    var top=h==='#top'?0:(function(){ var t=document.querySelector(h); return t?t.getBoundingClientRect().top+scrollY:null; })();
+    closeSheet(true); closeMx(true); closeNm(true);
+    var top=h==='#top'?0:(function(){ var t=document.querySelector(h); return t?t.getBoundingClientRect().top+scrollY-(mob?44:0):null; })();
     if(top===null) return; scrollTo({top:top,behavior:rm.matches?'auto':'smooth'}); }
-  [].slice.call(document.querySelectorAll('.brand,.ln-slot,.ln a[href^="#"],.tb a[href^="#"],.sheet-hooks a')).forEach(function(a){ a.addEventListener('click',jump); });
+  [].slice.call(document.querySelectorAll('.brand,.ln-slot,.ln a[href^="#"],.mh-mark,.mx-row,.sheet-hooks a,.nm-here a')).forEach(function(a){ a.addEventListener('click',jump); });
 
   // ---- menu sheet ----
   var sheet=document.getElementById('ssb-sheet'), panel=sheet.querySelector('.sheet-panel'), opener=null;
@@ -2715,16 +3659,75 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
   function closeSheet(silent){ if(!root.classList.contains('sheet-open')) return; root.classList.remove('sheet-open'); sheet.setAttribute('aria-hidden','true');
     document.querySelectorAll('[data-open-sheet]').forEach(function(b){ b.setAttribute('aria-expanded','false'); });
     if(opener&&!silent) opener.focus({preventScroll:true}); }
-  document.querySelectorAll('[data-open-sheet]').forEach(function(b){ b.addEventListener('click',function(){ root.classList.contains('sheet-open')?closeSheet():openSheet(b); }); });
+  // desktop and tablet open the site menu panel; phones keep the bottom sheet
+  document.querySelectorAll('[data-open-sheet]').forEach(function(b){ b.addEventListener('click',function(){ if(!mob){ openNm(b); return; } root.classList.contains('sheet-open')?closeSheet():openSheet(b); }); });
+
+  // ---- site menu (desktop): the section bar grows into a panel; big page links, the image swaps on hover ----
+  var nm=document.getElementById('nm'), nmBox=nm.querySelector('.nm-box'), nmIn=nm.querySelector('.nm-in'), lnMenu=document.querySelector('.ln-menu');
+  var nmLinks=[].slice.call(nm.querySelectorAll('.nm-a')), nmIms=[].slice.call(nm.querySelectorAll('.nm-im')), nmOpener=null, nmT=0, nmLoaded=false;
+  function nmSet(x,y,w,h,r){ nmBox.style.setProperty('--x',x+'px'); nmBox.style.setProperty('--y',y+'px'); nmBox.style.setProperty('--w',w+'px'); nmBox.style.setProperty('--h',h+'px'); nmBox.style.setProperty('--r',r+'px'); }
+  function nmOrigin(btn){ var r=(root.classList.contains('nav-l2')&&ln.offsetWidth)?bar.getBoundingClientRect():(btn||lnMenu).getBoundingClientRect(); return r; }
+  function nmTarget(){ var w1=Math.min(1040,innerWidth-48); nmIn.style.setProperty('--w1',w1+'px'); var h1=Math.min(nmIn.offsetHeight,innerHeight-16); nmBox.style.overflowY=nmIn.offsetHeight>innerHeight-16?'auto':'hidden'; return {x:(innerWidth-w1)/2,y:8,w:w1,h:h1}; }
+  function nmShow(i){ nmLinks.forEach(function(a,k){ a.classList.toggle('on',k===i); }); nmIms.forEach(function(f,k){ f.classList.toggle('on',k===i); }); }
+  function openNm(btn){
+    if(root.classList.contains('nm-open')){ closeNm(); return; }
+    clearTimeout(nmT); nm.classList.remove('is-closing'); nmOpener=btn||lnMenu;
+    if(!nmLoaded){ nmLoaded=true; nm.querySelectorAll('img').forEach(function(im){ im.loading='eager'; }); }
+    var o=nmOrigin(btn), t=nmTarget();
+    nmBox.classList.add('is-snap'); nmSet(o.left,o.top,o.width,o.height,11); void nmBox.offsetWidth; nmBox.classList.remove('is-snap');
+    root.classList.add('nm-open'); nm.setAttribute('aria-hidden','false');
+    document.querySelectorAll('[data-open-nm],[data-open-sheet]').forEach(function(b){ b.setAttribute('aria-expanded','true'); });
+    nmShow(0);
+    requestAnimationFrame(function(){ nmSet(t.x,t.y,t.w,t.h,18); });
+    setTimeout(function(){ nmBox.focus({preventScroll:true}); },280);   // keyboard users Tab into the links; no ring on open
+  }
+  function closeNm(silent){
+    if(!root.classList.contains('nm-open')) return;
+    var o=nmOrigin(nmOpener); nm.classList.add('is-closing'); root.classList.remove('nm-open'); nm.setAttribute('aria-hidden','true');
+    nmBox.style.overflowY='hidden'; nmSet(o.left,o.top,o.width,o.height,11);
+    document.querySelectorAll('[data-open-nm],[data-open-sheet]').forEach(function(b){ b.setAttribute('aria-expanded','false'); });
+    nmT=setTimeout(function(){ nm.classList.remove('is-closing'); },rm.matches?0:650);
+    if(!silent&&nmOpener&&nmOpener.focus) nmOpener.focus({preventScroll:true});
+  }
+  if(lnMenu) lnMenu.addEventListener('click',function(){ openNm(lnMenu); });
+  nm.querySelectorAll('[data-nm-close]').forEach(function(b){ b.addEventListener('click',function(){ closeNm(); }); });
+  nm.querySelectorAll('[data-lead]').forEach(function(b){ b.addEventListener('click',function(){ closeNm(true); }); });
+  nmLinks.forEach(function(a,i){ a.addEventListener('mouseenter',function(){ nmShow(i); }); a.addEventListener('focus',function(){ nmShow(i); }); });
+  addEventListener('resize',function(){ if(!root.classList.contains('nm-open')) return; if(mq.matches){ closeNm(true); return; } var t=nmTarget(); nmSet(t.x,t.y,t.w,t.h,18); });
   sheet.querySelectorAll('[data-close-sheet]').forEach(function(b){ b.addEventListener('click',function(){ closeSheet(); }); });
+  // ---- section list (phone): opened from the section header ----
+  var mxBtn=mh.querySelector('.mh-where');
+  function openMx(){ root.classList.add('mx-open'); mx.setAttribute('aria-hidden','false'); mxBtn.setAttribute('aria-expanded','true');
+    setTimeout(function(){ var on=mx.querySelector('.mx-row.on')||mx.querySelector('.mx-x'); on.focus({preventScroll:true}); },80); }
+  function closeMx(silent){ if(!root.classList.contains('mx-open')) return; root.classList.remove('mx-open'); mx.setAttribute('aria-hidden','true'); mxBtn.setAttribute('aria-expanded','false');
+    mxPanel.style.removeProperty('--drag'); if(!silent) mxBtn.focus({preventScroll:true}); }
+  mxBtn.addEventListener('click',openMx);
+  mx.querySelectorAll('[data-mx-close]').forEach(function(b){ b.addEventListener('click',function(){ closeMx(); }); });
+  mx.querySelectorAll('[data-lead]').forEach(function(b){ b.addEventListener('click',function(){ closeMx(true); }); });
+  var my0=0, mdy=0, mdrag=false, mhead=mx.querySelector('.mx-head');
+  mhead.addEventListener('touchstart',function(e){ mdrag=true; my0=e.touches[0].clientY; mdy=0; mxPanel.classList.add('is-drag'); },{passive:true});
+  mhead.addEventListener('touchmove',function(e){ if(!mdrag) return; mdy=Math.max(0,e.touches[0].clientY-my0); mxPanel.style.setProperty('--drag',mdy+'px'); },{passive:true});
+  mhead.addEventListener('touchend',function(){ if(!mdrag) return; mdrag=false; mxPanel.classList.remove('is-drag'); if(mdy>90) closeMx(); else mxPanel.style.removeProperty('--drag'); });
   addEventListener('keydown',function(e){
+    if(root.classList.contains('nm-open')){
+      if(e.key==='Escape'){ closeNm(); return; }
+      if(e.key==='Tab'){ var q=[].slice.call(nmBox.querySelectorAll('a,button')); var q0=q[0], q1=q[q.length-1];
+        if(e.shiftKey&&document.activeElement===q0){ e.preventDefault(); q1.focus(); } else if(!e.shiftKey&&document.activeElement===q1){ e.preventDefault(); q0.focus(); } }
+      return;
+    }
+    if(root.classList.contains('mx-open')){
+      if(e.key==='Escape'){ closeMx(); return; }
+      if(e.key==='Tab'){ var g=[].slice.call(mxPanel.querySelectorAll('a,button')); var g0=g[0], g1=g[g.length-1];
+        if(e.shiftKey&&document.activeElement===g0){ e.preventDefault(); g1.focus(); } else if(!e.shiftKey&&document.activeElement===g1){ e.preventDefault(); g0.focus(); } }
+      return;
+    }
     if(!root.classList.contains('sheet-open')) return;
     if(e.key==='Escape'){ closeSheet(); return; }
     if(e.key==='Tab'){ var f=[].slice.call(panel.querySelectorAll('a,button')); var a=f[0], z=f[f.length-1];
       if(e.shiftKey&&document.activeElement===a){ e.preventDefault(); z.focus(); } else if(!e.shiftKey&&document.activeElement===z){ e.preventDefault(); a.focus(); } }
   });
   window.__nav={state:function(){ var r=fly.getBoundingClientRect(), br=bar.getBoundingClientRect();
-    return {y:scrollY,p:cur,l2:root.classList.contains('nav-l2'),dark:root.classList.contains('nav-dark'),tbOn:root.classList.contains('tb-on'),tbHide:root.classList.contains('tb-hide'),tbDark:root.classList.contains('tb-dark'),
+    return {y:scrollY,p:cur,l2:root.classList.contains('nav-l2'),dark:root.classList.contains('nav-dark'),mhOn:root.classList.contains('mh-on'),mxOpen:root.classList.contains('mx-open'),
       logo:{x:r.left,y:r.top,w:r.width,h:r.height},bar:{x:br.left,y:br.top,w:br.width,h:br.height},lnOpacity:ln.style.opacity,gnOpacity:gn.style.opacity,active:k}; }};
 })();
 </script>
@@ -2784,8 +3787,17 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
   cards.forEach(function(c,i){ var b=document.createElement('button'); b.type='button'; b.className='tm-seg'; b.dataset.seg=i; b.setAttribute('aria-label','Term '+(i+1)); rail.appendChild(b); });
   var cnt=document.querySelector('.tm-count'); if(cnt) cnt.parentNode.insertBefore(rail,cnt);
   rail.addEventListener('click',function(e){ var b=e.target.closest('[data-seg]'); if(b) go(+b.dataset.seg); });
+  function infoNeed(A,mob){
+    var on=stage.querySelector('.tm-card.on'), r=0.54;
+    if(!mob&&on&&on.offsetWidth){ var inf=on.querySelector('.tm-info'); if(inf&&inf.offsetWidth) r=inf.offsetWidth/on.offsetWidth; }
+    var probe=document.createElement('div'); probe.style.cssText='position:absolute;left:-9999px;top:0;visibility:hidden;width:'+Math.round(mob?A:A*r)+'px';
+    stage.appendChild(probe); var m=0;
+    cards.forEach(function(c){ var n=c.querySelector('.tm-info').cloneNode(true); probe.innerHTML=''; probe.appendChild(n); m=Math.max(m,n.offsetHeight); });
+    probe.remove(); return m+4; }
   function dims(){ var W=stage.clientWidth, mob=W<700;
     var A=mob?Math.min(W-40,520):Math.min(940,Math.round(W*0.64)), H=mob?Math.min(600,Math.max(520,Math.round(innerHeight*0.72))):Math.min(520,Math.max(420,innerHeight-430));
+    // the active card grows to fit the longest term, so the button at the bottom is never cut off
+    var need=infoNeed(A,mob); H=mob?Math.max(H,Math.ceil(need/0.62)):Math.max(H,need);
     var w=mob?Math.round(A*0.78):Math.round(Math.min(300,A*0.33)), h=mob?Math.round(H*0.8):Math.round(H*0.76), g=mob?12:16;
     stage.style.height=H+'px'; return {A:A,H:H,w:w,h:h,g:g,mob:mob}; }
   function layout(){ var d=dims();
@@ -2841,6 +3853,240 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
   if(rm.matches){ render(1); return; }
   addEventListener('scroll',onScroll,{passive:true}); addEventListener('resize',function(){ render(cur); });
   cur=tgt=prog(); render(cur);
+})();
+</script>
+<script>
+/* ===== pillars ===== */
+/* How you learn: stacked panels with parallax floaters, rails, 85% detail sheet with deep links, reel viewer */
+(function(){
+  var sec=document.querySelector('.pl-sec'); if(!sec) return;
+  var root=document.documentElement;
+  var rm=matchMedia('(prefers-reduced-motion: reduce)');
+  var stack=sec.querySelector('.pl-stack');
+  var panels=[].slice.call(sec.querySelectorAll('.pl-panel'));
+  var dlg=document.getElementById('pl-dlg'), rv=document.getElementById('pl-rv');
+  // overlays sit above every section and the nav
+  document.body.appendChild(dlg); document.body.appendChild(rv);
+
+  // ---------- stacked panels: parallax, cover, active pillar ----------
+  var P=panels.map(function(p){
+    return {el:p, stage:p.querySelector('.pl-stage'), bg:p.querySelector('.pl-bg'), card:p.querySelector('.pl-card'),
+      fl:[].slice.call(p.querySelectorAll('.pl-f')).map(function(f){ return {el:f, d:parseFloat(f.dataset.d)||.5}; })};
+  });
+  var step=1, top0=0, stickTop=60, mob=false, active=-1;
+  var bar=sec.querySelector('.pl-bar'), dockNav=sec.querySelector('.pl-dock .pl-idx'), tabs=[].slice.call(sec.querySelectorAll('.pl-idx a')), dockOn=false;
+  function measure(){
+    // panels stick just under the pinned headline: its height drives --pl-top
+    if(innerWidth>760) sec.style.setProperty('--pl-bar',bar.offsetHeight+'px'); else sec.style.removeProperty('--pl-bar');
+    var cs=getComputedStyle(panels[0]);
+    stickTop=parseFloat(cs.top)||0;
+    step=panels[0].offsetHeight+(parseFloat(cs.marginBottom)||0);
+    top0=stack.getBoundingClientRect().top+scrollY;
+    mob=innerWidth<=1180;
+  }
+  function frame(){
+    raf=0;
+    var y=scrollY, range=mob?70:150, n=-1;
+    P.forEach(function(p,i){
+      // t: -1 entering from below, 0 just stuck, 1 fully covered by the next panel
+      var t=(y+stickTop-(top0+i*step))/step;
+      if(t>-0.5) n=i;
+      if(rm.matches) return;
+      if(t<-1.2||t>1.2) return;
+      var tc=Math.max(-1,Math.min(1,t));
+      p.fl.forEach(function(f){ f.el.style.setProperty('--fy',(-tc*f.d*range).toFixed(1)+'px'); });
+      p.card.style.setProperty('--cy',(-tc*(mob?10:22)).toFixed(1)+'px');
+      p.bg.style.setProperty('--bgy',(tc*(mob?24:48)).toFixed(1)+'px');
+      p.stage.style.setProperty('--cov',i<P.length-1?Math.max(0,Math.min(1,t)).toFixed(3):0);
+    });
+    n=Math.max(0,n);
+    // the index docks at the bottom while the panels fill the screen
+    var sr=stack.getBoundingClientRect(), on=sr.top<innerHeight*0.55&&sr.bottom>innerHeight*0.6;
+    if(on!==dockOn){ dockOn=on; sec.classList.toggle('dock-on',on); }
+    if(n!==active){ active=n; sec.dataset.sub=panels[n].dataset.sub; sec.dataset.subI=n; dispatchEvent(new CustomEvent('ssb:sub'));
+      tabs.forEach(function(a){ var on=+a.dataset.i===n; a.classList.toggle('on',on); if(on) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current'); });
+      // phones: keep the active pillar in view in the pinned strip
+      var am=dockNav.querySelector('a.on'); if(am&&dockNav.scrollWidth>dockNav.clientWidth) dockNav.scrollTo({left:Math.max(0,am.offsetLeft-4),behavior:rm.matches?'auto':'smooth'}); }
+  }
+  var raf=0;
+  function kick(){ if(!raf) raf=requestAnimationFrame(frame); }
+  addEventListener('scroll',kick,{passive:true});
+  addEventListener('resize',function(){ measure(); kick(); });
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ measure(); kick(); });
+  setTimeout(function(){ measure(); kick(); },500);
+  measure(); frame();
+
+  // pillar index: jump to the point where that panel has just stuck
+  tabs.forEach(function(a){ var i=+a.dataset.i; a.addEventListener('click',function(e){ e.preventDefault(); measure();
+    scrollTo({top:top0+i*step-stickTop+2,behavior:rm.matches?'auto':'smooth'}); }); });
+  if(window.ResizeObserver) new ResizeObserver(function(){ measure(); kick(); }).observe(bar);
+
+  // ---------- rails: arrows (desktop), mouse drag, arrow state ----------
+  [].slice.call(sec.querySelectorAll('.pl-card')).forEach(function(card){
+    var rail=card.querySelector('.pl-rail'), pv=card.querySelector('.pl-pv'), nx=card.querySelector('.pl-nx');
+    function stepW(){ var it=rail.querySelector('.pl-it'); return it?(it.offsetWidth+8)*2:200; }
+    function state(){ pv.disabled=rail.scrollLeft<4; nx.disabled=rail.scrollLeft+rail.clientWidth>=rail.scrollWidth-4; }
+    pv.addEventListener('click',function(){ rail.scrollBy({left:-stepW(),behavior:rm.matches?'auto':'smooth'}); });
+    nx.addEventListener('click',function(){ rail.scrollBy({left:stepW(),behavior:rm.matches?'auto':'smooth'}); });
+    rail.addEventListener('scroll',function(){ requestAnimationFrame(state); },{passive:true});
+    state(); setTimeout(state,600);
+    var down=false, sx=0, sl=0, moved=false;
+    rail.addEventListener('pointerdown',function(e){ if(e.pointerType!=='mouse') return; down=true; moved=false; sx=e.clientX; sl=rail.scrollLeft; });
+    addEventListener('pointermove',function(e){ if(!down) return; var dx=e.clientX-sx; if(Math.abs(dx)>5){ moved=true; rail.classList.add('is-drag'); } if(moved) rail.scrollLeft=sl-dx; });
+    addEventListener('pointerup',function(){ if(!down) return; down=false; setTimeout(function(){ rail.classList.remove('is-drag'); },0); });
+    rail.addEventListener('click',function(e){ if(moved){ e.preventDefault(); e.stopPropagation(); moved=false; } },true);
+  });
+
+  // ---------- shared overlay helpers ----------
+  function lock(on){ root.classList.toggle('pl-lock',on); }
+  function trap(box,e){
+    var f=[].slice.call(box.querySelectorAll('a[href],button:not([disabled]),video')).filter(function(x){ return x.offsetParent!==null; });
+    if(!f.length) return; var a=f[0], z=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===a){ e.preventDefault(); z.focus(); }
+    else if(!e.shiftKey&&document.activeElement===z){ e.preventDefault(); a.focus(); }
+  }
+
+  // ---------- detail sheet / modal ----------
+  var box=dlg.querySelector('.pl-dlg-box'), media=dlg.querySelector('.pl-dlg-media img'), dn=dlg.querySelector('.pl-dlg-n'), dt=dlg.querySelector('.pl-dlg-t'),
+      dc=dlg.querySelector('.pl-dlg-c'), dnext=dlg.querySelector('.pl-dlg-next'), head=dlg.querySelector('.pl-dlg-head');
+  var openKey=null, opener=null, pushed=false;
+  function render(key,at){
+    var tpl=document.getElementById('pl-tpl-'+key); if(!tpl) return false;
+    dn.innerHTML='<b>'+tpl.dataset.n.split(' / ')[0]+'</b> / '+tpl.dataset.n.split(' / ')[1];
+    dt.textContent=tpl.dataset.name;
+    media.src=tpl.dataset.bg; media.style.objectPosition=tpl.dataset.fx||'50% 50%';
+    dc.innerHTML=''; dc.appendChild(tpl.content.cloneNode(true)); dc.scrollTop=0;
+    dnext.textContent='Next: '+tpl.dataset.nextName; dnext.dataset.next=tpl.dataset.next;
+    openKey=key;
+    if(at!=null){ var rows=dc.querySelectorAll('.pd-row'), r=rows[+at];
+      if(r) setTimeout(function(){ dc.scrollTo({top:r.offsetTop-dc.offsetTop-12,behavior:rm.matches?'auto':'smooth'}); r.classList.add('is-hit'); },380); }
+    return true;
+  }
+  function openDlg(key,at,btn){
+    if(!render(key,at)) return;
+    if(!dlg.classList.contains('is-open')){
+      opener=btn||document.activeElement; dlg.classList.add('is-open'); dlg.setAttribute('aria-hidden','false'); lock(true);
+      try{ history.pushState({pl:key},'',location.pathname+location.search+'#pillar-'+key); pushed=true; }catch(_){ pushed=false; }
+      setTimeout(function(){ dlg.querySelector('.pl-dlg-x').focus({preventScroll:true}); },60);
+    } else {
+      try{ history.replaceState({pl:key},'',location.pathname+location.search+'#pillar-'+key); }catch(_){}
+    }
+  }
+  function closeDlg(fromPop){
+    if(!dlg.classList.contains('is-open')) return;
+    dlg.classList.remove('is-open'); dlg.setAttribute('aria-hidden','true'); box.style.removeProperty('--drag'); openKey=null;
+    if(!rv.classList.contains('is-open')) lock(false);
+    if(pushed&&!fromPop){ pushed=false; history.back(); } else pushed=false;
+    if(opener&&opener.focus) opener.focus({preventScroll:true});
+  }
+  sec.addEventListener('click',function(e){
+    var b=e.target.closest('[data-pl-open]'); if(!b) return;
+    e.preventDefault(); openDlg(b.dataset.plOpen,b.dataset.at,b);
+  });
+  dlg.addEventListener('click',function(e){
+    if(e.target.closest('[data-pl-close]')){ closeDlg(); return; }
+    var j=e.target.closest('[data-pd-jump]');
+    if(j){ e.preventDefault(); var h=j.getAttribute('href'); closeDlg();
+      setTimeout(function(){ var t=document.querySelector(h); if(t) scrollTo({top:t.getBoundingClientRect().top+scrollY,behavior:rm.matches?'auto':'smooth'}); },pushed?80:40); }
+  });
+  dnext.addEventListener('click',function(){ openDlg(dnext.dataset.next); });
+  addEventListener('popstate',function(){ if(dlg.classList.contains('is-open')) closeDlg(true); });
+  // deep link: #pillar-ai opens that pillar
+  var m=/^#pillar-([a-z]+)$/.exec(location.hash);
+  if(m&&document.getElementById('pl-tpl-'+m[1])){
+    setTimeout(function(){ var p=document.getElementById('learn-'+m[1]); if(p) scrollTo({top:p.getBoundingClientRect().top+scrollY-60}); openDlg(m[1]); try{ history.replaceState(null,'',location.pathname+location.search+'#pillar-'+m[1]); pushed=false; }catch(_){} },300);
+  }
+  // swipe down on the sheet head to close (phone)
+  var sy=0, dy=0, dragging=false;
+  head.addEventListener('touchstart',function(e){ if(innerWidth>760) return; dragging=true; sy=e.touches[0].clientY; dy=0; box.classList.add('is-drag'); },{passive:true});
+  head.addEventListener('touchmove',function(e){ if(!dragging) return; dy=Math.max(0,e.touches[0].clientY-sy); box.style.setProperty('--drag',dy+'px'); },{passive:true});
+  head.addEventListener('touchend',function(){ if(!dragging) return; dragging=false; box.classList.remove('is-drag');
+    if(dy>110) closeDlg(); else box.style.removeProperty('--drag'); });
+
+  // ---------- reel viewer ----------
+  var vid=rv.querySelector('video'), bars=rv.querySelector('.pl-rv-bars'), cap=rv.querySelector('.pl-rv-cap'), snd=rv.querySelector('.pl-rv-snd');
+  var set=[], idx=0, rvOpener=null, muted=false, prog=0;
+  function show(i){
+    idx=(i+set.length)%set.length; var r=set[idx];
+    [].slice.call(bars.children).forEach(function(b,k){ b.classList.toggle('done',k<idx); b.firstChild.style.width=k<idx?'100%':'0'; });
+    cap.querySelector('small').textContent=r.dataset.s; cap.querySelector('b').textContent=r.dataset.t;
+    var img=r.querySelector('img'); vid.poster=img?img.currentSrc||img.src:'';
+    if(vid.getAttribute('src')!==r.dataset.src) vid.src=r.dataset.src;
+    try{ vid.currentTime=0; }catch(_){}
+    vid.muted=muted; var pr=vid.play(); if(pr&&pr.catch) pr.catch(function(){ vid.muted=true; muted=true; snd.textContent='Sound off'; snd.setAttribute('aria-pressed','false'); vid.play().catch(function(){}); });
+  }
+  function openRv(btn){
+    var rail=btn.closest('.pl-rail'); set=[].slice.call(rail.querySelectorAll('.pl-reel'));
+    bars.innerHTML=set.map(function(){ return '<i><b></b></i>'; }).join('');
+    rvOpener=btn; rv.classList.add('is-open'); rv.setAttribute('aria-hidden','false'); lock(true);
+    show(set.indexOf(btn)); tickBar();
+    setTimeout(function(){ rv.querySelector('.pl-rv-x').focus({preventScroll:true}); },60);
+  }
+  function closeRv(){
+    if(!rv.classList.contains('is-open')) return;
+    rv.classList.remove('is-open'); rv.setAttribute('aria-hidden','true'); vid.pause(); cancelAnimationFrame(prog);
+    if(!dlg.classList.contains('is-open')) lock(false);
+    if(rvOpener&&rvOpener.focus) rvOpener.focus({preventScroll:true});
+  }
+  function tickBar(){
+    cancelAnimationFrame(prog);
+    (function loop(){ var b=bars.children[idx]; if(b&&vid.duration) b.firstChild.style.width=(vid.currentTime/vid.duration*100)+'%';
+      if(rv.classList.contains('is-open')) prog=requestAnimationFrame(loop); })();
+  }
+  vid.addEventListener('ended',function(){ show(idx+1); });
+  sec.addEventListener('click',function(e){ var b=e.target.closest('.pl-reel'); if(!b) return; e.preventDefault(); openRv(b); });
+  rv.querySelector('.pl-rv-prev').addEventListener('click',function(){ show(idx-1); });
+  rv.querySelector('.pl-rv-next').addEventListener('click',function(){ show(idx+1); });
+  rv.querySelectorAll('[data-rv-close]').forEach(function(b){ b.addEventListener('click',closeRv); });
+  snd.addEventListener('click',function(){ muted=!muted; vid.muted=muted; snd.textContent=muted?'Sound off':'Sound on'; snd.setAttribute('aria-pressed',String(!muted)); });
+  var tx=0, ty=0;
+  rv.addEventListener('touchstart',function(e){ tx=e.touches[0].clientX; ty=e.touches[0].clientY; },{passive:true});
+  rv.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-tx, dyy=e.changedTouches[0].clientY-ty;
+    if(dyy>90&&Math.abs(dyy)>Math.abs(dx)) closeRv(); else if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dyy)) show(idx+(dx<0?1:-1)); },{passive:true});
+
+  addEventListener('keydown',function(e){
+    if(rv.classList.contains('is-open')){
+      if(e.key==='Escape'){ closeRv(); return; }
+      if(e.key==='ArrowRight'){ show(idx+1); return; }
+      if(e.key==='ArrowLeft'){ show(idx-1); return; }
+      if(e.key==='Tab') trap(rv,e); return;
+    }
+    if(dlg.classList.contains('is-open')){
+      if(e.key==='Escape'){ closeDlg(); return; }
+      if(e.key==='Tab') trap(box,e);
+    }
+  });
+  window.__pillars={open:openDlg,close:closeDlg,reel:function(k,i){ var r=sec.querySelectorAll('.pl-reel[data-reel="'+k+'"]')[i||0]; if(r) openRv(r); },closeReel:closeRv};
+})();
+</script>
+<script>
+/* ===== breakers ===== */
+/* Breakers: videos load and play only while on screen; the voices breaker crossfades every 9s, controls at the bottom */
+(function(){
+  var secs=[].slice.call(document.querySelectorAll('.bk-sec')); if(!secs.length) return;
+  var rm=matchMedia('(prefers-reduced-motion: reduce)');
+  function play(v){ if(rm.matches) return; if(!v.getAttribute('src')) v.src=v.dataset.src; var p=v.play(); if(p&&p.catch) p.catch(function(){}); }
+  function stop(v){ if(!v.paused) v.pause(); }
+  secs.forEach(function(sec){
+    var slides=[].slice.call(sec.querySelectorAll('.bk-slide')), bars=[].slice.call(sec.querySelectorAll('.bk-bars button')), cur=0, seen=false, t0=0, raf=0, DUR=9000;
+    function vidOf(i){ return slides[i]&&slides[i].querySelector('video'); }
+    function show(i){ i=(i+slides.length)%slides.length;
+      slides.forEach(function(s,k){ s.classList.toggle('is-on',k===i); if(slides.length>1) s.setAttribute('aria-hidden',k===i?'false':'true'); var v=vidOf(k); if(v&&k!==i) stop(v); });
+      cur=i; t0=performance.now(); bars.forEach(function(b,k){ b.querySelector('i').style.setProperty('--f',k<i?1:0); b.setAttribute('aria-current',k===i?'true':'false'); });
+      if(seen) play(vidOf(i)); }
+    function loop(now){ if(!seen||slides.length<2||rm.matches){ raf=0; return; } var p=Math.min(1,(now-t0)/DUR); var b=bars[cur]; if(b) b.querySelector('i').style.setProperty('--f',p.toFixed(3));
+      if(p>=1) show(cur+1); raf=requestAnimationFrame(loop); }
+    bars.forEach(function(b,k){ b.addEventListener('click',function(){ show(k); }); });
+    [].slice.call(sec.querySelectorAll('[data-step]')).forEach(function(b){ b.addEventListener('click',function(){ show(cur+ +b.dataset.step); }); });
+    var sx=0; sec.addEventListener('touchstart',function(e){ sx=e.touches[0].clientX; },{passive:true});
+    sec.addEventListener('touchend',function(e){ var dx=e.changedTouches[0].clientX-sx; if(slides.length>1&&Math.abs(dx)>50) show(cur+(dx<0?1:-1)); },{passive:true});
+    new IntersectionObserver(function(es){ es.forEach(function(en){
+      seen=en.isIntersecting;
+      if(seen){ play(vidOf(cur)); t0=performance.now()-(t0?0:0); if(!raf) raf=requestAnimationFrame(loop); }
+      else { slides.forEach(function(s,k){ var v=vidOf(k); if(v) stop(v); }); }
+    }); },{rootMargin:'0px 0px -10% 0px',threshold:0.15}).observe(sec);
+    show(0);
+  });
 })();
 </script>
 <script>
@@ -2951,6 +4197,111 @@ main>section:has(+ .seam){padding-bottom:clamp(28px,3.5vw,48px)}
   var m=location.hash.match(/^#faq-[a-z-]+$/), t=m&&document.getElementById(location.hash.slice(1));
   if(t&&t.classList.contains('fq-item')){ set(t,true); setTimeout(function(){ t.scrollIntoView({block:'center'}); },300); }
   else if(items[0]) set(items[0],true);
+})();
+</script>
+<script>
+/* ===== lead ===== */
+/* Lead modal: opens from every Apply / Brochure / Talk to an advisor link; desktop exit intent; carousel; form checks. No data is sent: this is a design preview. */
+(function(){
+  var ld=document.getElementById('ld'); if(!ld) return;
+  var root=document.documentElement, box=ld.querySelector('.ld-box'), form=ld.querySelector('.ld-form'), done=ld.querySelector('.ld-done');
+  var t=ld.querySelector('.ld-t'), sub=ld.querySelector('.ld-sub'), go=ld.querySelector('.ld-go-t');
+  var rm=matchMedia('(prefers-reduced-motion: reduce)');
+  var COPY={
+    apply:{t:'Start your application',s:'Tell us a little about you. An admissions advisor will reach out about next steps.',b:'Continue to application'},
+    brochure:{t:'Get the brochure',s:'The full curriculum, fees and Cohort 1 outcomes, sent to your email.',b:'Send me the brochure'},
+    callback:{t:'Talk to an advisor',s:'Leave your number and an admissions advisor will call you back.',b:'Request a callback'},
+    exit:{t:'Before you go',s:'Take the brochure with you: the curriculum, fees and Cohort 1 outcomes.',b:'Send me the brochure'}
+  };
+  var opener=null, shown=false;
+
+  // which kind of lead a link asks for
+  function kindOf(a){
+    if(a.dataset.lead) return a.dataset.lead;
+    var h=a.getAttribute('href')||'';
+    if(/school-of-business\/admission/.test(h)) return 'apply';
+    if(/#brochure$/.test(h)) return 'brochure';
+    if(h==='#advisor') return 'callback';
+    return null;
+  }
+  document.addEventListener('click',function(e){
+    if(e.defaultPrevented||e.metaKey||e.ctrlKey||e.shiftKey||e.button>0) return;
+    var a=e.target.closest('a[href],button[data-lead]'); if(!a||ld.contains(a)&&!a.dataset.lead) return;
+    if(a.hasAttribute('data-no-lead')) return;   // page links (menus) go to the page itself
+    if(a.closest('.ld-done')) return;
+    var k=kindOf(a); if(!k) return;
+    e.preventDefault(); open(k,a);
+  });
+
+  function open(kind,btn){
+    var c=COPY[kind]||COPY.apply;
+    ld.dataset.v=kind; t.textContent=c.t; sub.textContent=c.s; go.textContent=c.b;
+    form.hidden=false; done.hidden=true;
+    [].slice.call(form.querySelectorAll('.ld-f')).forEach(function(f){ f.classList.remove('is-bad'); });
+    opener=btn||document.activeElement; shown=true;
+    ld.classList.add('is-open'); ld.setAttribute('aria-hidden','false'); root.classList.add('ld-lock');
+    car(0); play();
+    setTimeout(function(){
+      // phones: do not pop the keyboard; desktop: start typing straight away
+      if(innerWidth>760) form.querySelector('input').focus({preventScroll:true}); else ld.querySelector('.ld-x').focus({preventScroll:true});
+    },80);
+  }
+  function close(){
+    if(!ld.classList.contains('is-open')) return;
+    ld.classList.remove('is-open'); ld.setAttribute('aria-hidden','true'); box.style.removeProperty('--drag'); stop();
+    root.classList.remove('ld-lock');
+    if(opener&&opener.focus&&document.contains(opener)) opener.focus({preventScroll:true});
+  }
+  ld.querySelectorAll('[data-ld-close]').forEach(function(b){ b.addEventListener('click',close); });
+  addEventListener('keydown',function(e){
+    if(!ld.classList.contains('is-open')) return;
+    if(e.key==='Escape'){ close(); return; }
+    if(e.key==='Tab'){ var f=[].slice.call(box.querySelectorAll('a[href],button,input,select')).filter(function(x){ return x.offsetParent!==null; });
+      var a=f[0], z=f[f.length-1];
+      if(e.shiftKey&&document.activeElement===a){ e.preventDefault(); z.focus(); } else if(!e.shiftKey&&document.activeElement===z){ e.preventDefault(); a.focus(); } }
+  });
+
+  // ---- carousel: 5s a slide, the bar fills while it is on, a bar jumps to its slide ----
+  var slides=[].slice.call(ld.querySelectorAll('.ld-sl')), bars=[].slice.call(ld.querySelectorAll('.ld-bars button')), si=0, t0=0, raf=0, DUR=5000;
+  function car(i){ si=(i+slides.length)%slides.length; t0=performance.now();
+    slides.forEach(function(s,k){ s.classList.toggle('is-on',k===si); });
+    bars.forEach(function(b,k){ b.querySelector('i').style.setProperty('--f',k<si?1:0); b.setAttribute('aria-current',k===si?'true':'false'); }); }
+  function frame(now){ var p=Math.min(1,(now-t0)/DUR); var b=bars[si]; if(b) b.querySelector('i').style.setProperty('--f',p.toFixed(3));
+    if(p>=1) car(si+1); raf=requestAnimationFrame(frame); }
+  function play(){ stop(); if(rm.matches){ bars[si].querySelector('i').style.setProperty('--f',1); return; } raf=requestAnimationFrame(frame); }
+  function stop(){ cancelAnimationFrame(raf); raf=0; }
+  bars.forEach(function(b,k){ b.addEventListener('click',function(){ car(k); play(); }); });
+
+  // ---- form checks ----
+  var rules={name:function(v){ return v.trim().length>1; },phone:function(v){ return /^[6-9]\d{9}$/.test(v.replace(/\D/g,'')); },email:function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); },exp:function(v){ return !!v; }};
+  form.querySelector('[name="phone"]').addEventListener('input',function(){ this.value=this.value.replace(/\D/g,'').slice(0,10); });
+  form.addEventListener('input',function(e){ var f=e.target.closest('.ld-f'); if(f&&f.classList.contains('is-bad')&&rules[e.target.name](e.target.value)) f.classList.remove('is-bad'); });
+  form.addEventListener('submit',function(e){
+    e.preventDefault(); var first=null;
+    Object.keys(rules).forEach(function(n){ var el=form.elements[n], ok=rules[n](el.value); el.closest('.ld-f').classList.toggle('is-bad',!ok); if(!ok&&!first) first=el; });
+    if(first){ first.focus(); return; }
+    // design preview: nothing is sent anywhere
+    try{ localStorage.setItem('ssb-lead','1'); }catch(_){}
+    done.querySelector('.ld-done-t span').textContent=form.elements.name.value.trim().split(/\s+/)[0];
+    form.hidden=true; done.hidden=false; done.querySelector('.ld-done-k').focus&&done.querySelector('.ld-done-k').setAttribute('tabindex','-1'); done.querySelector('.ld-done-k').focus();
+  });
+
+  // ---- phone: swipe the photo strip down to close ----
+  var strip=ld.querySelector('.ld-car'), y0=0, dy=0, drag=false;
+  strip.addEventListener('touchstart',function(e){ if(innerWidth>760) return; drag=true; y0=e.touches[0].clientY; dy=0; box.classList.add('is-drag'); },{passive:true});
+  strip.addEventListener('touchmove',function(e){ if(!drag) return; dy=Math.max(0,e.touches[0].clientY-y0); box.style.setProperty('--drag',dy+'px'); },{passive:true});
+  strip.addEventListener('touchend',function(){ if(!drag) return; drag=false; box.classList.remove('is-drag'); if(dy>100) close(); else box.style.removeProperty('--drag'); });
+
+  // ---- exit intent (desktop only): once a session, after 20s, never after a lead, never over another overlay ----
+  var fine=matchMedia('(hover:hover) and (pointer:fine)'), born=Date.now();
+  document.addEventListener('mouseout',function(e){
+    if(e.relatedTarget||e.clientY>4||!fine.matches||innerWidth<=760) return;
+    if(Date.now()-born<20000||shown) return;
+    try{ if(sessionStorage.getItem('ssb-exit')||localStorage.getItem('ssb-lead')) return; sessionStorage.setItem('ssb-exit','1'); }catch(_){}
+    if(root.classList.contains('pl-lock')||root.classList.contains('sheet-open')||root.classList.contains('mx-open')) return;
+    open('exit',null);
+  });
+  window.__lead={open:open,close:close};
 })();
 </script>
 <script>

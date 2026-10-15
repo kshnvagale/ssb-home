@@ -12,6 +12,7 @@ ssb-home/
   index.html                GENERATED. Do not edit by hand.
   tools/
     faculty_data.py         faculty and mentors data; regenerates the faculty list and captions
+    pillars_data.py         "How you learn" pillars data; regenerates src/sections/pillars/pillars.html
     faculty-research.md     sources for every faculty company and role (Oct 2026)
   src/
     page.html               page template with {{CSS}}, {{JS}} and one {{name}} slot per section
@@ -24,7 +25,9 @@ ssb-home/
         <name>.css          styles for this section
         <name>.js           optional behaviour for this section
   media/                    local images and logos (only the files the page uses)
-    brands/                 company logos (Brandfetch, plus Simple Icons glyphs for a few)
+    brands/                 company logos (Brandfetch, plus Simple Icons glyphs for a few); icon-dark.* = square app icons
+    pillars/                photos and reel posters for the pillars section
+    breakers/  team/  press/  posters and logos for the breakers, founding team and press (breaker videos stream from the v3 lab)
     admissions/  built/  campus/  faculty/  footer/  pg/
   .preview/h.html           preview harness: renders the page at a true width (?w=390&h=844) in an iframe
 ```
@@ -33,23 +36,31 @@ Sections in page order:
 
 | # | Folder | What it is | Theme |
 |---|--------|------------|-------|
-| 1 | `nav` | Global nav, flying logo, section bar, mobile tab bar, menu sheet | |
+| 1 | `nav` | Global nav, flying logo, section bar (desktop) whose menu button opens the site menu panel, sticky section header + section list sheet (phone), menu sheet (phone) | |
 | 2 | `hero` | Programme name as H1, CTAs, facts row, logo marquee, stat tiles, film card | light |
 | 3 | `film` | The hero film card lifts into a full-screen frame on scroll | dark |
 | 4 | `outcomes` | Alumni before and after cards in two marquee rows | dark |
+| 5 | `breakers` (`why`) | Full-width video breaker: Nikhil Kamath quote, 60% / 62% AI stats | dark |
 | | seam | Gradient horizon, dark to light | |
-| 5 | `programme` | Five-term carousel (white active card, image-led side cards, step rail) and the term sheet | light |
+| 6 | `programme` | Five-term carousel (white active card, image-led side cards, step rail) and the term sheet | light |
 | | seam | Pixel fill, light to dark | |
-| 6 | `punch` | "Learn business [photo] by building it." The halves close in on a changing photo | dark |
-| 7 | `built` | Full-bleed company showcase with tabs and hotspots | dark |
+| 7 | `punch` | "Learn business [photo] by building it." The halves close in on a changing photo | dark |
+| 8 | `pillars` | "How you learn": pinned headline, five stacked photo panels (card + sideways rail, floating logos), pillar index docked at the bottom of the screen, 85% detail sheet, reel viewer | dark |
+| 9 | `built` | Full-bleed company showcase with tabs and hotspots | dark |
+| 10 | `breakers` (`voices`) | Full-width video breaker, two slides: Anupam Mittal, Ankur Warikoo; controls at the bottom | dark |
 | | seam | Pixel fill, dark to light | |
-| 8 | `faculty` | Name list with stacked brand tiles that fan out, sticky portrait, topic filter | light |
-| 9 | `campus` | Campus life: the cohort arrives full-bleed and pulls back into a photo mosaic | light |
+| 11 | `faculty` | Name list with stacked brand tiles that fan out, sticky portrait, topic filter | light |
+| 12 | `campus` | Campus life: the cohort arrives full-bleed and pulls back into a photo mosaic; student clubs strip | light |
+| 13 | `team` | Founding team: portrait grid (rail on phones) with past companies | light |
 | | seam | Pixel fill, light to dark | |
-| 10 | `admissions` | Sticky intro (title, eligibility, CTAs) beside process and fee cards; scholarships block (sheet each, `#scholarship-*`) with Impact Foundation backers | dark |
+| 14 | `press` | Four real articles about SSB (rail on phones) | dark |
+| 15 | `admissions` | Sticky intro (title, eligibility, CTAs) beside process and fee cards; scholarships block (sheet each, `#scholarship-*`) with Impact Foundation backers | dark |
 | | seam | Gradient horizon, dark to light | |
-| 11 | `faq` | Accordion, one open at a time, each answer linkable (`#faq-*`) | light |
-| 12 | `footer` | Copy of the live footer, plus draft footnotes | |
+| 16 | `faq` | Accordion, one open at a time, each answer linkable (`#faq-*`) | light |
+| 17 | `footer` | Copy of the live footer, plus draft footnotes | |
+| 18 | `lead` | Lead modal (apply, brochure, callback, exit intent): photo carousel with proof + form; 85% sheet on phones | |
+
+`breakers` fills two slots with `{{breakers:why}}` and `{{breakers:voices}}` (files `breakers-why.html`, `breakers-voices.html`). Any section can do this: `{{name:part}}` reads `src/sections/<name>/<name>-<part>.html`.
 
 Faculty and campus are both light on purpose: the full-bleed cohort photo is the divider.
 
@@ -89,6 +100,12 @@ Do not edit `index.html`. The next build overwrites it.
 
 ```bash
 python3 tools/faculty_data.py && python3 build.py
+```
+
+**Pillars are data-driven too.** Edit `PILLARS` in `tools/pillars_data.py` (copy, numbers, rail items, floating logos, detail sheet), then run:
+
+```bash
+python3 tools/pillars_data.py && python3 build.py
 ```
 
 ## Add or change a transition (seam)

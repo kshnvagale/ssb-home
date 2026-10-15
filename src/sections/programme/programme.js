@@ -52,8 +52,17 @@
   cards.forEach(function(c,i){ var b=document.createElement('button'); b.type='button'; b.className='tm-seg'; b.dataset.seg=i; b.setAttribute('aria-label','Term '+(i+1)); rail.appendChild(b); });
   var cnt=document.querySelector('.tm-count'); if(cnt) cnt.parentNode.insertBefore(rail,cnt);
   rail.addEventListener('click',function(e){ var b=e.target.closest('[data-seg]'); if(b) go(+b.dataset.seg); });
+  function infoNeed(A,mob){
+    var on=stage.querySelector('.tm-card.on'), r=0.54;
+    if(!mob&&on&&on.offsetWidth){ var inf=on.querySelector('.tm-info'); if(inf&&inf.offsetWidth) r=inf.offsetWidth/on.offsetWidth; }
+    var probe=document.createElement('div'); probe.style.cssText='position:absolute;left:-9999px;top:0;visibility:hidden;width:'+Math.round(mob?A:A*r)+'px';
+    stage.appendChild(probe); var m=0;
+    cards.forEach(function(c){ var n=c.querySelector('.tm-info').cloneNode(true); probe.innerHTML=''; probe.appendChild(n); m=Math.max(m,n.offsetHeight); });
+    probe.remove(); return m+4; }
   function dims(){ var W=stage.clientWidth, mob=W<700;
     var A=mob?Math.min(W-40,520):Math.min(940,Math.round(W*0.64)), H=mob?Math.min(600,Math.max(520,Math.round(innerHeight*0.72))):Math.min(520,Math.max(420,innerHeight-430));
+    // the active card grows to fit the longest term, so the button at the bottom is never cut off
+    var need=infoNeed(A,mob); H=mob?Math.max(H,Math.ceil(need/0.62)):Math.max(H,need);
     var w=mob?Math.round(A*0.78):Math.round(Math.min(300,A*0.33)), h=mob?Math.round(H*0.8):Math.round(H*0.76), g=mob?12:16;
     stage.style.height=H+'px'; return {A:A,H:H,w:w,h:h,g:g,mob:mob}; }
   function layout(){ var d=dims();

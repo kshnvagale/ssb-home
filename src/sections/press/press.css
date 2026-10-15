@@ -1,0 +1,34 @@
+/* Press: what the press has written about SSB, four article cards (rail on phones) */
+.pr-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:clamp(56px,7vw,96px) 0}
+.pr-wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
+.pr-head{margin-bottom:clamp(22px,3vw,36px)}
+.pr-head .sec-eyebrow{color:var(--mint);margin-bottom:14px}
+.pr-title{font-size:clamp(28px,3vw,44px);line-height:1.06;letter-spacing:-.032em;font-weight:500}
+.pr-grid{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.pr-card{display:flex;flex-direction:column;height:100%;padding:20px 20px 18px;border-radius:14px;background:#FBFAF7;color:var(--ink-t);transition:transform .6s var(--ease-spring),box-shadow .5s var(--ease-out)}
+.pr-card:hover{transform:translateY(-3px);box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+.pr-lg{display:flex;align-items:center;height:32px}
+.pr-lg img{width:auto;max-width:170px;object-fit:contain}
+.pr-card time{margin-top:18px;font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint-t)}
+.pr-card h3{margin-top:10px;font-size:18px;font-weight:500;letter-spacing:-.02em;line-height:1.28}
+.pr-card p{margin-top:8px;font-size:13.5px;line-height:1.45;color:var(--dim-t)}
+.pr-go{display:flex;align-items:center;gap:6px;margin-top:auto;padding-top:18px;font-size:13px;font-weight:500;color:var(--cta)}
+.pr-go svg{width:12px;height:12px;transition:transform .5s var(--ease-spring)}
+.pr-card:hover .pr-go svg{transform:translate(2px,-2px)}
+.pr-card:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+@media (max-width:1000px){
+  .pr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .pr-grid{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 var(--pad);margin:0 calc(var(--pad) * -1);padding:0 var(--pad);scrollbar-width:none}
+  .pr-grid::-webkit-scrollbar{display:none}
+  .pr-grid li{flex:none;width:78vw;max-width:320px;scroll-snap-align:start}
+  .pr-card h3{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){
+  .pr-card, .pr-go svg{transition:none}
+}
+
+/* press runs straight into admissions: one gap, not two */
+.pr-sec{padding-bottom:clamp(40px,5vw,64px)}
+.pr-sec+.ad-sec{padding-top:clamp(48px,6vw,88px)}
