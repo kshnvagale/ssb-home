@@ -94,3 +94,6 @@
 }
 @keyframes bs-ping{0%{transform:scale(1);opacity:.85}70%,100%{transform:scale(2.3);opacity:0}}
 @keyframes bs-fill{to{transform:scaleX(1)}}
+
+/* same background as How you learn above: tight gap, not a full section gap */
+.pl-sec+.bs-sec{padding-top:var(--sec-y-tight)}

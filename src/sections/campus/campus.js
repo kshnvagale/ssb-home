@@ -58,3 +58,14 @@
     [head,hero].concat(tiles).forEach(function(el){ io.observe(el); });
   } else { [head,hero].concat(tiles).forEach(function(el){ el.classList.add('is-in'); }); }
 })();
+
+/* clubs strip: hovering eases the scroll down instead of stopping it */
+(function(){
+  var row=document.querySelector('.cl-strip-row'); if(!row||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var tr=row.querySelector('.cl-strip-track'), raf=0;
+  function ease(to){ cancelAnimationFrame(raf); var a=tr.getAnimations?tr.getAnimations()[0]:null; if(!a) return;
+    var from=a.playbackRate, t0=performance.now();
+    (function step(n){ var p=Math.min(1,(n-t0)/600), e=1-Math.pow(1-p,3); a.playbackRate=from+(to-from)*e; if(p<1) raf=requestAnimationFrame(step); })(t0); }
+  row.addEventListener('pointerenter',function(e){ if(e.pointerType==='mouse') ease(0.22); });
+  row.addEventListener('pointerleave',function(e){ if(e.pointerType==='mouse') ease(1); });
+})();

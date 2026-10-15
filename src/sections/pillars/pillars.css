@@ -21,6 +21,12 @@
 .pl-idx a:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
 .pl-stack{padding:0 12px}
 .pl-panel{position:sticky;top:var(--pl-top);height:var(--pl-h);margin-bottom:12px}
+/* desktop: the headline is pinned to the section, the panels to the stack. The section's content box ends where the
+   last panel starts to move (negative margin, same height back as padding), so the headline leaves with it */
+@media (min-width:761px){
+  .pl-stack{margin-bottom:calc(-1 * (var(--pl-h) + 12px))}
+  .pl-sec{padding-bottom:calc(var(--pl-h) + 24px)}
+}
 .pl-panel:last-child{margin-bottom:0}
 .pl-stage{position:relative;height:100%;border-radius:24px;overflow:hidden;background:#0b1510;isolation:isolate;transform-origin:50% 0;transform:scale(calc(1 - var(--cov,0) * .06));will-change:transform}
 .pl-stage::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(70% 60% at 50% 50%,rgba(5,14,9,.42),rgba(5,14,9,.12) 70%),linear-gradient(180deg,rgba(5,14,9,.25),rgba(5,14,9,0) 30%,rgba(5,14,9,0) 70%,rgba(5,14,9,.3))}
