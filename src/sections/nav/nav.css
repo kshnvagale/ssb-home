@@ -66,10 +66,10 @@ html.nav-dark .ln-hooks a:hover, html.nav-dark .ln-hooks a.on{color:#fff}
 html.nav-dark .ln-ind{background:rgba(255,255,255,.12)}
 html.nav-dark .ln-sep{background:rgba(255,255,255,.14)}
 .mh, .mx{display:none}
-.sheet{position:fixed;inset:0;z-index:45;visibility:hidden;pointer-events:none}
+.sheet{position:fixed;inset:0;z-index:45;visibility:hidden;pointer-events:none;transition:visibility 0s linear .5s}
 .sheet-scrim{position:absolute;inset:0;background:rgba(5,14,9,.32);opacity:0;transition:opacity .5s var(--ease-out)}
 .sheet-panel{position:absolute;top:10px;right:10px;width:min(392px,calc(100vw - 20px));max-height:calc(100dvh - 20px);overflow:auto;overscroll-behavior:contain;padding:8px 8px 14px;border-radius:16px;color:var(--ink-t);background:rgba(250,250,246,.95);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:0 30px 70px -30px rgba(10,28,19,.5),0 1px 1px rgba(10,28,19,.04);opacity:0;transform:translateY(-10px) scale(.98);transform-origin:100% 0;transition:opacity .4s var(--ease-out),transform .6s var(--ease-out)}
-html.sheet-open .sheet{visibility:visible;pointer-events:auto}
+html.sheet-open .sheet{visibility:visible;pointer-events:auto;transition-delay:0s}
 html.sheet-open .sheet-scrim{opacity:1}
 html.sheet-open .sheet-panel{opacity:1;transform:none}
 .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:4px 4px 10px 10px}
@@ -139,8 +139,8 @@ html.sheet-open .sh-i{opacity:1;transform:none;transition-delay:calc(.06s + var(
   html.nav-dark .mh-where:active{background:rgba(255,255,255,.08)}
   html.nav-dark .mh-pg b{background:var(--mint)}
   /* section list: bottom sheet */
-  .mx{display:block;position:fixed;inset:0;z-index:45;visibility:hidden;pointer-events:none}
-  html.mx-open .mx{visibility:visible;pointer-events:auto}
+  .mx{display:block;position:fixed;inset:0;z-index:45;visibility:hidden;pointer-events:none;transition:visibility 0s linear .5s}
+  html.mx-open .mx{visibility:visible;pointer-events:auto;transition-delay:0s}
   .mx-scrim{position:absolute;inset:0;background:rgba(5,14,9,.42);opacity:0;transition:opacity .45s var(--ease-out)}
   html.mx-open .mx-scrim{opacity:1}
   .mx-panel{position:absolute;left:0;right:0;bottom:0;max-height:85svh;overflow:auto;overscroll-behavior:contain;padding:0 8px calc(10px + env(safe-area-inset-bottom,0px));border-radius:20px 20px 0 0;background:#FBFAF7;color:var(--ink-t);transform:translateY(102%);transition:transform .55s var(--ease-out)}

@@ -1,7 +1,7 @@
 /* Lead modal: apply / brochure / callback / exit intent. Photo carousel with proof on the left, form on the right (85% sheet on phones) */
 html.ld-lock, html.ld-lock body{overflow:hidden}
-.ld{position:fixed;inset:0;z-index:60;visibility:hidden;pointer-events:none;color:var(--ink-t)}
-.ld.is-open{visibility:visible;pointer-events:auto}
+.ld{position:fixed;inset:0;z-index:60;visibility:hidden;pointer-events:none;color:var(--ink-t);transition:visibility 0s linear .5s}
+.ld.is-open{visibility:visible;pointer-events:auto;transition-delay:0s}
 .ld-scrim{position:absolute;inset:0;background:rgba(5,14,9,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .45s var(--ease-out)}
 .ld.is-open .ld-scrim{opacity:1}
 .ld-box{position:absolute;left:50%;top:50%;width:min(980px,calc(100vw - 48px));height:min(640px,85vh);display:grid;grid-template-columns:42% minmax(0,1fr);border-radius:20px;overflow:hidden;background:#FBFAF7;box-shadow:0 60px 120px -40px rgba(0,0,0,.7);opacity:0;transform:translate3d(-50%,calc(-50% + 24px),0) scale(.98);transition:opacity .45s var(--ease-out),transform .7s var(--ease-out)}
