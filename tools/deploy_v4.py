@@ -40,10 +40,32 @@ export default nextConfig;
 
 
 def token():
+    """The CLI login. If it has expired, refresh it the way the CLI does (refresh token + the CLI's public client id,
+    found in the npx-cached vercel package) and save it back."""
+    import glob, re, urllib.parse
     p = os.path.expanduser('~/Library/Application Support/com.vercel.cli/auth.json')
     d = json.load(open(p))
-    if d.get('expiresAt', 0) < time.time() + 60:
-        sys.exit('Vercel login has expired: log in with the CLI again (vercel login), then re-run.')
+    if d.get('expiresAt', 0) > time.time() + 60:
+        return d['token']
+    ids = {}
+    for f in glob.glob(os.path.expanduser('~/.npm/_npx/*/node_modules/vercel/dist/**/*.js'), recursive=True):
+        for m in re.findall(r'cl_[A-Za-z0-9]{20,}', open(f, errors='ignore').read()):
+            ids[m] = ids.get(m, 0) + 1
+    if not ids or not d.get('refreshToken'):
+        sys.exit('Vercel login has expired and cannot be refreshed here: run `vercel login` (Node 20/22/24), then re-run.')
+    cid = max(ids, key=ids.get)
+    body = urllib.parse.urlencode({'grant_type': 'refresh_token', 'refresh_token': d['refreshToken'], 'client_id': cid}).encode()
+    try:
+        r = json.load(urllib.request.urlopen(urllib.request.Request('https://api.vercel.com/login/oauth/token', data=body,
+                                                                      headers={'Content-Type': 'application/x-www-form-urlencoded'})))
+    except urllib.error.HTTPError as e:
+        sys.exit(f'Vercel login refresh failed ({e.code}): run `vercel login`, then re-run.')
+    d['token'] = r['access_token']
+    if r.get('refresh_token'):
+        d['refreshToken'] = r['refresh_token']
+    d['expiresAt'] = int(time.time()) + int(r.get('expires_in', 3600))
+    json.dump(d, open(p, 'w'), indent=2)
+    print('refreshed the Vercel login')
     return d['token']
 
 
