@@ -81,13 +81,43 @@
   var scene=sec.querySelector('.pl-scene');
   var OB=layers.map(function(l,k){ return {st:scene, card:P[k].card, it:[].slice.call(l.querySelectorAll('.pl-ob')), a0:-Math.PI/2+k*.7, k:k, w:0, h:0, half:0}; });
   var obPhase=0, obLast=0, obRaf=0, REV=150000;
-  function obMeasure(){ OB.forEach(function(o){ o.w=o.st.clientWidth; o.h=o.st.clientHeight; o.half=o.card.offsetWidth/2; }); }
-  function obPlace(o){ var n=o.it.length; if(!n) return; var rx=o.w*.45, ry=o.h*.40;
-    o.it.forEach(function(el,i){ var t=o.a0+obPhase+i*2*Math.PI/n, s=Math.sin(t), d=(s+1)/2;
-      el.style.setProperty('--ox',(o.w/2+rx*Math.cos(t)).toFixed(1)+'px'); el.style.setProperty('--oy',(o.h/2+ry*s).toFixed(1)+'px');
-      // fade out while passing behind the card column (never half-covered by the card or the index), slightly smaller at the back
-      var dx=Math.abs(rx*Math.cos(t)), vis=Math.max(0,Math.min(1,(dx-o.half-24)/70));
-      el.style.setProperty('--os',(.84+.16*d).toFixed(3)); el.style.setProperty('--oo',vis.toFixed(3)); }); }
+  function obMeasure(){ OB.forEach(function(o){ o.w=o.st.clientWidth; o.h=o.st.clientHeight; o.half=o.card.offsetWidth/2; }); drawRings(); }
+  // Rings lie on one tilted plane (height = 30% of width, so about 72 degrees from face-on), centred a little below the
+  // middle of the scene. Desktop: inner dotted, middle solid (logos ride it, a glint travels its front), outer ticked.
+  var TILT=.30, ringSvg=scene.querySelector('.pl-rings');
+  function geo(){ var desk=innerWidth>=1181, w=scene.clientWidth, h=scene.clientHeight;
+    return {w:w, h:h, cx:w/2, cy:h*(desk?.56:.55), R:desk?[.30,.43,.58]:[.40,.62,.86]}; }
+  function drawRings(){
+    if(!ringSvg) return; var g=geo(), w=g.w, h=g.h, cx=g.cx, cy=g.cy, f=function(v){ return v.toFixed(1); };
+    var out='<defs><linearGradient id="plrF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DEFFEC" stop-opacity=".08"/><stop offset="1" stop-color="#DEFFEC" stop-opacity=".36"/></linearGradient>'+
+      '<linearGradient id="plrB" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#DEFFEC" stop-opacity=".08"/><stop offset="1" stop-color="#DEFFEC" stop-opacity=".02"/></linearGradient>'+
+      '<filter id="plGl" x="-10%" y="-300%" width="120%" height="700%"><feGaussianBlur stdDeviation="3.5"/></filter></defs>';
+    g.R.forEach(function(r,k){
+      var rx=w*r, ry=rx*TILT, L=cx-rx, Rr=cx+rx;
+      var back='M'+f(L)+' '+f(cy)+' A'+f(rx)+' '+f(ry)+' 0 0 1 '+f(Rr)+' '+f(cy);
+      var front='M'+f(Rr)+' '+f(cy)+' A'+f(rx)+' '+f(ry)+' 0 0 1 '+f(L)+' '+f(cy);
+      out+='<path d="'+back+'" fill="none" stroke="url(#plrB)" stroke-width="1"/>';
+      if(k===0) out+='<path d="'+front+'" fill="none" stroke="url(#plrF)" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="0.1 7"/>';
+      else out+='<path d="'+front+'" fill="none" stroke="url(#plrF)" stroke-width="'+(k===1?1.6:1.1)+'"/>';
+      if(k===1){ out+='<path class="pl-glint" pathLength="1000" d="'+front+'" fill="none" stroke="#DEFFEC" stroke-opacity=".55" stroke-width="5" filter="url(#plGl)"/>'+
+                      '<path class="pl-glint" pathLength="1000" d="'+front+'" fill="none" stroke="#F2FFF7" stroke-width="1.6" stroke-linecap="round"/>'; }
+      if(k===2){ for(var a=8;a<=172;a+=4){ var t=a*Math.PI/180, s=Math.sin(t), x=cx+rx*Math.cos(t), y=cy+ry*s;
+        out+='<line x1="'+f(x)+'" y1="'+f(y)+'" x2="'+f(x)+'" y2="'+f(y+2+(a%20===0?7:3)*s)+'" stroke="#DEFFEC" stroke-opacity="'+(.06+.22*s).toFixed(3)+'" stroke-width="1"/>'; } }
+    });
+    ringSvg.setAttribute('viewBox','0 0 '+w+' '+h); ringSvg.innerHTML=out;
+    scene.style.setProperty('--pl-floor',(cy/h*100).toFixed(1)+'%');
+  }
+  // Logos ride the middle ring: angle t on the plane, s = sin t is how near (1 front, -1 back). Near logos are larger,
+  // brighter and sharp; far ones smaller, darker and slightly blurred. Each floats 62px (scaled) above its ring point,
+  // with a stem down to it. They fade out while passing behind the card column.
+  function obPlace(o){ var n=o.it.length; if(!n) return; var g=geo(), rx=g.w*g.R[1], ry=rx*TILT;
+    o.it.forEach(function(el,i){ var t=o.a0+obPhase+i*2*Math.PI/n, s=Math.sin(t), d=(s+1)/2, sc=.62+.38*d;
+      var x=g.cx+rx*Math.cos(t), y=g.cy+ry*s;
+      el.style.setProperty('--ox',x.toFixed(1)+'px'); el.style.setProperty('--oy',(y-62*sc).toFixed(1)+'px');
+      el.style.setProperty('--os',sc.toFixed(3)); el.style.setProperty('--ob',(.62+.38*d).toFixed(3)); el.style.setProperty('--obb',((1-d)*1.2).toFixed(2)+'px');
+      el.style.zIndex=String(Math.round(d*100));
+      var dx=Math.abs(rx*Math.cos(t)), vis=Math.max(0,Math.min(1,(dx-o.half-30)/80));
+      el.style.setProperty('--oo',vis.toFixed(3)); }); }
   function obTick(now){ obRaf=0; if(innerWidth<1181) return;
     if(obLast&&!rm.matches) obPhase+=(now-obLast)/REV*2*Math.PI; obLast=now;
     var o=OB[Math.max(0,active)], vis=scene.getBoundingClientRect(); if(o) obPlace(o);

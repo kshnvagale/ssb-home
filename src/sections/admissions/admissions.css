@@ -1,6 +1,12 @@
 /* Admissions & fees: five-step process, eligibility, intakes and fees, scholarships (sheet per scholarship, #scholarship-*), Impact Foundation backers */
 .ad-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:var(--sec-y) 0;overflow:clip}
-.ad-sec::before{content:"";position:absolute;left:50%;top:120px;width:1400px;height:700px;margin-left:-700px;background:radial-gradient(closest-side,rgba(29,146,91,.22),rgba(29,146,91,0));pointer-events:none}
+.ad-sec{background:#060A08}
+/* lit backdrop (same as How you learn): a soft near-white light from above-left, darker edges, grain; no coloured glow */
+.ad-sec::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(48% 38% at 26% -6%,rgba(222,255,236,.11),rgba(222,255,236,.03) 55%,rgba(222,255,236,0) 75%),radial-gradient(40% 30% at 88% 6%,rgba(222,255,236,.045),rgba(222,255,236,0) 70%),radial-gradient(100% 80% at 50% 40%,rgba(0,0,0,0) 55%,rgba(0,0,0,.45))}
+.ad-sec::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27160%27 height=%27160%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")}
+.ad-wrap{z-index:1}
+/* quiet perspective rings behind the intro (drawn by admissions.js), same plane and treatment as How you learn, no logos */
+.ad-rings{position:absolute;left:0;right:0;top:0;height:min(100%,1100px);z-index:0;pointer-events:none;width:100%}
 .ad-wrap{position:relative;max-width:1440px;margin:0 auto;padding:0 var(--pad)}
 .ad-head{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:48px;align-items:end}
 .ad-eyebrow{color:var(--mint)}
@@ -19,7 +25,7 @@
 .ad-step p{margin-top:8px;font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.58);text-wrap:pretty;max-width:26ch}
 /* cards */
 .ad-grid{margin-top:clamp(56px,6vw,80px);display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:12px}
-.ad-card{border-radius:20px;padding:28px 28px 24px;background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.ad-card{position:relative;border-radius:20px;padding:28px 28px 24px;background:linear-gradient(180deg,#111B16 0%,#0B120E 100%);box-shadow:inset 0 1px 0 rgba(222,255,236,.08),inset 0 0 0 1px rgba(222,255,236,.055),0 1px 0 rgba(0,0,0,.5),0 50px 90px -50px rgba(0,0,0,.95)}
 .ad-card h3{font-size:20px;font-weight:500;letter-spacing:-.025em}
 .ad-card-h{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .ad-live{display:inline-flex;align-items:center;gap:8px;height:28px;padding:0 10px;border-radius:8px;background:rgba(107,238,159,.1);color:var(--mint);font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
@@ -30,7 +36,7 @@
 .ad-tr.is-past{color:rgba(255,255,255,.32)}
 .ad-tr.is-past span:last-child{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.25)}
 .ad-tr small{display:inline-block;margin-left:10px;padding:3px 6px;border-radius:5px;background:rgba(255,255,255,.06);font:500 9.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;vertical-align:2px}
-.ad-tr.is-now{margin:0 -14px;padding:14px;border-radius:12px;border-top-color:transparent;background:linear-gradient(90deg,rgba(29,146,91,.28),rgba(29,146,91,.1));color:#fff;font-weight:500}
+.ad-tr.is-now{margin:0 -14px;padding:14px;border-radius:12px;border-top-color:transparent;background:linear-gradient(90deg,rgba(107,238,159,.12),rgba(107,238,159,.03));box-shadow:inset 0 0 0 1px rgba(107,238,159,.2),inset 2px 0 0 #6BEE9F;color:#fff;font-weight:500}
 .ad-tr.is-now+.ad-tr{border-top-color:transparent}
 .ad-fine{margin-top:18px;font-size:13px;line-height:1.5;color:rgba(255,255,255,.42);max-width:62ch}
 .ad-list{list-style:none;margin-top:14px}
@@ -38,7 +44,7 @@
 .ad-list li:first-child{border-top:0}
 .ad-list b{display:block;margin-bottom:3px;font:500 10.5px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
 /* scholarships */
-.ad-sch{margin-top:12px;border-radius:20px;padding:clamp(28px,3vw,40px);background:linear-gradient(150deg,#0A4A2A 0%,#073A21 45%,#05251A 100%);box-shadow:inset 0 0 0 1px rgba(107,238,159,.14);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:clamp(24px,3vw,48px);align-items:start}
+.ad-sch{margin-top:12px;border-radius:20px;padding:clamp(28px,3vw,40px);background:radial-gradient(70% 120% at 0% 0%,rgba(29,146,91,.38),rgba(29,146,91,.08) 50%,rgba(29,146,91,0) 75%),linear-gradient(180deg,#0F1A14 0%,#0A110D 100%);box-shadow:inset 0 1px 0 rgba(222,255,236,.09),inset 0 0 0 1px rgba(107,238,159,.14),0 50px 90px -50px rgba(0,0,0,.95);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:clamp(24px,3vw,48px);align-items:start}
 .ad-sch-title{font-size:var(--t-h3);font-weight:500;letter-spacing:-.035em;line-height:1.08}
 .ad-sch-head p{margin-top:12px;font-size:15.5px;line-height:1.5;color:rgba(255,255,255,.7);max-width:40ch}
 .ad-sch-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
@@ -125,7 +131,7 @@ html.ad-lock, html.ad-lock body{overflow:hidden}
 .ad-proc-list li{display:flex;align-items:baseline;gap:16px;padding:13px 0;border-top:1px solid rgba(255,255,255,.08);font-size:16px;letter-spacing:-.01em}
 .ad-proc-list li:first-child{border-top:0}
 .ad-proc-list span{flex:none;width:22px;font:500 11px/1 var(--mono);letter-spacing:.1em;color:var(--mint)}
-.ad-fast{margin-top:14px;padding:14px 16px;border-radius:12px;background:rgba(107,238,159,.07);font-size:14px;line-height:1.5;color:rgba(255,255,255,.7)}
+.ad-fast{margin-top:14px;padding:14px 16px;border-radius:12px;background:rgba(222,255,236,.035);box-shadow:inset 0 0 0 1px rgba(222,255,236,.06);font-size:14px;line-height:1.5;color:rgba(255,255,255,.7)}
 .ad-fast b{display:block;margin-bottom:4px;font:500 10.5px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
 .ad-sch{margin-top:clamp(40px,5vw,64px)}
 @media (max-width:1000px){

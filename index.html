@@ -960,7 +960,6 @@ main>.bk-sec{padding:0!important}
 .pl-scene{position:sticky;top:var(--pl-top);z-index:0;height:var(--pl-h);margin-bottom:calc(-1 * var(--pl-h));border-radius:24px;overflow:hidden;background:#040C08;isolation:isolate}
 .pl-layer{position:absolute;inset:0;opacity:0;transition:opacity .7s var(--ease-out)}
 .pl-layer.on{opacity:1}
-.pl-layer .pl-bg{top:0;height:100%;transform:none}
 .pl-grain{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27160%27 height=%27160%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")}
 .pl-panel{z-index:1;pointer-events:none}
 /* the deck sits in the scene; cards are transformed by pillars.js (bottom-anchored so the deck shows bottom edges) */
@@ -971,20 +970,23 @@ main>.bk-sec{padding:0!important}
 
 .pl-bg{position:absolute;left:0;top:-8%;width:100%;height:116%;object-fit:cover;transform:translate3d(0,var(--bgy,0px),0) scale(1.02);will-change:transform}
 /* abstract panel background (replaces the photos): base, three drifting glows, grid, twinkling cells, light behind the card */
-.pl-aura{overflow:hidden;background:radial-gradient(120% 90% at 50% 110%,#0A2417 0%,#06130C 55%,#040C08 100%)}
-.pl-g{position:absolute;border-radius:50%;mix-blend-mode:screen;will-change:transform}
-.pl-g1{width:62%;aspect-ratio:1;left:-16%;top:-24%;opacity:.42;background:radial-gradient(closest-side,var(--ga),transparent);animation:plDrift1 28s ease-in-out infinite alternate}
-.pl-g2{width:56%;aspect-ratio:1;right:-14%;bottom:-36%;opacity:.26;background:radial-gradient(closest-side,var(--gb),transparent);animation:plDrift2 32s ease-in-out infinite alternate}
-.pl-spot{position:absolute;left:50%;top:50%;width:min(1000px,84%);aspect-ratio:1.5;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(107,238,159,.2),rgba(107,238,159,.06) 50%,transparent)}
-.pl-aura::after{content:"";position:absolute;inset:0;background:radial-gradient(90% 85% at 50% 50%,transparent 55%,rgba(3,9,6,.55));pointer-events:none}
-@keyframes plDrift1{to{transform:translate3d(16%,14%,0) scale(1.1)}}
-@keyframes plDrift2{to{transform:translate3d(-14%,-16%,0) scale(1.12)}}
+/* Scene look: one lit backdrop (a soft near-white light from above, a faintly lit floor where the rings lie, dark
+   edges), rings drawn in perspective by pillars.js (near half brighter and thicker, far half fading; a glint travels
+   along the front of the middle ring), and logos that float above the middle ring on fine stems. */
+.pl-backdrop{position:absolute;inset:0;z-index:0;background:
+  radial-gradient(55% 48% at 50% -6%,rgba(222,255,236,.13),rgba(222,255,236,.035) 55%,rgba(222,255,236,0) 75%),
+  radial-gradient(62% 22% at 50% var(--pl-floor,64%),rgba(222,255,236,.05),rgba(222,255,236,0) 70%),
+  linear-gradient(180deg,#0B130F 0%,#070C09 50%,#050806 100%)}
+.pl-backdrop::after{content:"";position:absolute;inset:0;background:radial-gradient(95% 90% at 50% 45%,rgba(0,0,0,0) 55%,rgba(0,0,0,.5))}
+.pl-rings{position:absolute;inset:0;z-index:1;width:100%;height:100%;overflow:visible;pointer-events:none}
+.pl-rings .pl-glint{stroke-dasharray:46 2000;stroke-dashoffset:46;animation:plGlint 11s linear infinite}
+@keyframes plGlint{to{stroke-dashoffset:-1046}}
+.pl-layer{z-index:2}
 /* orbit (desktop): rings are the only lines; logos ride the middle ring, slightly smaller at the back (top).
    Below 1181px the same logos sit in one centred row along the top of the panel; the old floaters are not used */
 .pl-fl{display:none}
 @media (max-width:1180px){
   .pl-orbit{position:absolute;z-index:2;left:12px;right:12px;top:16px;display:flex;justify-content:center;gap:10px;pointer-events:none}
-  .pl-ring{display:none}
   .pl-ob{flex:none;width:52px;height:52px;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.5),0 16px 32px -16px rgba(0,0,0,.8)}
   .pl-ob img{display:block;width:100%;height:100%;object-fit:cover}
   .pl-ob:nth-child(n+12){display:none}
@@ -994,16 +996,15 @@ main>.bk-sec{padding:0!important}
   .pl-ob{width:42px;height:42px;border-radius:11px}
   .pl-ob:nth-child(n+10){display:none}
 }
+/* logos (desktop): a tile, a stem down to the ring and a contact dot; depth from pillars.js (--os scale, --ob brightness, --obb blur) */
 @media (min-width:1181px){
   .pl-orbit{display:block;position:absolute;inset:0;z-index:2;pointer-events:none}
-  .pl-ring{position:absolute;left:50%;top:50%;border-radius:50%;transform:translate(-50%,-50%)}
-  .pl-r1{width:90%;height:80%;border:1px solid rgba(255,255,255,.13)}
-  .pl-r2{width:64%;height:58%;border:1px solid rgba(255,255,255,.06)}
-  .pl-r3{width:122%;height:112%;border:1px solid rgba(255,255,255,.05)}
-  .pl-ob{position:absolute;left:0;top:0;width:68px;height:68px;margin:-34px 0 0 -34px;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.55),0 0 0 6px rgba(255,255,255,.04),0 24px 48px -20px rgba(0,0,0,.8);transform:translate3d(var(--ox,-200px),var(--oy,-200px),0) scale(var(--os,1));opacity:var(--oo,1);will-change:transform}
-  .pl-ob img{display:block;width:100%;height:100%;object-fit:cover}
+  .pl-ob{position:absolute;left:0;top:0;width:64px;height:64px;margin:-32px 0 0 -32px;transform:translate3d(var(--ox,-200px),var(--oy,-200px),0) scale(var(--os,1));opacity:var(--oo,1);will-change:transform}
+  .pl-ob img{display:block;width:100%;height:100%;object-fit:cover;border-radius:17px;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.6),0 18px 30px -14px rgba(0,0,0,.9);filter:brightness(var(--ob,1)) blur(var(--obb,0px))}
+  .pl-ob::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:var(--teth,30px);margin-left:-.5px;background:linear-gradient(180deg,rgba(222,255,236,.42),rgba(222,255,236,.1));opacity:var(--ob,1)}
+  .pl-ob::before{content:"";position:absolute;left:50%;top:calc(100% + var(--teth,30px));width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:#DEFFEC;box-shadow:0 0 10px 2px rgba(107,238,159,.45);opacity:var(--ob,1)}
 }
-@media (prefers-reduced-motion:reduce){ .pl-g{animation:none} }
+@media (prefers-reduced-motion:reduce){ .pl-rings .pl-glint{animation:none;opacity:0} }
 .pl-fl{position:absolute;inset:0;z-index:2}
 .pl-f{position:absolute;left:var(--x);top:var(--y);transform:translate3d(-50%,calc(-50% + var(--fy,0px)),0);will-change:transform}
 .pl-ic{width:64px;height:64px;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.5),0 22px 44px -18px rgba(0,0,0,.7)}
@@ -1664,7 +1665,13 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 /* ===== admissions ===== */
 /* Admissions & fees: five-step process, eligibility, intakes and fees, scholarships (sheet per scholarship, #scholarship-*), Impact Foundation backers */
 .ad-sec{position:relative;z-index:6;background:var(--ink);color:#fff;padding:var(--sec-y) 0;overflow:clip}
-.ad-sec::before{content:"";position:absolute;left:50%;top:120px;width:1400px;height:700px;margin-left:-700px;background:radial-gradient(closest-side,rgba(29,146,91,.22),rgba(29,146,91,0));pointer-events:none}
+.ad-sec{background:#060A08}
+/* lit backdrop (same as How you learn): a soft near-white light from above-left, darker edges, grain; no coloured glow */
+.ad-sec::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(48% 38% at 26% -6%,rgba(222,255,236,.11),rgba(222,255,236,.03) 55%,rgba(222,255,236,0) 75%),radial-gradient(40% 30% at 88% 6%,rgba(222,255,236,.045),rgba(222,255,236,0) 70%),radial-gradient(100% 80% at 50% 40%,rgba(0,0,0,0) 55%,rgba(0,0,0,.45))}
+.ad-sec::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27160%27 height=%27160%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")}
+.ad-wrap{z-index:1}
+/* quiet perspective rings behind the intro (drawn by admissions.js), same plane and treatment as How you learn, no logos */
+.ad-rings{position:absolute;left:0;right:0;top:0;height:min(100%,1100px);z-index:0;pointer-events:none;width:100%}
 .ad-wrap{position:relative;max-width:1440px;margin:0 auto;padding:0 var(--pad)}
 .ad-head{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:48px;align-items:end}
 .ad-eyebrow{color:var(--mint)}
@@ -1683,7 +1690,7 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 .ad-step p{margin-top:8px;font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.58);text-wrap:pretty;max-width:26ch}
 /* cards */
 .ad-grid{margin-top:clamp(56px,6vw,80px);display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:12px}
-.ad-card{border-radius:20px;padding:28px 28px 24px;background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.ad-card{position:relative;border-radius:20px;padding:28px 28px 24px;background:linear-gradient(180deg,#111B16 0%,#0B120E 100%);box-shadow:inset 0 1px 0 rgba(222,255,236,.08),inset 0 0 0 1px rgba(222,255,236,.055),0 1px 0 rgba(0,0,0,.5),0 50px 90px -50px rgba(0,0,0,.95)}
 .ad-card h3{font-size:20px;font-weight:500;letter-spacing:-.025em}
 .ad-card-h{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .ad-live{display:inline-flex;align-items:center;gap:8px;height:28px;padding:0 10px;border-radius:8px;background:rgba(107,238,159,.1);color:var(--mint);font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
@@ -1694,7 +1701,7 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 .ad-tr.is-past{color:rgba(255,255,255,.32)}
 .ad-tr.is-past span:last-child{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.25)}
 .ad-tr small{display:inline-block;margin-left:10px;padding:3px 6px;border-radius:5px;background:rgba(255,255,255,.06);font:500 9.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;vertical-align:2px}
-.ad-tr.is-now{margin:0 -14px;padding:14px;border-radius:12px;border-top-color:transparent;background:linear-gradient(90deg,rgba(29,146,91,.28),rgba(29,146,91,.1));color:#fff;font-weight:500}
+.ad-tr.is-now{margin:0 -14px;padding:14px;border-radius:12px;border-top-color:transparent;background:linear-gradient(90deg,rgba(107,238,159,.12),rgba(107,238,159,.03));box-shadow:inset 0 0 0 1px rgba(107,238,159,.2),inset 2px 0 0 #6BEE9F;color:#fff;font-weight:500}
 .ad-tr.is-now+.ad-tr{border-top-color:transparent}
 .ad-fine{margin-top:18px;font-size:13px;line-height:1.5;color:rgba(255,255,255,.42);max-width:62ch}
 .ad-list{list-style:none;margin-top:14px}
@@ -1702,7 +1709,7 @@ html.pl-lock, html.pl-lock body{overflow:hidden}
 .ad-list li:first-child{border-top:0}
 .ad-list b{display:block;margin-bottom:3px;font:500 10.5px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
 /* scholarships */
-.ad-sch{margin-top:12px;border-radius:20px;padding:clamp(28px,3vw,40px);background:linear-gradient(150deg,#0A4A2A 0%,#073A21 45%,#05251A 100%);box-shadow:inset 0 0 0 1px rgba(107,238,159,.14);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:clamp(24px,3vw,48px);align-items:start}
+.ad-sch{margin-top:12px;border-radius:20px;padding:clamp(28px,3vw,40px);background:radial-gradient(70% 120% at 0% 0%,rgba(29,146,91,.38),rgba(29,146,91,.08) 50%,rgba(29,146,91,0) 75%),linear-gradient(180deg,#0F1A14 0%,#0A110D 100%);box-shadow:inset 0 1px 0 rgba(222,255,236,.09),inset 0 0 0 1px rgba(107,238,159,.14),0 50px 90px -50px rgba(0,0,0,.95);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:clamp(24px,3vw,48px);align-items:start}
 .ad-sch-title{font-size:var(--t-h3);font-weight:500;letter-spacing:-.035em;line-height:1.08}
 .ad-sch-head p{margin-top:12px;font-size:15.5px;line-height:1.5;color:rgba(255,255,255,.7);max-width:40ch}
 .ad-sch-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
@@ -1789,7 +1796,7 @@ html.ad-lock, html.ad-lock body{overflow:hidden}
 .ad-proc-list li{display:flex;align-items:baseline;gap:16px;padding:13px 0;border-top:1px solid rgba(255,255,255,.08);font-size:16px;letter-spacing:-.01em}
 .ad-proc-list li:first-child{border-top:0}
 .ad-proc-list span{flex:none;width:22px;font:500 11px/1 var(--mono);letter-spacing:.1em;color:var(--mint)}
-.ad-fast{margin-top:14px;padding:14px 16px;border-radius:12px;background:rgba(107,238,159,.07);font-size:14px;line-height:1.5;color:rgba(255,255,255,.7)}
+.ad-fast{margin-top:14px;padding:14px 16px;border-radius:12px;background:rgba(222,255,236,.035);box-shadow:inset 0 0 0 1px rgba(222,255,236,.06);font-size:14px;line-height:1.5;color:rgba(255,255,255,.7)}
 .ad-fast b{display:block;margin-bottom:4px;font:500 10.5px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
 .ad-sch{margin-top:clamp(40px,5vw,64px)}
 @media (max-width:1000px){
@@ -2641,7 +2648,7 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
     </div>
   </div>
   <div class="pl-stack">
-    <div class="pl-scene"><div class="pl-layer on" data-i="0"><div class="pl-bg pl-aura" style="--ga:#0E8A63;--gb:#1C9CA8" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div><div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/openai/icon-dark.jpg" alt="OpenAI" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/anthropic/icon-dark.jpg" alt="Claude" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/gemini/icon-dark.png" alt="Gemini" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/lovable/icon-dark.jpg" alt="Lovable" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/elevenlabs/icon-dark.jpg" alt="ElevenLabs" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/n8n/icon-dark.jpg" alt="n8n" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/zapier/icon-dark.jpg" alt="Zapier" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/cursor/icon-dark.jpg" alt="Cursor" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/crewai/icon-dark.jpg" alt="CrewAI" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/perplexity/icon-dark.jpg" alt="Perplexity" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/heygen/icon-dark.jpg" alt="HeyGen" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/notion/icon-dark.jpg" alt="Notion" width="68" height="68" decoding="async" loading="lazy"></span></div></div><div class="pl-layer" data-i="1"><div class="pl-bg pl-aura" style="--ga:#0B7A3E;--gb:#C9A04A" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div><div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/peakxv/icon-dark.jpg" alt="Peak XV" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/lightrock/icon-dark.jpg" alt="Lightrock" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/zomato/icon-dark.png" alt="Zomato" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/swiggy/icon-dark.jpg" alt="Swiggy" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/thewholetruth/icon-dark.jpg" alt="The Whole Truth" width="68" height="68" decoding="async" loading="lazy"></span></div></div><div class="pl-layer" data-i="2"><div class="pl-bg pl-aura" style="--ga:#0A6E58;--gb:#3FA9C4" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div><div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/ajio/icon-dark.jpg" alt="AJIO" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/practo/icon-dark.jpg" alt="Practo" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/meolaa/icon-dark.jpg" alt="Meolaa" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/stockgro/icon-dark.jpg" alt="StockGro" width="68" height="68" decoding="async" loading="lazy"></span></div></div><div class="pl-layer" data-i="3"><div class="pl-bg pl-aura" style="--ga:#0C6B3F;--gb:#D98E52" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div><div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/jio/icon-dark.png" alt="Jio" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/reliance/icon-dark.jpg" alt="Reliance" width="68" height="68" decoding="async" loading="lazy"></span></div></div><div class="pl-layer" data-i="4"><div class="pl-bg pl-aura" style="--ga:#0D6A47;--gb:#7F72E0" aria-hidden="true"><span class="pl-g pl-g1"></span><span class="pl-g pl-g2"></span><span class="pl-spot"></span></div><div class="pl-orbit"><span class="pl-ring pl-r1" aria-hidden="true"></span><span class="pl-ring pl-r2" aria-hidden="true"></span><span class="pl-ring pl-r3" aria-hidden="true"></span><span class="pl-ob"><img src="media/brands/google/icon-dark.jpg" alt="Google" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/blinkit/icon-dark.jpg" alt="Blinkit" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/phonepe/icon-dark.jpg" alt="PhonePe" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/openai/icon-dark.jpg" alt="OpenAI" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/peakxv/icon-dark.jpg" alt="Peak XV" width="68" height="68" decoding="async" loading="lazy"></span></div></div><span class="pl-grain" aria-hidden="true"></span></div>
+    <div class="pl-scene"><div class="pl-backdrop" aria-hidden="true"></div><svg class="pl-rings" aria-hidden="true" focusable="false"></svg><div class="pl-layer on" data-i="0"><div class="pl-orbit"><span class="pl-ob"><img src="media/brands/openai/icon-dark.jpg" alt="OpenAI" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/anthropic/icon-dark.jpg" alt="Claude" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/gemini/icon-dark.png" alt="Gemini" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/lovable/icon-dark.jpg" alt="Lovable" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/elevenlabs/icon-dark.jpg" alt="ElevenLabs" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/n8n/icon-dark.jpg" alt="n8n" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/zapier/icon-dark.jpg" alt="Zapier" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/cursor/icon-dark.jpg" alt="Cursor" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/crewai/icon-dark.jpg" alt="CrewAI" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/perplexity/icon-dark.jpg" alt="Perplexity" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/heygen/icon-dark.jpg" alt="HeyGen" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/notion/icon-dark.jpg" alt="Notion" width="68" height="68" decoding="async" loading="lazy"></span></div></div><div class="pl-layer" data-i="1"><div class="pl-orbit"><span class="pl-ob"><img src="media/brands/peakxv/icon-dark.jpg" alt="Peak XV" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/lightrock/icon-dark.jpg" alt="Lightrock" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/zomato/icon-dark.png" alt="Zomato" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/swiggy/icon-dark.jpg" alt="Swiggy" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/thewholetruth/icon-dark.jpg" alt="The Whole Truth" width="68" height="68" decoding="async" loading="lazy"></span></div></div><div class="pl-layer" data-i="2"><div class="pl-orbit"><span class="pl-ob"><img src="media/brands/ajio/icon-dark.jpg" alt="AJIO" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/practo/icon-dark.jpg" alt="Practo" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/meolaa/icon-dark.jpg" alt="Meolaa" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/stockgro/icon-dark.jpg" alt="StockGro" width="68" height="68" decoding="async" loading="lazy"></span></div></div><div class="pl-layer" data-i="3"><div class="pl-orbit"><span class="pl-ob"><img src="media/brands/jio/icon-dark.png" alt="Jio" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/reliance/icon-dark.jpg" alt="Reliance" width="68" height="68" decoding="async" loading="lazy"></span></div></div><div class="pl-layer" data-i="4"><div class="pl-orbit"><span class="pl-ob"><img src="media/brands/google/icon-dark.jpg" alt="Google" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/blinkit/icon-dark.jpg" alt="Blinkit" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/phonepe/icon-dark.jpg" alt="PhonePe" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/openai/icon-dark.jpg" alt="OpenAI" width="68" height="68" decoding="async" loading="lazy"></span><span class="pl-ob"><img src="media/brands/peakxv/icon-dark.jpg" alt="Peak XV" width="68" height="68" decoding="async" loading="lazy"></span></div></div><span class="pl-grain" aria-hidden="true"></span></div>
     <article class="pl-panel" id="learn-ai" data-key="ai" data-sub="AI fluency" aria-labelledby="pl-t-ai">
       <div class="pl-stage">
         <div class="pl-fl" aria-hidden="false"><span class="pl-f pl-ft pl-ic" style="--x:9%;--y:16%;--mx:6%;--row:0" data-d="0.8"><img src="media/brands/openai/icon-dark.jpg" alt="OpenAI" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:22%;--y:30%;--mx:30%;--row:1" data-d="0.45"><img src="media/brands/anthropic/icon-dark.jpg" alt="Claude" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:12%;--y:52%;--mx:56%;--row:0" data-d="0.7"><img src="media/brands/gemini/icon-dark.png" alt="Gemini" width="64" height="64" decoding="async"></span><span class="pl-f pl-ft pl-ic" style="--x:25%;--y:70%;--mx:80%;--row:1" data-d="0.35"><img src="media/brands/lovable/icon-dark.jpg" alt="Lovable" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:8%;--y:84%;--mx:8%;--row:0" data-d="0.9"><img src="media/brands/elevenlabs/icon-dark.jpg" alt="ElevenLabs" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:76%;--y:14%;--mx:33%;--row:1" data-d="0.6"><img src="media/brands/n8n/icon-dark.jpg" alt="n8n" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:90%;--y:30%;--mx:58%;--row:0" data-d="0.4"><img src="media/brands/zapier/icon-dark.jpg" alt="Zapier" width="64" height="64" decoding="async"></span><span class="pl-f pl-fb pl-ic" style="--x:78%;--y:50%;--mx:82%;--row:1" data-d="0.85"><img src="media/brands/cursor/icon-dark.jpg" alt="Cursor" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:91%;--y:70%" data-d="0.5"><img src="media/brands/crewai/icon-dark.jpg" alt="CrewAI" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:74%;--y:86%" data-d="0.75"><img src="media/brands/perplexity/icon-dark.jpg" alt="Perplexity" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:31%;--y:10%" data-d="0.3"><img src="media/brands/heygen/icon-dark.jpg" alt="HeyGen" width="64" height="64" decoding="async"></span><span class="pl-f pl-dk pl-ic" style="--x:71%;--y:32%" data-d="0.3"><img src="media/brands/notion/icon-dark.jpg" alt="Notion" width="64" height="64" decoding="async"></span></div>
@@ -3051,6 +3058,7 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
 </section>
 <!-- Admissions & fees: sticky intro with eligibility and CTAs; process and fee cards; scholarships (sheet per scholarship, #scholarship-*) with the Impact Foundation backers -->
 <section class="ad-sec" id="admissions" data-nav="dark" aria-labelledby="ad-title">
+  <svg class="ad-rings" aria-hidden="true" focusable="false"></svg>
   <div class="ad-wrap">
     <div class="ad-top">
       <div class="ad-left">
@@ -4024,13 +4032,43 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
   var scene=sec.querySelector('.pl-scene');
   var OB=layers.map(function(l,k){ return {st:scene, card:P[k].card, it:[].slice.call(l.querySelectorAll('.pl-ob')), a0:-Math.PI/2+k*.7, k:k, w:0, h:0, half:0}; });
   var obPhase=0, obLast=0, obRaf=0, REV=150000;
-  function obMeasure(){ OB.forEach(function(o){ o.w=o.st.clientWidth; o.h=o.st.clientHeight; o.half=o.card.offsetWidth/2; }); }
-  function obPlace(o){ var n=o.it.length; if(!n) return; var rx=o.w*.45, ry=o.h*.40;
-    o.it.forEach(function(el,i){ var t=o.a0+obPhase+i*2*Math.PI/n, s=Math.sin(t), d=(s+1)/2;
-      el.style.setProperty('--ox',(o.w/2+rx*Math.cos(t)).toFixed(1)+'px'); el.style.setProperty('--oy',(o.h/2+ry*s).toFixed(1)+'px');
-      // fade out while passing behind the card column (never half-covered by the card or the index), slightly smaller at the back
-      var dx=Math.abs(rx*Math.cos(t)), vis=Math.max(0,Math.min(1,(dx-o.half-24)/70));
-      el.style.setProperty('--os',(.84+.16*d).toFixed(3)); el.style.setProperty('--oo',vis.toFixed(3)); }); }
+  function obMeasure(){ OB.forEach(function(o){ o.w=o.st.clientWidth; o.h=o.st.clientHeight; o.half=o.card.offsetWidth/2; }); drawRings(); }
+  // Rings lie on one tilted plane (height = 30% of width, so about 72 degrees from face-on), centred a little below the
+  // middle of the scene. Desktop: inner dotted, middle solid (logos ride it, a glint travels its front), outer ticked.
+  var TILT=.30, ringSvg=scene.querySelector('.pl-rings');
+  function geo(){ var desk=innerWidth>=1181, w=scene.clientWidth, h=scene.clientHeight;
+    return {w:w, h:h, cx:w/2, cy:h*(desk?.56:.55), R:desk?[.30,.43,.58]:[.40,.62,.86]}; }
+  function drawRings(){
+    if(!ringSvg) return; var g=geo(), w=g.w, h=g.h, cx=g.cx, cy=g.cy, f=function(v){ return v.toFixed(1); };
+    var out='<defs><linearGradient id="plrF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DEFFEC" stop-opacity=".08"/><stop offset="1" stop-color="#DEFFEC" stop-opacity=".36"/></linearGradient>'+
+      '<linearGradient id="plrB" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#DEFFEC" stop-opacity=".08"/><stop offset="1" stop-color="#DEFFEC" stop-opacity=".02"/></linearGradient>'+
+      '<filter id="plGl" x="-10%" y="-300%" width="120%" height="700%"><feGaussianBlur stdDeviation="3.5"/></filter></defs>';
+    g.R.forEach(function(r,k){
+      var rx=w*r, ry=rx*TILT, L=cx-rx, Rr=cx+rx;
+      var back='M'+f(L)+' '+f(cy)+' A'+f(rx)+' '+f(ry)+' 0 0 1 '+f(Rr)+' '+f(cy);
+      var front='M'+f(Rr)+' '+f(cy)+' A'+f(rx)+' '+f(ry)+' 0 0 1 '+f(L)+' '+f(cy);
+      out+='<path d="'+back+'" fill="none" stroke="url(#plrB)" stroke-width="1"/>';
+      if(k===0) out+='<path d="'+front+'" fill="none" stroke="url(#plrF)" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="0.1 7"/>';
+      else out+='<path d="'+front+'" fill="none" stroke="url(#plrF)" stroke-width="'+(k===1?1.6:1.1)+'"/>';
+      if(k===1){ out+='<path class="pl-glint" pathLength="1000" d="'+front+'" fill="none" stroke="#DEFFEC" stroke-opacity=".55" stroke-width="5" filter="url(#plGl)"/>'+
+                      '<path class="pl-glint" pathLength="1000" d="'+front+'" fill="none" stroke="#F2FFF7" stroke-width="1.6" stroke-linecap="round"/>'; }
+      if(k===2){ for(var a=8;a<=172;a+=4){ var t=a*Math.PI/180, s=Math.sin(t), x=cx+rx*Math.cos(t), y=cy+ry*s;
+        out+='<line x1="'+f(x)+'" y1="'+f(y)+'" x2="'+f(x)+'" y2="'+f(y+2+(a%20===0?7:3)*s)+'" stroke="#DEFFEC" stroke-opacity="'+(.06+.22*s).toFixed(3)+'" stroke-width="1"/>'; } }
+    });
+    ringSvg.setAttribute('viewBox','0 0 '+w+' '+h); ringSvg.innerHTML=out;
+    scene.style.setProperty('--pl-floor',(cy/h*100).toFixed(1)+'%');
+  }
+  // Logos ride the middle ring: angle t on the plane, s = sin t is how near (1 front, -1 back). Near logos are larger,
+  // brighter and sharp; far ones smaller, darker and slightly blurred. Each floats 62px (scaled) above its ring point,
+  // with a stem down to it. They fade out while passing behind the card column.
+  function obPlace(o){ var n=o.it.length; if(!n) return; var g=geo(), rx=g.w*g.R[1], ry=rx*TILT;
+    o.it.forEach(function(el,i){ var t=o.a0+obPhase+i*2*Math.PI/n, s=Math.sin(t), d=(s+1)/2, sc=.62+.38*d;
+      var x=g.cx+rx*Math.cos(t), y=g.cy+ry*s;
+      el.style.setProperty('--ox',x.toFixed(1)+'px'); el.style.setProperty('--oy',(y-62*sc).toFixed(1)+'px');
+      el.style.setProperty('--os',sc.toFixed(3)); el.style.setProperty('--ob',(.62+.38*d).toFixed(3)); el.style.setProperty('--obb',((1-d)*1.2).toFixed(2)+'px');
+      el.style.zIndex=String(Math.round(d*100));
+      var dx=Math.abs(rx*Math.cos(t)), vis=Math.max(0,Math.min(1,(dx-o.half-30)/80));
+      el.style.setProperty('--oo',vis.toFixed(3)); }); }
   function obTick(now){ obRaf=0; if(innerWidth<1181) return;
     if(obLast&&!rm.matches) obPhase+=(now-obLast)/REV*2*Math.PI; obLast=now;
     var o=OB[Math.max(0,active)], vis=scene.getBoundingClientRect(); if(o) obPlace(o);
@@ -4313,6 +4351,23 @@ main>section:has(+ .seam){padding-bottom:var(--sec-y-tight)}
   // deep link
   var m=location.hash.match(/^#scholarship-([a-z-]+)$/);
   if(m){ var i=data.findIndex(function(d){return d.slug===m[1];}); if(i>-1) setTimeout(function(){ sec.scrollIntoView(); open(i); },300); }
+})();
+
+/* quiet perspective rings behind the intro: one tilted plane (height 30% of width), near half brighter, far half fading */
+(function(){
+  var sec=document.querySelector('.ad-sec'), svg=sec&&sec.querySelector('.ad-rings'); if(!svg) return;
+  function draw(){
+    var w=svg.clientWidth, h=svg.clientHeight; if(!w||!h) return;
+    var small=w<761, cx=w*(small?.5:.3), cy=h*(small?.22:.42), R=small?[.5,.75,1.05]:[.24,.36,.5], T=.3, f=function(v){ return v.toFixed(1); };
+    var out='<defs><linearGradient id="adrF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DEFFEC" stop-opacity=".05"/><stop offset="1" stop-color="#DEFFEC" stop-opacity=".2"/></linearGradient>'+
+      '<linearGradient id="adrB" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#DEFFEC" stop-opacity=".05"/><stop offset="1" stop-color="#DEFFEC" stop-opacity=".012"/></linearGradient></defs>';
+    R.forEach(function(r,k){ var rx=w*r, ry=rx*T, L=cx-rx, Rr=cx+rx;
+      out+='<path d="M'+f(L)+' '+f(cy)+' A'+f(rx)+' '+f(ry)+' 0 0 1 '+f(Rr)+' '+f(cy)+'" fill="none" stroke="url(#adrB)" stroke-width="1"/>';
+      out+='<path d="M'+f(Rr)+' '+f(cy)+' A'+f(rx)+' '+f(ry)+' 0 0 1 '+f(L)+' '+f(cy)+'" fill="none" stroke="url(#adrF)" stroke-width="'+(k===1?1.4:1)+'"'+(k===0?' stroke-dasharray="0.1 7" stroke-linecap="round" stroke-width="1.6"':'')+'/>';
+    });
+    svg.setAttribute('viewBox','0 0 '+w+' '+h); svg.innerHTML=out;
+  }
+  draw(); addEventListener('resize',draw); if(window.ResizeObserver) new ResizeObserver(draw).observe(sec);
 })();
 </script>
 <script>

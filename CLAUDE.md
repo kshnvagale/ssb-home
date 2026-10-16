@@ -55,6 +55,10 @@ Overlays: the root hides with `visibility` after a delay equal to its exit anima
 No photos behind the cards. Each panel has an abstract background (`aura()` in `tools/pillars_data.py`, colours in `AURA`): a deep green base, two slow glows, a light behind the card, grain. The only lines are the orbit rings.
 Desktop (1181px and up): the pillar's logos (icon floaters, deduped) sit evenly on one ring and travel along it (`pillars.js`, one turn per 150s, only panels on screen move). They fade out while behind the card column. Below 1181px they are one centred row at the top of the panel (8 max on tablets, 6 on phones). Text chips in `floaters` are kept in the data but no longer shown. The photos in `bg` are still the headers of the detail sheets.
 
+## How you learn and Admissions: backdrop and rings
+
+No coloured glows. Both sections use a lit backdrop: near-black (#050806 to #0B130F), one soft near-white light from above (rgba(222,255,236,.11 to .13)), darker edges, grain. The rings are drawn in SVG by JS (`drawRings` in pillars.js, the IIFE at the end of admissions.js) on one tilted plane (height = 30% of width): near half brighter and thicker (gradient .08 to .36), far half fading (.08 to .02); inner ring dotted, outer ring ticked, a glint travels the front of the middle ring (pillars only). Pillar logos ride the middle ring, float 62px (scaled) above it on a stem with a contact dot, and get smaller, darker and slightly blurred toward the back. Admissions cards are solid surfaces (gradient #111B16 to #0B120E, edge highlight, deep shadow); the scholarship block is a dark surface lit green from its top-left corner.
+
 ## How you learn: the deck
 
 One pinned scene (`.pl-scene`) holds the background, the logos and all five cards. On load `pillars.js` moves each card out of its panel into `.pl-deck`; the panels stay as empty scroll spacers (they keep the `#learn-*` ids, the stack height and the pillar index jumps).
